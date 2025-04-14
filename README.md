@@ -2,7 +2,7 @@ PCD a.y. 2024-2025 - ISI LM UNIBO - Cesena Campus
 
 # Assignment #02 -  Find the Dependencies
 
-v0.9.0-20250413
+v0.10.0-20250414
 
 The assignment includes two points, the first about asynchronous programming and the second about reactive programming.
 
@@ -29,6 +29,8 @@ The assignment includes two points, the first about asynchronous programming and
 	- The suggested reactive programming framework to be adopted is [ReactiveX](https://reactivex.io/), e.g. [RxJava](https://github.com/ReactiveX/RxJava) if working in Java or the JVM.
 
 	- As for the previous point, [JavaParser](https://javaparser.org/) can be used for parsing individual Java source files and build the AST.
+
+	- The point (2) is **not** meant to reuse the library developed in point (1), based on async programming: the whole solution should be re-designed, non only the GUI part, exploiting specifically reactive programming.
  
 
 ### The deliverable
