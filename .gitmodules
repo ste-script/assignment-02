@@ -1,0 +1,3 @@
+[submodule "resources/assignment-01"]
+	path = resources/assignment-01
+	url = https://github.com/ste-script/assignment-01.git
