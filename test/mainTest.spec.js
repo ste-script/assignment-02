@@ -2,7 +2,7 @@ const {
   getClassDependencies,
   getPackageDependencies,
   getProjectDependencies,
-} = require("../src/main");
+} = require("../src/main").default;
 
 async function runTests() {
   try {

@@ -1,6 +1,6 @@
-const fs = require("fs").promises;
-const path = require("path");
-const { parse, BaseJavaCstVisitorWithDefaults } = require("java-parser");
+import { promises as fs } from "fs";
+import { basename, join } from "path";
+import { parse, BaseJavaCstVisitorWithDefaults } from "java-parser";
 
 class ClassDepsReport {
   constructor(className, usedTypes) {
@@ -26,8 +26,8 @@ async function getClassDependencies(classSrcFile) {
   try {
     const content = await fs.readFile(classSrcFile, "utf8");
     const ast = parse(content);
-    const usedTypes = extractDependenciesFromAST(ast);
-    const className = path.basename(classSrcFile, ".java");
+    const usedTypes = await extractDependenciesFromAST(ast);
+    const className = basename(classSrcFile, ".java");
     return new ClassDepsReport(className, usedTypes);
   } catch (error) {
     throw new Error(`Error analyzing class ${classSrcFile}: ${error.message}`);
@@ -39,13 +39,13 @@ async function getPackageDependencies(packageSrcFolder) {
     const files = await fs.readdir(packageSrcFolder);
     const javaFiles = files
       .filter((file) => file.endsWith(".java"))
-      .map((file) => path.join(packageSrcFolder, file));
+      .map((file) => join(packageSrcFolder, file));
     const classReports = await Promise.all(
       javaFiles.map((file) => getClassDependencies(file))
     );
     const allUsedTypes = classReports.flatMap((report) => report.usedTypes);
-    const uniqueTypes = deduplicateTypes(allUsedTypes);
-    const packageName = path.basename(packageSrcFolder);
+    const uniqueTypes = await deduplicateTypes(allUsedTypes);
+    const packageName = basename(packageSrcFolder);
     return new PackageDepsReport(packageName, uniqueTypes);
   } catch (error) {
     throw new Error(
@@ -61,7 +61,7 @@ async function getProjectDependencies(projectSrcFolder) {
       packageDirs.map((dir) => getPackageDependencies(dir))
     );
     const allUsedTypes = packageReports.flatMap((report) => report.usedTypes);
-    const uniqueTypes = deduplicateTypes(allUsedTypes);
+    const uniqueTypes = await deduplicateTypes(allUsedTypes);
     return new ProjectDepsReport(uniqueTypes);
   } catch (error) {
     throw new Error(
@@ -70,7 +70,7 @@ async function getProjectDependencies(projectSrcFolder) {
   }
 }
 
-class DependecyAnalyserLib extends BaseJavaCstVisitorWithDefaults {
+class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults {
   constructor() {
     super();
     this.customResult = [];
@@ -133,9 +133,9 @@ class DependecyAnalyserLib extends BaseJavaCstVisitorWithDefaults {
   }
 }
 
-function extractDependenciesFromAST(ast) {
+async function extractDependenciesFromAST(ast) {
   const types = new Set();
-  const visitorCollector = new DependecyAnalyserLib();
+  const visitorCollector = new DependecyAnalyserCstVisitor();
   visitorCollector.visit(ast);
   const customResult = visitorCollector.customResult;
   customResult.forEach((type) => {
@@ -151,7 +151,7 @@ function extractDependenciesFromAST(ast) {
   return result;
 }
 
-function deduplicateTypes(types) {
+async function deduplicateTypes(types) {
   const seen = new Set();
   return types.filter((t) => {
     const key = `${t.package}.${t.type}`;
@@ -169,7 +169,7 @@ async function findPackageDirectories(dir) {
   let hasJavaFile = false;
 
   for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
+    const fullPath = join(dir, entry.name);
     if (entry.isDirectory()) {
       const subPackages = await findPackageDirectories(fullPath);
       packages.push(...subPackages);
@@ -185,7 +185,7 @@ async function findPackageDirectories(dir) {
   return packages;
 }
 
-module.exports = {
+export default {
   getClassDependencies,
   getPackageDependencies,
   getProjectDependencies,
