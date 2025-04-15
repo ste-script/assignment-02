@@ -35,7 +35,7 @@ async function getClassDependencies(classSrcFile) {
   }
 }
 
-async function getPackageDependencies(packageSrcFolder) {
+async function getPackageDependencies(packageSrcFolder, unique = false) {
   try {
     const files = await fs.readdir(packageSrcFolder);
     const javaFiles = files
@@ -45,6 +45,11 @@ async function getPackageDependencies(packageSrcFolder) {
       javaFiles.map((file) => getClassDependencies(file))
     );
     const packageName = basename(packageSrcFolder);
+    if (unique) {
+      const flattenedTypes = classReports.flatMap((report) => report.usedTypes);
+      const deduplicatedTypes = await deduplicateTypes(flattenedTypes);
+      return new PackageDepsReport(packageName, deduplicatedTypes);
+    }
     return new PackageDepsReport(packageName, classReports);
   } catch (error) {
     throw new Error(
@@ -53,13 +58,20 @@ async function getPackageDependencies(packageSrcFolder) {
   }
 }
 
-async function getProjectDependencies(projectSrcFolder) {
+async function getProjectDependencies(projectSrcFolder, unique = false) {
   try {
     const packageDirs = await findPackageDirectories(projectSrcFolder);
     const packageReports = await Promise.all(
       packageDirs.map((dir) => getPackageDependencies(dir))
     );
     const projectName = basename(projectSrcFolder);
+    if (unique) {
+      const flattenedTypes = packageReports.flatMap((report) =>
+        report.classReports.flatMap((classReport) => classReport.usedTypes)
+      );
+      const deduplicatedTypes = await deduplicateTypes(flattenedTypes);
+      return new ProjectDepsReport(projectName, deduplicatedTypes);
+    }
     return new ProjectDepsReport(projectName, packageReports);
   } catch (error) {
     throw new Error(
