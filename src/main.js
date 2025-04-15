@@ -185,7 +185,7 @@ async function findPackageDirectories(dir) {
   return packages;
 }
 
-export default {
+export {
   getClassDependencies,
   getPackageDependencies,
   getProjectDependencies,

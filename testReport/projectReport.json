@@ -1,0 +1,5544 @@
+{
+  "usedTypes": [
+    {
+      "type": "ManagementFactory",
+      "package": "java.lang.management"
+    },
+    {
+      "type": "MBeanServer",
+      "package": "javax.management"
+    },
+    {
+      "type": "MalformedObjectNameException",
+      "package": "javax.management"
+    },
+    {
+      "type": "ObjectName",
+      "package": "javax.management"
+    },
+    {
+      "type": "Log",
+      "package": "org.apache.commons.logging"
+    },
+    {
+      "type": "LogFactory",
+      "package": "org.apache.commons.logging"
+    },
+    {
+      "type": "BeansException",
+      "package": "org.springframework.beans"
+    },
+    {
+      "type": "DisposableBean",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "InitializingBean",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "ApplicationReadyEvent",
+      "package": "org.springframework.boot.context.event"
+    },
+    {
+      "type": "WebServerInitializedEvent",
+      "package": "org.springframework.boot.web.context"
+    },
+    {
+      "type": "ApplicationContext",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "ApplicationContextAware",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "ApplicationEvent",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "ConfigurableApplicationContext",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "EnvironmentAware",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "GenericApplicationListener",
+      "package": "org.springframework.context.event"
+    },
+    {
+      "type": "Ordered",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "ResolvableType",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "Environment",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "StandardEnvironment",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "Assert",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "Console",
+      "package": "java.io"
+    },
+    {
+      "type": "Method",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "Locale",
+      "package": "java.util"
+    },
+    {
+      "type": "ClassUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "ArrayList",
+      "package": "java.util"
+    },
+    {
+      "type": "Collections",
+      "package": "java.util"
+    },
+    {
+      "type": "EnumSet",
+      "package": "java.util"
+    },
+    {
+      "type": "List",
+      "package": "java.util"
+    },
+    {
+      "type": "Set",
+      "package": "java.util"
+    },
+    {
+      "type": "IntFunction",
+      "package": "java.util.function"
+    },
+    {
+      "type": "PropertyResolver",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "PropertySource",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "StringUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "Map",
+      "package": "java.util"
+    },
+    {
+      "type": "ConcurrentHashMap",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "ApplicationEventPublisher",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "ApplicationListener",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "PayloadApplicationEvent",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "ApplicationContextInitializer",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "ContextRefreshedEvent",
+      "package": "org.springframework.context.event"
+    },
+    {
+      "type": "WeakReference",
+      "package": "java.lang.ref"
+    },
+    {
+      "type": "ParentContextAvailableEvent",
+      "package": "org.springframework.boot.builder.ParentContextApplicationContextInitializer"
+    },
+    {
+      "type": "ContextClosedEvent",
+      "package": "org.springframework.context.event"
+    },
+    {
+      "type": "ObjectUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "Arrays",
+      "package": "java.util"
+    },
+    {
+      "type": "Collection",
+      "package": "java.util"
+    },
+    {
+      "type": "HashMap",
+      "package": "java.util"
+    },
+    {
+      "type": "LinkedHashMap",
+      "package": "java.util"
+    },
+    {
+      "type": "LinkedHashSet",
+      "package": "java.util"
+    },
+    {
+      "type": "Properties",
+      "package": "java.util"
+    },
+    {
+      "type": "AtomicBoolean",
+      "package": "java.util.concurrent.atomic"
+    },
+    {
+      "type": "AbstractAutowireCapableBeanFactory",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "BeanNameGenerator",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "ApplicationContextFactory",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "Banner",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "BootstrapRegistry",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "BootstrapRegistryInitializer",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "SpringApplication",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "WebApplicationType",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "ApplicationConversionService",
+      "package": "org.springframework.boot.convert"
+    },
+    {
+      "type": "ConfigurableEnvironment",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "ResourceLoader",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "ApplicationStartup",
+      "package": "org.springframework.core.metrics"
+    },
+    {
+      "type": "ConfigDataEnvironmentPostProcessor",
+      "package": "org.springframework.boot.context.config"
+    },
+    {
+      "type": "EnvironmentPostProcessor",
+      "package": "org.springframework.boot.env"
+    },
+    {
+      "type": "JsonParser",
+      "package": "org.springframework.boot.json"
+    },
+    {
+      "type": "JsonParserFactory",
+      "package": "org.springframework.boot.json"
+    },
+    {
+      "type": "DeferredLogFactory",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "CommandLinePropertySource",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "MutablePropertySources",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "PropertiesPropertySource",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "Binder",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "EnumerablePropertySource",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "Comparator",
+      "package": "java.util"
+    },
+    {
+      "type": "LinkedList",
+      "package": "java.util"
+    },
+    {
+      "type": "Function",
+      "package": "java.util.function"
+    },
+    {
+      "type": "UnaryOperator",
+      "package": "java.util.function"
+    },
+    {
+      "type": "Collectors",
+      "package": "java.util.stream"
+    },
+    {
+      "type": "Stream",
+      "package": "java.util.stream"
+    },
+    {
+      "type": "Configuration",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "ImportSelector",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "OrderComparator",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "Order",
+      "package": "org.springframework.core.annotation"
+    },
+    {
+      "type": "SpringRunner",
+      "package": "org.springframework.test.context.junit4"
+    },
+    {
+      "type": "Aware",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "ImportBeanDefinitionRegistrar",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "AnnotationMetadata",
+      "package": "org.springframework.core.type"
+    },
+    {
+      "type": "BufferedReader",
+      "package": "java.io"
+    },
+    {
+      "type": "IOException",
+      "package": "java.io"
+    },
+    {
+      "type": "InputStreamReader",
+      "package": "java.io"
+    },
+    {
+      "type": "URL",
+      "package": "java.net"
+    },
+    {
+      "type": "StandardCharsets",
+      "package": "java.nio.charset"
+    },
+    {
+      "type": "Enumeration",
+      "package": "java.util"
+    },
+    {
+      "type": "Iterator",
+      "package": "java.util"
+    },
+    {
+      "type": "UrlResource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "PriorityOrdered",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "AnsiOutput",
+      "package": "org.springframework.boot.ansi"
+    },
+    {
+      "type": "Enabled",
+      "package": "org.springframework.boot.ansi.AnsiOutput"
+    },
+    {
+      "type": "ApplicationEnvironmentPreparedEvent",
+      "package": "org.springframework.boot.context.event"
+    },
+    {
+      "type": "EnvironmentPostProcessorApplicationListener",
+      "package": "org.springframework.boot.env"
+    },
+    {
+      "type": "Consumer",
+      "package": "java.util.function"
+    },
+    {
+      "type": "CloudPlatform",
+      "package": "org.springframework.boot.cloud"
+    },
+    {
+      "type": "ToStringCreator",
+      "package": "org.springframework.core.style"
+    },
+    {
+      "type": "InstanceSupplier",
+      "package": "org.springframework.boot.BootstrapRegistry"
+    },
+    {
+      "type": "Scope",
+      "package": "org.springframework.boot.BootstrapRegistry"
+    },
+    {
+      "type": "ConfigurableBootstrapContext",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "DefaultPropertiesPropertySource",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "BinderOption",
+      "package": "org.springframework.boot.context.config.ConfigDataEnvironmentContributors"
+    },
+    {
+      "type": "BindException",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "Bindable",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "PlaceholdersResolver",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "ConfigurationPropertySource",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "SpringFactoriesLoader",
+      "package": "org.springframework.core.io.support"
+    },
+    {
+      "type": "LogMessage",
+      "package": "org.springframework.core.log"
+    },
+    {
+      "type": "NoSuchElementException",
+      "package": "java.util"
+    },
+    {
+      "type": "StreamSupport",
+      "package": "java.util.stream"
+    },
+    {
+      "type": "ConversionService",
+      "package": "org.springframework.core.convert"
+    },
+    {
+      "type": "CollectionUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "Kind",
+      "package": "org.springframework.boot.context.config.ConfigDataEnvironmentContributor"
+    },
+    {
+      "type": "Origin",
+      "package": "org.springframework.boot.origin"
+    },
+    {
+      "type": "OriginLookup",
+      "package": "org.springframework.boot.origin"
+    },
+    {
+      "type": "PropertyPlaceholderHelper",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "SystemPropertyUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "Predicate",
+      "package": "java.util.function"
+    },
+    {
+      "type": "ImportPhase",
+      "package": "org.springframework.boot.context.config.ConfigDataEnvironmentContributor"
+    },
+    {
+      "type": "BindContext",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "BindHandler",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "ConfigurationPropertyName",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "Supplier",
+      "package": "java.util.function"
+    },
+    {
+      "type": "DefaultBootstrapContext",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "DefaultResourceLoader",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "EventListener",
+      "package": "java.util"
+    },
+    {
+      "type": "HashSet",
+      "package": "java.util"
+    },
+    {
+      "type": "BootstrapContext",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "ArgumentResolver",
+      "package": "org.springframework.core.io.support.SpringFactoriesLoader"
+    },
+    {
+      "type": "OriginProvider",
+      "package": "org.springframework.boot.origin"
+    },
+    {
+      "type": "Objects",
+      "package": "java.util"
+    },
+    {
+      "type": "AbstractBindHandler",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "RuntimeHints",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "RuntimeHintsRegistrar",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "FilePatternResourceHintsRegistrar",
+      "package": "org.springframework.aot.hint.support"
+    },
+    {
+      "type": "PropertySourceLoader",
+      "package": "org.springframework.boot.env"
+    },
+    {
+      "type": "ResourceUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "AbstractFailureAnalyzer",
+      "package": "org.springframework.boot.diagnostics"
+    },
+    {
+      "type": "FailureAnalysis",
+      "package": "org.springframework.boot.diagnostics"
+    },
+    {
+      "type": "Name",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "ExecutableMode",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "BindableRuntimeHintsRegistrar",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "ReflectionUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "File",
+      "package": "java.io"
+    },
+    {
+      "type": "Files",
+      "package": "java.nio.file"
+    },
+    {
+      "type": "Path",
+      "package": "java.nio.file"
+    },
+    {
+      "type": "Resource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "ConfigTreePropertySource",
+      "package": "org.springframework.boot.env"
+    },
+    {
+      "type": "Option",
+      "package": "org.springframework.boot.env.ConfigTreePropertySource"
+    },
+    {
+      "type": "ResourceType",
+      "package": "org.springframework.boot.context.config.LocationResourceLoader"
+    },
+    {
+      "type": "Paths",
+      "package": "java.nio.file"
+    },
+    {
+      "type": "Matcher",
+      "package": "java.util.regex"
+    },
+    {
+      "type": "Pattern",
+      "package": "java.util.regex"
+    },
+    {
+      "type": "ConfigurationProperty",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "AbstractEnvironment",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "FilenameFilter",
+      "package": "java.io"
+    },
+    {
+      "type": "FileSystemResource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "ResourcePatternResolver",
+      "package": "org.springframework.core.io.support"
+    },
+    {
+      "type": "ArrayDeque",
+      "package": "java.util"
+    },
+    {
+      "type": "Deque",
+      "package": "java.util"
+    },
+    {
+      "type": "BindResult",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "LinkedMultiValueMap",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "MultiValueMap",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "Option",
+      "package": "org.springframework.boot.context.config.ConfigData"
+    },
+    {
+      "type": "PropertySourceOptions",
+      "package": "org.springframework.boot.context.config.ConfigData"
+    },
+    {
+      "type": "OriginTrackedResource",
+      "package": "org.springframework.boot.origin"
+    },
+    {
+      "type": "ClassPathResource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "FileUrlResource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "ByteArrayResource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "Duration",
+      "package": "java.time"
+    },
+    {
+      "type": "ApplicationRunner",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "CommandLineRunner",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "SpringApplicationRunListener",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "AvailabilityChangeEvent",
+      "package": "org.springframework.boot.availability"
+    },
+    {
+      "type": "LivenessState",
+      "package": "org.springframework.boot.availability"
+    },
+    {
+      "type": "ReadinessState",
+      "package": "org.springframework.boot.availability"
+    },
+    {
+      "type": "ApplicationEventMulticaster",
+      "package": "org.springframework.context.event"
+    },
+    {
+      "type": "SimpleApplicationEventMulticaster",
+      "package": "org.springframework.context.event"
+    },
+    {
+      "type": "AbstractApplicationContext",
+      "package": "org.springframework.context.support"
+    },
+    {
+      "type": "ErrorHandler",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "FileNotFoundException",
+      "package": "java.io"
+    },
+    {
+      "type": "BiConsumer",
+      "package": "java.util.function"
+    },
+    {
+      "type": "ConfigurableListableBeanFactory",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "ApplicationFailedEvent",
+      "package": "org.springframework.boot.context.event"
+    },
+    {
+      "type": "ApplicationPreparedEvent",
+      "package": "org.springframework.boot.context.event"
+    },
+    {
+      "type": "ApplicationStartingEvent",
+      "package": "org.springframework.boot.context.event"
+    },
+    {
+      "type": "LogFile",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "LogLevel",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "LoggerGroup",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "LoggerGroups",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "LoggingInitializationContext",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "LoggingSystem",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "LoggingSystemProperties",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "SmartLifecycle",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "Instant",
+      "package": "java.time"
+    },
+    {
+      "type": "StartupStep",
+      "package": "org.springframework.core.metrics"
+    },
+    {
+      "type": "Clock",
+      "package": "java.time"
+    },
+    {
+      "type": "ConcurrentLinkedQueue",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "AtomicInteger",
+      "package": "java.util.concurrent.atomic"
+    },
+    {
+      "type": "AtomicReference",
+      "package": "java.util.concurrent.atomic"
+    },
+    {
+      "type": "TimelineEvent",
+      "package": "org.springframework.boot.context.metrics.buffering.StartupTimeline"
+    },
+    {
+      "type": "ConverterNotFoundException",
+      "package": "org.springframework.core.convert"
+    },
+    {
+      "type": "TreeSet",
+      "package": "java.util"
+    },
+    {
+      "type": "UnboundConfigurationPropertiesException",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "IterableConfigurationPropertySource",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "FieldError",
+      "package": "org.springframework.validation"
+    },
+    {
+      "type": "NotReadablePropertyException",
+      "package": "org.springframework.beans"
+    },
+    {
+      "type": "DataObjectPropertyName",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "Form",
+      "package": "org.springframework.boot.context.properties.source.ConfigurationPropertyName"
+    },
+    {
+      "type": "AbstractBindingResult",
+      "package": "org.springframework.validation"
+    },
+    {
+      "type": "BeanPropertyBindingResult",
+      "package": "org.springframework.validation"
+    },
+    {
+      "type": "Validator",
+      "package": "org.springframework.validation"
+    },
+    {
+      "type": "ObjectError",
+      "package": "org.springframework.validation"
+    },
+    {
+      "type": "Context",
+      "package": "org.springframework.boot.context.properties.bind.Binder"
+    },
+    {
+      "type": "Array",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "Constructor",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "PropertyEditor",
+      "package": "java.beans"
+    },
+    {
+      "type": "Annotation",
+      "package": "java.lang.annotation"
+    },
+    {
+      "type": "BeanUtils",
+      "package": "org.springframework.beans"
+    },
+    {
+      "type": "PropertyEditorRegistry",
+      "package": "org.springframework.beans"
+    },
+    {
+      "type": "SimpleTypeConverter",
+      "package": "org.springframework.beans"
+    },
+    {
+      "type": "CustomBooleanEditor",
+      "package": "org.springframework.beans.propertyeditors"
+    },
+    {
+      "type": "CustomNumberEditor",
+      "package": "org.springframework.beans.propertyeditors"
+    },
+    {
+      "type": "FileEditor",
+      "package": "org.springframework.beans.propertyeditors"
+    },
+    {
+      "type": "ConversionException",
+      "package": "org.springframework.core.convert"
+    },
+    {
+      "type": "ConversionFailedException",
+      "package": "org.springframework.core.convert"
+    },
+    {
+      "type": "TypeDescriptor",
+      "package": "org.springframework.core.convert"
+    },
+    {
+      "type": "ConditionalGenericConverter",
+      "package": "org.springframework.core.convert.converter"
+    },
+    {
+      "type": "GenericConversionService",
+      "package": "org.springframework.core.convert.support"
+    },
+    {
+      "type": "Field",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "JvmClassMappingKt",
+      "package": "kotlin.jvm"
+    },
+    {
+      "type": "KClass",
+      "package": "kotlin.reflect"
+    },
+    {
+      "type": "MemberCategory",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "ReflectionHints",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "NestedConfigurationProperty",
+      "package": "org.springframework.boot.context.properties"
+    },
+    {
+      "type": "BeanProperties",
+      "package": "org.springframework.boot.context.properties.bind.JavaBeanBinder"
+    },
+    {
+      "type": "BeanProperty",
+      "package": "org.springframework.boot.context.properties.bind.JavaBeanBinder"
+    },
+    {
+      "type": "KotlinDetector",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "MergedAnnotations",
+      "package": "org.springframework.core.annotation"
+    },
+    {
+      "type": "BindRestriction",
+      "package": "org.springframework.boot.context.properties.bind.Bindable"
+    },
+    {
+      "type": "ConfigurationPropertyCaching",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "ConfigurationPropertySources",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "ConfigurationPropertyState",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "DefaultFormattingConversionService",
+      "package": "org.springframework.format.support"
+    },
+    {
+      "type": "ConcurrentReferenceHashMap",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "CollectionFactory",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "Documented",
+      "package": "java.lang.annotation"
+    },
+    {
+      "type": "ElementType",
+      "package": "java.lang.annotation"
+    },
+    {
+      "type": "Retention",
+      "package": "java.lang.annotation"
+    },
+    {
+      "type": "RetentionPolicy",
+      "package": "java.lang.annotation"
+    },
+    {
+      "type": "Target",
+      "package": "java.lang.annotation"
+    },
+    {
+      "type": "Modifier",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "Autowired",
+      "package": "org.springframework.beans.factory.annotation"
+    },
+    {
+      "type": "SearchStrategy",
+      "package": "org.springframework.core.annotation.MergedAnnotations"
+    },
+    {
+      "type": "Introspector",
+      "package": "java.beans"
+    },
+    {
+      "type": "InvocationTargetException",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "BridgeMethodResolver",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "MethodParameter",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "EnumMap",
+      "package": "java.util"
+    },
+    {
+      "type": "PropertySources",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "Parameter",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "Optional",
+      "package": "java.util"
+    },
+    {
+      "type": "KFunction",
+      "package": "kotlin.reflect"
+    },
+    {
+      "type": "KParameter",
+      "package": "kotlin.reflect"
+    },
+    {
+      "type": "ReflectJvmMapping",
+      "package": "kotlin.reflect.jvm"
+    },
+    {
+      "type": "DefaultParameterNameDiscoverer",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "ParameterNameDiscoverer",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "MergedAnnotation",
+      "package": "org.springframework.core.annotation"
+    },
+    {
+      "type": "OriginTrackedValue",
+      "package": "org.springframework.boot.origin"
+    },
+    {
+      "type": "ConfigurablePropertyResolver",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "StubPropertySource",
+      "package": "org.springframework.core.env.PropertySource"
+    },
+    {
+      "type": "PropertySourcesPropertyResolver",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "AbstractPropertyResolver",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "MapPropertySource",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "BiPredicate",
+      "package": "java.util.function"
+    },
+    {
+      "type": "SoftReference",
+      "package": "java.lang.ref"
+    },
+    {
+      "type": "Random",
+      "package": "java.util"
+    },
+    {
+      "type": "PropertySourceOrigin",
+      "package": "org.springframework.boot.origin"
+    },
+    {
+      "type": "SystemEnvironmentPropertySource",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "ReferenceType",
+      "package": "org.springframework.util.ConcurrentReferenceHashMap"
+    },
+    {
+      "type": "ConcurrentModificationException",
+      "package": "java.util"
+    },
+    {
+      "type": "ToStringFormat",
+      "package": "org.springframework.boot.context.properties.source.ConfigurationPropertyName"
+    },
+    {
+      "type": "BeanDefinitionRegistry",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "BindMethod",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "AttributeAccessor",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "BeanDefinition",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "BeanDefinitionBuilder",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "ConstructorBinding",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "AliasFor",
+      "package": "org.springframework.core.annotation"
+    },
+    {
+      "type": "Indexed",
+      "package": "org.springframework.stereotype"
+    },
+    {
+      "type": "AnnotatedElement",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "AopUtils",
+      "package": "org.springframework.aop.support"
+    },
+    {
+      "type": "NoSuchBeanDefinitionException",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "BeanPostProcessor",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "RootBeanDefinition",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "BindConstructorProvider",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "Bean",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "Validated",
+      "package": "org.springframework.validation.annotation"
+    },
+    {
+      "type": "GenerationContext",
+      "package": "org.springframework.aot.generate"
+    },
+    {
+      "type": "BeanFactoryInitializationAotContribution",
+      "package": "org.springframework.beans.factory.aot"
+    },
+    {
+      "type": "BeanFactoryInitializationAotProcessor",
+      "package": "org.springframework.beans.factory.aot"
+    },
+    {
+      "type": "BeanFactoryInitializationCode",
+      "package": "org.springframework.beans.factory.aot"
+    },
+    {
+      "type": "ScopedProxyUtils",
+      "package": "org.springframework.aop.scope"
+    },
+    {
+      "type": "BeanFactory",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "ListableBeanFactory",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "AnnotatedGenericBeanDefinition",
+      "package": "org.springframework.beans.factory.annotation"
+    },
+    {
+      "type": "BeanDefinitionHolder",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "BeanDefinitionReaderUtils",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "AnnotationConfigUtils",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "AnnotationScopeMetadataResolver",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "ScopeMetadata",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "ScopeMetadataResolver",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "ScopedProxyMode",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "Modifier",
+      "package": "javax.lang.model.element"
+    },
+    {
+      "type": "GeneratedMethod",
+      "package": "org.springframework.aot.generate"
+    },
+    {
+      "type": "BeanRegistrationAotContribution",
+      "package": "org.springframework.beans.factory.aot"
+    },
+    {
+      "type": "BeanRegistrationAotProcessor",
+      "package": "org.springframework.beans.factory.aot"
+    },
+    {
+      "type": "BeanRegistrationCode",
+      "package": "org.springframework.beans.factory.aot"
+    },
+    {
+      "type": "BeanRegistrationCodeFragments",
+      "package": "org.springframework.beans.factory.aot"
+    },
+    {
+      "type": "BeanRegistrationCodeFragmentsDecorator",
+      "package": "org.springframework.beans.factory.aot"
+    },
+    {
+      "type": "InstanceSupplier",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "RegisteredBean",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "ClassName",
+      "package": "org.springframework.javapoet"
+    },
+    {
+      "type": "CodeBlock",
+      "package": "org.springframework.javapoet"
+    },
+    {
+      "type": "BeanCreationException",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "FactoryBean",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "BoundPropertiesTrackingBindHandler",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "PropertySourcesPlaceholdersResolver",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "IgnoreErrorsBindHandler",
+      "package": "org.springframework.boot.context.properties.bind.handler"
+    },
+    {
+      "type": "IgnoreTopLevelConverterNotFoundBindHandler",
+      "package": "org.springframework.boot.context.properties.bind.handler"
+    },
+    {
+      "type": "NoUnboundElementsBindHandler",
+      "package": "org.springframework.boot.context.properties.bind.handler"
+    },
+    {
+      "type": "ValidationBindHandler",
+      "package": "org.springframework.boot.context.properties.bind.validation"
+    },
+    {
+      "type": "UnboundElementsSourceFilter",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "Errors",
+      "package": "org.springframework.validation"
+    },
+    {
+      "type": "Qualifier",
+      "package": "org.springframework.beans.factory.annotation"
+    },
+    {
+      "type": "MessageInterpolatorFactory",
+      "package": "org.springframework.boot.validation"
+    },
+    {
+      "type": "LocalValidatorFactoryBean",
+      "package": "org.springframework.validation.beanvalidation"
+    },
+    {
+      "type": "Import",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "Component",
+      "package": "org.springframework.stereotype"
+    },
+    {
+      "type": "TypeExcludeFilter",
+      "package": "org.springframework.boot.context"
+    },
+    {
+      "type": "ClassPathScanningCandidateComponentProvider",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "AnnotationAttributes",
+      "package": "org.springframework.core.annotation"
+    },
+    {
+      "type": "AnnotationTypeFilter",
+      "package": "org.springframework.core.type.filter"
+    },
+    {
+      "type": "DefaultConversionService",
+      "package": "org.springframework.core.convert.support"
+    },
+    {
+      "type": "FormattingConversionService",
+      "package": "org.springframework.format.support"
+    },
+    {
+      "type": "MethodValidationExcludeFilter",
+      "package": "org.springframework.boot.validation.beanvalidation"
+    },
+    {
+      "type": "Conventions",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "Nested",
+      "package": "org.springframework.boot.context.properties.bind"
+    },
+    {
+      "type": "InjectionPoint",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "UnsatisfiedDependencyException",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "AbstractInjectionFailureAnalyzer",
+      "package": "org.springframework.boot.diagnostics.analyzer"
+    },
+    {
+      "type": "BiFunction",
+      "package": "java.util.function"
+    },
+    {
+      "type": "SingletonSupplier",
+      "package": "org.springframework.util.function"
+    },
+    {
+      "type": "PropertySourcesPlaceholderConfigurer",
+      "package": "org.springframework.context.support"
+    },
+    {
+      "type": "SpringApplicationEvent",
+      "package": "org.springframework.boot.context.event"
+    },
+    {
+      "type": "ApplicationPid",
+      "package": "org.springframework.boot.system"
+    },
+    {
+      "type": "SystemProperties",
+      "package": "org.springframework.boot.system"
+    },
+    {
+      "type": "AnnotatedBeanDefinition",
+      "package": "org.springframework.beans.factory.annotation"
+    },
+    {
+      "type": "BeanDefinitionRegistryPostProcessor",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "ComponentScan",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "AtomicLong",
+      "package": "java.util.concurrent.atomic"
+    },
+    {
+      "type": "BeanFactoryAware",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "MetadataReader",
+      "package": "org.springframework.core.type.classreading"
+    },
+    {
+      "type": "MetadataReaderFactory",
+      "package": "org.springframework.core.type.classreading"
+    },
+    {
+      "type": "TypeFilter",
+      "package": "org.springframework.core.type.filter"
+    },
+    {
+      "type": "BeanFactoryAnnotationUtils",
+      "package": "org.springframework.beans.factory.annotation"
+    },
+    {
+      "type": "LocaleContextHolder",
+      "package": "org.springframework.context.i18n"
+    },
+    {
+      "type": "ConditionalConverter",
+      "package": "org.springframework.core.convert.converter"
+    },
+    {
+      "type": "Converter",
+      "package": "org.springframework.core.convert.converter"
+    },
+    {
+      "type": "ConverterFactory",
+      "package": "org.springframework.core.convert.converter"
+    },
+    {
+      "type": "ConverterRegistry",
+      "package": "org.springframework.core.convert.converter"
+    },
+    {
+      "type": "GenericConverter",
+      "package": "org.springframework.core.convert.converter"
+    },
+    {
+      "type": "ConvertiblePair",
+      "package": "org.springframework.core.convert.converter.GenericConverter"
+    },
+    {
+      "type": "ConfigurableConversionService",
+      "package": "org.springframework.core.convert.support"
+    },
+    {
+      "type": "AnnotationFormatterFactory",
+      "package": "org.springframework.format"
+    },
+    {
+      "type": "Formatter",
+      "package": "org.springframework.format"
+    },
+    {
+      "type": "FormatterRegistry",
+      "package": "org.springframework.format"
+    },
+    {
+      "type": "Parser",
+      "package": "org.springframework.format"
+    },
+    {
+      "type": "Printer",
+      "package": "org.springframework.format"
+    },
+    {
+      "type": "StringValueResolver",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "ParseException",
+      "package": "java.text"
+    },
+    {
+      "type": "DataSize",
+      "package": "org.springframework.util.unit"
+    },
+    {
+      "type": "DataUnit",
+      "package": "org.springframework.util.unit"
+    },
+    {
+      "type": "ChronoUnit",
+      "package": "java.time.temporal"
+    },
+    {
+      "type": "InetAddress",
+      "package": "java.net"
+    },
+    {
+      "type": "UnknownHostException",
+      "package": "java.net"
+    },
+    {
+      "type": "InputStreamSource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "FileCopyUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "OffsetDateTime",
+      "package": "java.time"
+    },
+    {
+      "type": "DateTimeFormatter",
+      "package": "java.time.format"
+    },
+    {
+      "type": "Period",
+      "package": "java.time"
+    },
+    {
+      "type": "ApplicationResourceLoader",
+      "package": "org.springframework.boot.io"
+    },
+    {
+      "type": "BeanInstantiationException",
+      "package": "org.springframework.beans"
+    },
+    {
+      "type": "FailureAnalyzer",
+      "package": "org.springframework.boot.diagnostics"
+    },
+    {
+      "type": "AotInitializerNotFoundException",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "BeanCurrentlyInCreationException",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "PrintWriter",
+      "package": "java.io"
+    },
+    {
+      "type": "StringWriter",
+      "package": "java.io"
+    },
+    {
+      "type": "BeanDefinitionOverrideException",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "Proxy",
+      "package": "java.lang.reflect"
+    },
+    {
+      "type": "BeanNotOfRequiredTypeException",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "BindValidationException",
+      "package": "org.springframework.boot.context.properties.bind.validation"
+    },
+    {
+      "type": "InvalidConfigurationPropertyNameException",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "InvalidConfigurationPropertyValueException",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "MutuallyExclusiveConfigurationPropertiesException",
+      "package": "org.springframework.boot.context.properties.source"
+    },
+    {
+      "type": "NoUniqueBeanDefinitionException",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "ConfigurableBeanFactory",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "PatternParseException",
+      "package": "org.springframework.web.util.pattern"
+    },
+    {
+      "type": "PortInUseException",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "ValidationException",
+      "package": "jakarta.validation"
+    },
+    {
+      "type": "SpringBootExceptionReporter",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "FailureHandler",
+      "package": "org.springframework.core.io.support.SpringFactoriesLoader"
+    },
+    {
+      "type": "ByteArrayInputStream",
+      "package": "java.io"
+    },
+    {
+      "type": "InputStream",
+      "package": "java.io"
+    },
+    {
+      "type": "FileVisitOption",
+      "package": "java.nio.file"
+    },
+    {
+      "type": "BasicFileAttributes",
+      "package": "java.nio.file.attribute"
+    },
+    {
+      "type": "TreeMap",
+      "package": "java.util"
+    },
+    {
+      "type": "Lock",
+      "package": "java.util.concurrent.locks"
+    },
+    {
+      "type": "ReentrantLock",
+      "package": "java.util.concurrent.locks"
+    },
+    {
+      "type": "TextResourceOrigin",
+      "package": "org.springframework.boot.origin"
+    },
+    {
+      "type": "Location",
+      "package": "org.springframework.boot.origin.TextResourceOrigin"
+    },
+    {
+      "type": "AotDetector",
+      "package": "org.springframework.aot"
+    },
+    {
+      "type": "GeneratedClass",
+      "package": "org.springframework.aot.generate"
+    },
+    {
+      "type": "DeferredLogs",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "SmartApplicationListener",
+      "package": "org.springframework.context.event"
+    },
+    {
+      "type": "Closeable",
+      "package": "java.io"
+    },
+    {
+      "type": "LineNumberReader",
+      "package": "java.io"
+    },
+    {
+      "type": "BooleanSupplier",
+      "package": "java.util.function"
+    },
+    {
+      "type": "DumperOptions",
+      "package": "org.yaml.snakeyaml"
+    },
+    {
+      "type": "LoaderOptions",
+      "package": "org.yaml.snakeyaml"
+    },
+    {
+      "type": "Yaml",
+      "package": "org.yaml.snakeyaml"
+    },
+    {
+      "type": "BaseConstructor",
+      "package": "org.yaml.snakeyaml.constructor"
+    },
+    {
+      "type": "Constructor",
+      "package": "org.yaml.snakeyaml.constructor"
+    },
+    {
+      "type": "SafeConstructor",
+      "package": "org.yaml.snakeyaml.constructor"
+    },
+    {
+      "type": "Mark",
+      "package": "org.yaml.snakeyaml.error"
+    },
+    {
+      "type": "MappingNode",
+      "package": "org.yaml.snakeyaml.nodes"
+    },
+    {
+      "type": "Node",
+      "package": "org.yaml.snakeyaml.nodes"
+    },
+    {
+      "type": "NodeTuple",
+      "package": "org.yaml.snakeyaml.nodes"
+    },
+    {
+      "type": "ScalarNode",
+      "package": "org.yaml.snakeyaml.nodes"
+    },
+    {
+      "type": "SequenceNode",
+      "package": "org.yaml.snakeyaml.nodes"
+    },
+    {
+      "type": "Tag",
+      "package": "org.yaml.snakeyaml.nodes"
+    },
+    {
+      "type": "Representer",
+      "package": "org.yaml.snakeyaml.representer"
+    },
+    {
+      "type": "Resolver",
+      "package": "org.yaml.snakeyaml.resolver"
+    },
+    {
+      "type": "YamlProcessor",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "Document",
+      "package": "org.springframework.boot.env.OriginTrackedPropertiesLoader"
+    },
+    {
+      "type": "PropertiesLoaderUtils",
+      "package": "org.springframework.core.io.support"
+    },
+    {
+      "type": "TypeReference",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "HexFormat",
+      "package": "java.util"
+    },
+    {
+      "type": "OptionalInt",
+      "package": "java.util"
+    },
+    {
+      "type": "OptionalLong",
+      "package": "java.util"
+    },
+    {
+      "type": "UUID",
+      "package": "java.util"
+    },
+    {
+      "type": "Instantiator",
+      "package": "org.springframework.boot.util"
+    },
+    {
+      "type": "StandardServletEnvironment",
+      "package": "org.springframework.web.context.support"
+    },
+    {
+      "type": "SystemEnvironmentOrigin",
+      "package": "org.springframework.boot.origin"
+    },
+    {
+      "type": "Flyway",
+      "package": "org.flywaydb.core"
+    },
+    {
+      "type": "AbstractBeansOfTypeDatabaseInitializerDetector",
+      "package": "org.springframework.boot.sql.init.dependency"
+    },
+    {
+      "type": "DatabaseInitializerDetector",
+      "package": "org.springframework.boot.sql.init.dependency"
+    },
+    {
+      "type": "HttpClientSettings",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "LambdaSafe",
+      "package": "org.springframework.boot.util"
+    },
+    {
+      "type": "ClientHttpConnector",
+      "package": "org.springframework.http.client.reactive"
+    },
+    {
+      "type": "HttpComponentsClientHttpConnector",
+      "package": "org.springframework.http.client.reactive"
+    },
+    {
+      "type": "JdkClientHttpConnector",
+      "package": "org.springframework.http.client.reactive"
+    },
+    {
+      "type": "JettyClientHttpConnector",
+      "package": "org.springframework.http.client.reactive"
+    },
+    {
+      "type": "ReactorClientHttpConnector",
+      "package": "org.springframework.http.client.reactive"
+    },
+    {
+      "type": "HttpRedirects",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "SslBundle",
+      "package": "org.springframework.boot.ssl"
+    },
+    {
+      "type": "ConnectionConfig",
+      "package": "org.apache.hc.client5.http.config"
+    },
+    {
+      "type": "RequestConfig",
+      "package": "org.apache.hc.client5.http.config"
+    },
+    {
+      "type": "CloseableHttpAsyncClient",
+      "package": "org.apache.hc.client5.http.impl.async"
+    },
+    {
+      "type": "HttpAsyncClientBuilder",
+      "package": "org.apache.hc.client5.http.impl.async"
+    },
+    {
+      "type": "PoolingAsyncClientConnectionManagerBuilder",
+      "package": "org.apache.hc.client5.http.impl.nio"
+    },
+    {
+      "type": "TlsStrategy",
+      "package": "org.apache.hc.core5.http.nio.ssl"
+    },
+    {
+      "type": "HttpComponentsHttpAsyncClientBuilder",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "HttpClient",
+      "package": "java.net.http"
+    },
+    {
+      "type": "PropertyMapper",
+      "package": "org.springframework.boot.context.properties"
+    },
+    {
+      "type": "JdkHttpClientBuilder",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "HttpClient",
+      "package": "org.eclipse.jetty.client"
+    },
+    {
+      "type": "HttpClientTransport",
+      "package": "org.eclipse.jetty.client"
+    },
+    {
+      "type": "ClientConnector",
+      "package": "org.eclipse.jetty.io"
+    },
+    {
+      "type": "JettyHttpClientBuilder",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "HttpClient",
+      "package": "reactor.netty.http.client"
+    },
+    {
+      "type": "ReactorHttpClientBuilder",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "ClientHttpRequestFactory",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "HttpComponentsClientHttpRequestFactory",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "JdkClientHttpRequestFactory",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "JettyClientHttpRequestFactory",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "ReactorClientHttpRequestFactory",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "SimpleClientHttpRequestFactory",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "HttpURLConnection",
+      "package": "java.net"
+    },
+    {
+      "type": "AbstractClientHttpRequestFactoryWrapper",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "HttpClient",
+      "package": "org.apache.hc.client5.http.classic"
+    },
+    {
+      "type": "HttpClientBuilder",
+      "package": "org.apache.hc.client5.http.impl.classic"
+    },
+    {
+      "type": "PoolingHttpClientConnectionManagerBuilder",
+      "package": "org.apache.hc.client5.http.impl.io"
+    },
+    {
+      "type": "TlsSocketStrategy",
+      "package": "org.apache.hc.client5.http.ssl"
+    },
+    {
+      "type": "SocketConfig",
+      "package": "org.apache.hc.core5.http.io"
+    },
+    {
+      "type": "TimeUnit",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "HttpAsyncClient",
+      "package": "org.apache.hc.client5.http.async"
+    },
+    {
+      "type": "PoolingAsyncClientConnectionManager",
+      "package": "org.apache.hc.client5.http.impl.nio"
+    },
+    {
+      "type": "CloseableHttpClient",
+      "package": "org.apache.hc.client5.http.impl.classic"
+    },
+    {
+      "type": "PoolingHttpClientConnectionManager",
+      "package": "org.apache.hc.client5.http.impl.io"
+    },
+    {
+      "type": "URI",
+      "package": "java.net"
+    },
+    {
+      "type": "DefaultRedirectStrategy",
+      "package": "org.apache.hc.client5.http.impl"
+    },
+    {
+      "type": "RedirectStrategy",
+      "package": "org.apache.hc.client5.http.protocol"
+    },
+    {
+      "type": "HttpRequest",
+      "package": "org.apache.hc.core5.http"
+    },
+    {
+      "type": "HttpResponse",
+      "package": "org.apache.hc.core5.http"
+    },
+    {
+      "type": "HttpContext",
+      "package": "org.apache.hc.core5.http.protocol"
+    },
+    {
+      "type": "Redirects",
+      "package": "org.springframework.boot.http.client.ClientHttpRequestFactorySettings"
+    },
+    {
+      "type": "SSLContext",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "DefaultClientTlsStrategy",
+      "package": "org.apache.hc.client5.http.ssl"
+    },
+    {
+      "type": "DefaultHostnameVerifier",
+      "package": "org.apache.hc.client5.http.ssl"
+    },
+    {
+      "type": "SslOptions",
+      "package": "org.springframework.boot.ssl"
+    },
+    {
+      "type": "Redirect",
+      "package": "java.net.http.HttpClient"
+    },
+    {
+      "type": "SSLParameters",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "Request",
+      "package": "org.eclipse.jetty.client"
+    },
+    {
+      "type": "HttpClientTransportDynamic",
+      "package": "org.eclipse.jetty.client.transport"
+    },
+    {
+      "type": "HttpClientTransportOverHTTP",
+      "package": "org.eclipse.jetty.client.transport"
+    },
+    {
+      "type": "SslContextFactory",
+      "package": "org.eclipse.jetty.util.ssl"
+    },
+    {
+      "type": "SSLException",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "ChannelOption",
+      "package": "io.netty.channel"
+    },
+    {
+      "type": "SslContextBuilder",
+      "package": "io.netty.handler.ssl"
+    },
+    {
+      "type": "SslContextSpec",
+      "package": "reactor.netty.tcp.SslProvider"
+    },
+    {
+      "type": "SslManagerBundle",
+      "package": "org.springframework.boot.ssl"
+    },
+    {
+      "type": "ThrowingConsumer",
+      "package": "org.springframework.util.function"
+    },
+    {
+      "type": "HttpsURLConnection",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "SSLSocketFactory",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "DateTimeException",
+      "package": "java.time"
+    },
+    {
+      "type": "BuildPropertiesRuntimeHints",
+      "package": "org.springframework.boot.info.BuildProperties"
+    },
+    {
+      "type": "ImportRuntimeHints",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "DateTimeParseException",
+      "package": "java.time.format"
+    },
+    {
+      "type": "GitPropertiesRuntimeHints",
+      "package": "org.springframework.boot.info.GitProperties"
+    },
+    {
+      "type": "GarbageCollectorMXBean",
+      "package": "java.lang.management"
+    },
+    {
+      "type": "MemoryMXBean",
+      "package": "java.lang.management"
+    },
+    {
+      "type": "MemoryUsage",
+      "package": "java.lang.management"
+    },
+    {
+      "type": "PlatformManagedObject",
+      "package": "java.lang.management"
+    },
+    {
+      "type": "KeyStore",
+      "package": "java.security"
+    },
+    {
+      "type": "KeyStoreException",
+      "package": "java.security"
+    },
+    {
+      "type": "Certificate",
+      "package": "java.security.cert"
+    },
+    {
+      "type": "CertificateExpiredException",
+      "package": "java.security.cert"
+    },
+    {
+      "type": "CertificateNotYetValidException",
+      "package": "java.security.cert"
+    },
+    {
+      "type": "X509Certificate",
+      "package": "java.security.cert"
+    },
+    {
+      "type": "Date",
+      "package": "java.util"
+    },
+    {
+      "type": "X500Principal",
+      "package": "javax.security.auth.x500"
+    },
+    {
+      "type": "Status",
+      "package": "org.springframework.boot.info.SslInfo.CertificateValidityInfo"
+    },
+    {
+      "type": "NoSuchSslBundleException",
+      "package": "org.springframework.boot.ssl"
+    },
+    {
+      "type": "SslBundles",
+      "package": "org.springframework.boot.ssl"
+    },
+    {
+      "type": "UncheckedIOException",
+      "package": "java.io"
+    },
+    {
+      "type": "ContextResource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "ProtocolResolver",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "Base64",
+      "package": "java.util"
+    },
+    {
+      "type": "JsonDeserializer",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "JsonSerializer",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "KeyDeserializer",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "Module",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "SimpleModule",
+      "package": "com.fasterxml.jackson.databind.module"
+    },
+    {
+      "type": "HierarchicalBeanFactory",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "Scope",
+      "package": "org.springframework.boot.jackson.JsonComponent"
+    },
+    {
+      "type": "AccessControl",
+      "package": "org.springframework.aot.generate"
+    },
+    {
+      "type": "BindingReflectionHintsRegistrar",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "BigDecimal",
+      "package": "java.math"
+    },
+    {
+      "type": "BigInteger",
+      "package": "java.math"
+    },
+    {
+      "type": "JsonParser",
+      "package": "com.fasterxml.jackson.core"
+    },
+    {
+      "type": "ObjectCodec",
+      "package": "com.fasterxml.jackson.core"
+    },
+    {
+      "type": "TreeNode",
+      "package": "com.fasterxml.jackson.core"
+    },
+    {
+      "type": "DeserializationContext",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "JsonMappingException",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "JsonNode",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "NullNode",
+      "package": "com.fasterxml.jackson.databind.node"
+    },
+    {
+      "type": "JsonGenerator",
+      "package": "com.fasterxml.jackson.core"
+    },
+    {
+      "type": "SerializerProvider",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "DataSource",
+      "package": "javax.sql"
+    },
+    {
+      "type": "EmbeddedDatabaseConnection",
+      "package": "org.springframework.boot.jdbc"
+    },
+    {
+      "type": "AbstractScriptDatabaseInitializer",
+      "package": "org.springframework.boot.sql.init"
+    },
+    {
+      "type": "DatabaseInitializationSettings",
+      "package": "org.springframework.boot.sql.init"
+    },
+    {
+      "type": "DatabasePopulatorUtils",
+      "package": "org.springframework.jdbc.datasource.init"
+    },
+    {
+      "type": "ResourceDatabasePopulator",
+      "package": "org.springframework.jdbc.datasource.init"
+    },
+    {
+      "type": "DatabaseMetaData",
+      "package": "java.sql"
+    },
+    {
+      "type": "DatabaseDriver",
+      "package": "org.springframework.boot.jdbc"
+    },
+    {
+      "type": "JdbcUtils",
+      "package": "org.springframework.jdbc.support"
+    },
+    {
+      "type": "BasicDataSource",
+      "package": "org.apache.commons.dbcp2"
+    },
+    {
+      "type": "HikariDataSource",
+      "package": "com.zaxxer.hikari"
+    },
+    {
+      "type": "HikariPool",
+      "package": "com.zaxxer.hikari.pool"
+    },
+    {
+      "type": "DirectFieldAccessor",
+      "package": "org.springframework.beans"
+    },
+    {
+      "type": "SQLException",
+      "package": "java.sql"
+    },
+    {
+      "type": "PoolDataSource",
+      "package": "oracle.ucp.jdbc"
+    },
+    {
+      "type": "ConnectionPool",
+      "package": "org.apache.tomcat.jdbc.pool"
+    },
+    {
+      "type": "DataSource",
+      "package": "org.apache.tomcat.jdbc.pool"
+    },
+    {
+      "type": "PropertyVetoException",
+      "package": "java.beans"
+    },
+    {
+      "type": "ComboPooledDataSource",
+      "package": "com.mchange.v2.c3p0"
+    },
+    {
+      "type": "OracleDataSource",
+      "package": "oracle.jdbc.datasource"
+    },
+    {
+      "type": "PoolDataSourceImpl",
+      "package": "oracle.ucp.jdbc"
+    },
+    {
+      "type": "JdbcDataSource",
+      "package": "org.h2.jdbcx"
+    },
+    {
+      "type": "PGSimpleDataSource",
+      "package": "org.postgresql.ds"
+    },
+    {
+      "type": "ViburDBCPDataSource",
+      "package": "org.vibur.dbcp"
+    },
+    {
+      "type": "SimpleDriverDataSource",
+      "package": "org.springframework.jdbc.datasource"
+    },
+    {
+      "type": "Wrapper",
+      "package": "java.sql"
+    },
+    {
+      "type": "AopProxyUtils",
+      "package": "org.springframework.aop.framework"
+    },
+    {
+      "type": "DelegatingDataSource",
+      "package": "org.springframework.jdbc.datasource"
+    },
+    {
+      "type": "Connection",
+      "package": "java.sql"
+    },
+    {
+      "type": "DataAccessException",
+      "package": "org.springframework.dao"
+    },
+    {
+      "type": "EmbeddedDatabaseType",
+      "package": "org.springframework.jdbc.datasource.embedded"
+    },
+    {
+      "type": "ThrowingFunction",
+      "package": "org.springframework.util.function"
+    },
+    {
+      "type": "CompletableFuture",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "ExecutionException",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "ThreadPoolExecutor",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "TimeoutException",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "HikariConfigMXBean",
+      "package": "com.zaxxer.hikari"
+    },
+    {
+      "type": "HikariPoolMXBean",
+      "package": "com.zaxxer.hikari"
+    },
+    {
+      "type": "Lifecycle",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "AbstractBeansOfTypeDependsOnDatabaseInitializationDetector",
+      "package": "org.springframework.boot.sql.init.dependency"
+    },
+    {
+      "type": "DependsOnDatabaseInitializationDetector",
+      "package": "org.springframework.boot.sql.init.dependency"
+    },
+    {
+      "type": "JdbcOperations",
+      "package": "org.springframework.jdbc.core"
+    },
+    {
+      "type": "NamedParameterJdbcOperations",
+      "package": "org.springframework.jdbc.core.namedparam"
+    },
+    {
+      "type": "JdbcClient",
+      "package": "org.springframework.jdbc.core.simple"
+    },
+    {
+      "type": "XADataSource",
+      "package": "javax.sql"
+    },
+    {
+      "type": "TransactionManager",
+      "package": "jakarta.transaction"
+    },
+    {
+      "type": "ConnectionFactory",
+      "package": "jakarta.jms"
+    },
+    {
+      "type": "JmsPoolConnectionFactory",
+      "package": "org.messaginghub.pooled.jms"
+    },
+    {
+      "type": "CachingConnectionFactory",
+      "package": "org.springframework.jms.connection"
+    },
+    {
+      "type": "XAConnectionFactory",
+      "package": "jakarta.jms"
+    },
+    {
+      "type": "DSLContext",
+      "package": "org.jooq"
+    },
+    {
+      "type": "Callable",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "Gson",
+      "package": "com.google.gson"
+    },
+    {
+      "type": "GsonBuilder",
+      "package": "com.google.gson"
+    },
+    {
+      "type": "TypeToken",
+      "package": "com.google.gson.reflect"
+    },
+    {
+      "type": "TypeReference",
+      "package": "com.fasterxml.jackson.core.type"
+    },
+    {
+      "type": "ObjectMapper",
+      "package": "com.fasterxml.jackson.databind"
+    },
+    {
+      "type": "ClassSerializer",
+      "package": "com.fasterxml.jackson.databind.ser.std"
+    },
+    {
+      "type": "FileSerializer",
+      "package": "com.fasterxml.jackson.databind.ser.std"
+    },
+    {
+      "type": "AtomicBooleanSerializer",
+      "package": "com.fasterxml.jackson.databind.ser.std.StdJdkSerializers"
+    },
+    {
+      "type": "AtomicIntegerSerializer",
+      "package": "com.fasterxml.jackson.databind.ser.std.StdJdkSerializers"
+    },
+    {
+      "type": "AtomicLongSerializer",
+      "package": "com.fasterxml.jackson.databind.ser.std.StdJdkSerializers"
+    },
+    {
+      "type": "TokenBufferSerializer",
+      "package": "com.fasterxml.jackson.databind.ser.std"
+    },
+    {
+      "type": "TypeHint",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "MemberPath",
+      "package": "org.springframework.boot.json.JsonWriter"
+    },
+    {
+      "type": "NameProcessor",
+      "package": "org.springframework.boot.json.JsonWriter"
+    },
+    {
+      "type": "ValueProcessor",
+      "package": "org.springframework.boot.json.JsonWriter"
+    },
+    {
+      "type": "Series",
+      "package": "org.springframework.boot.json.JsonValueWriter"
+    },
+    {
+      "type": "Extractor",
+      "package": "org.springframework.boot.json.JsonWriter.Member"
+    },
+    {
+      "type": "ByteArrayOutputStream",
+      "package": "java.io"
+    },
+    {
+      "type": "OutputStream",
+      "package": "java.io"
+    },
+    {
+      "type": "OutputStreamWriter",
+      "package": "java.io"
+    },
+    {
+      "type": "Writer",
+      "package": "java.io"
+    },
+    {
+      "type": "Charset",
+      "package": "java.nio.charset"
+    },
+    {
+      "type": "WritableResource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "ChangeLogParseException",
+      "package": "liquibase.exception"
+    },
+    {
+      "type": "SpringLiquibase",
+      "package": "liquibase.integration.spring"
+    },
+    {
+      "type": "Level",
+      "package": "java.util.logging"
+    },
+    {
+      "type": "LogManager",
+      "package": "java.util.logging"
+    },
+    {
+      "type": "Logger",
+      "package": "java.util.logging"
+    },
+    {
+      "type": "AbstractLoggingSystem",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "LoggerConfiguration",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "LoggingSystemFactory",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "Formatter",
+      "package": "java.util.logging"
+    },
+    {
+      "type": "LogRecord",
+      "package": "java.util.logging"
+    },
+    {
+      "type": "LoggingSystemProperty",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "Level",
+      "package": "org.apache.logging.log4j"
+    },
+    {
+      "type": "LogEvent",
+      "package": "org.apache.logging.log4j.core"
+    },
+    {
+      "type": "Configuration",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "Plugin",
+      "package": "org.apache.logging.log4j.core.config.plugins"
+    },
+    {
+      "type": "PatternLayout",
+      "package": "org.apache.logging.log4j.core.layout"
+    },
+    {
+      "type": "ConverterKeys",
+      "package": "org.apache.logging.log4j.core.pattern"
+    },
+    {
+      "type": "LogEventPatternConverter",
+      "package": "org.apache.logging.log4j.core.pattern"
+    },
+    {
+      "type": "PatternConverter",
+      "package": "org.apache.logging.log4j.core.pattern"
+    },
+    {
+      "type": "PatternFormatter",
+      "package": "org.apache.logging.log4j.core.pattern"
+    },
+    {
+      "type": "PatternParser",
+      "package": "org.apache.logging.log4j.core.pattern"
+    },
+    {
+      "type": "AnsiColor",
+      "package": "org.springframework.boot.ansi"
+    },
+    {
+      "type": "AnsiElement",
+      "package": "org.springframework.boot.ansi"
+    },
+    {
+      "type": "AnsiStyle",
+      "package": "org.springframework.boot.ansi"
+    },
+    {
+      "type": "MdcPatternConverter",
+      "package": "org.apache.logging.log4j.core.pattern"
+    },
+    {
+      "type": "PerformanceSensitive",
+      "package": "org.apache.logging.log4j.util"
+    },
+    {
+      "type": "ReadOnlyStringMap",
+      "package": "org.apache.logging.log4j.util"
+    },
+    {
+      "type": "CorrelationIdFormatter",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "Marker",
+      "package": "org.apache.logging.log4j"
+    },
+    {
+      "type": "ThrowableProxy",
+      "package": "org.apache.logging.log4j.core.impl"
+    },
+    {
+      "type": "Instant",
+      "package": "org.apache.logging.log4j.core.time"
+    },
+    {
+      "type": "JsonWriter",
+      "package": "org.springframework.boot.json"
+    },
+    {
+      "type": "StackTracePrinter",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "CommonStructuredLogFormat",
+      "package": "org.springframework.boot.logging.structured"
+    },
+    {
+      "type": "ElasticCommonSchemaPairs",
+      "package": "org.springframework.boot.logging.structured"
+    },
+    {
+      "type": "ElasticCommonSchemaProperties",
+      "package": "org.springframework.boot.logging.structured"
+    },
+    {
+      "type": "JsonWriterStructuredLogFormatter",
+      "package": "org.springframework.boot.logging.structured"
+    },
+    {
+      "type": "StructuredLogFormatter",
+      "package": "org.springframework.boot.logging.structured"
+    },
+    {
+      "type": "StructuredLoggingJsonMembersCustomizer",
+      "package": "org.springframework.boot.logging.structured"
+    },
+    {
+      "type": "ExtendedThrowablePatternConverter",
+      "package": "org.apache.logging.log4j.core.pattern"
+    },
+    {
+      "type": "ThrowablePatternConverter",
+      "package": "org.apache.logging.log4j.core.pattern"
+    },
+    {
+      "type": "LoggingEvent",
+      "package": "org.slf4j.event"
+    },
+    {
+      "type": "Severity",
+      "package": "org.apache.logging.log4j.core.net"
+    },
+    {
+      "type": "Message",
+      "package": "org.apache.logging.log4j.message"
+    },
+    {
+      "type": "Members",
+      "package": "org.springframework.boot.json.JsonWriter"
+    },
+    {
+      "type": "WritableJson",
+      "package": "org.springframework.boot.json"
+    },
+    {
+      "type": "GraylogExtendedLogFormatProperties",
+      "package": "org.springframework.boot.logging.structured"
+    },
+    {
+      "type": "URLConnection",
+      "package": "java.net"
+    },
+    {
+      "type": "ConsoleHandler",
+      "package": "java.util.logging"
+    },
+    {
+      "type": "Handler",
+      "package": "java.util.logging"
+    },
+    {
+      "type": "LogManager",
+      "package": "org.apache.logging.log4j"
+    },
+    {
+      "type": "Filter",
+      "package": "org.apache.logging.log4j.core"
+    },
+    {
+      "type": "Logger",
+      "package": "org.apache.logging.log4j.core"
+    },
+    {
+      "type": "LoggerContext",
+      "package": "org.apache.logging.log4j.core"
+    },
+    {
+      "type": "AbstractConfiguration",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "ConfigurationFactory",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "ConfigurationSource",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "LoggerConfig",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "CompositeConfiguration",
+      "package": "org.apache.logging.log4j.core.config.composite"
+    },
+    {
+      "type": "DenyAllFilter",
+      "package": "org.apache.logging.log4j.core.filter"
+    },
+    {
+      "type": "UrlConnectionFactory",
+      "package": "org.apache.logging.log4j.core.net"
+    },
+    {
+      "type": "SslConfiguration",
+      "package": "org.apache.logging.log4j.core.net.ssl"
+    },
+    {
+      "type": "SslConfigurationFactory",
+      "package": "org.apache.logging.log4j.core.net.ssl"
+    },
+    {
+      "type": "AuthorizationProvider",
+      "package": "org.apache.logging.log4j.core.util"
+    },
+    {
+      "type": "NameUtil",
+      "package": "org.apache.logging.log4j.core.util"
+    },
+    {
+      "type": "Log4jBridgeHandler",
+      "package": "org.apache.logging.log4j.jul"
+    },
+    {
+      "type": "StatusConsoleListener",
+      "package": "org.apache.logging.log4j.status"
+    },
+    {
+      "type": "StatusLogger",
+      "package": "org.apache.logging.log4j.status"
+    },
+    {
+      "type": "PropertiesUtil",
+      "package": "org.apache.logging.log4j.util"
+    },
+    {
+      "type": "LevelConfiguration",
+      "package": "org.springframework.boot.logging.LoggerConfiguration"
+    },
+    {
+      "type": "ZoneId",
+      "package": "java.time"
+    },
+    {
+      "type": "DefaultConfiguration",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "Order",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "ShutdownCallbackRegistry",
+      "package": "org.apache.logging.log4j.core.util"
+    },
+    {
+      "type": "BiConsumer",
+      "package": "org.apache.logging.log4j.util"
+    },
+    {
+      "type": "PropertySource",
+      "package": "org.apache.logging.log4j.util"
+    },
+    {
+      "type": "LoggerContextAware",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "StrLookup",
+      "package": "org.apache.logging.log4j.core.lookup"
+    },
+    {
+      "type": "Logger",
+      "package": "org.apache.logging.log4j"
+    },
+    {
+      "type": "Node",
+      "package": "org.apache.logging.log4j.core.config"
+    },
+    {
+      "type": "Arbiter",
+      "package": "org.apache.logging.log4j.core.config.arbiters"
+    },
+    {
+      "type": "PluginBuilderAttribute",
+      "package": "org.apache.logging.log4j.core.config.plugins"
+    },
+    {
+      "type": "PluginBuilderFactory",
+      "package": "org.apache.logging.log4j.core.config.plugins"
+    },
+    {
+      "type": "PluginConfiguration",
+      "package": "org.apache.logging.log4j.core.config.plugins"
+    },
+    {
+      "type": "PluginLoggerContext",
+      "package": "org.apache.logging.log4j.core.config.plugins"
+    },
+    {
+      "type": "Profiles",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "Layout",
+      "package": "org.apache.logging.log4j.core"
+    },
+    {
+      "type": "AbstractStringLayout",
+      "package": "org.apache.logging.log4j.core.layout"
+    },
+    {
+      "type": "StructuredLogFormatterFactory",
+      "package": "org.springframework.boot.logging.structured"
+    },
+    {
+      "type": "CommonFormatters",
+      "package": "org.springframework.boot.logging.structured.StructuredLogFormatterFactory"
+    },
+    {
+      "type": "MultiFormatStringBuilderFormattable",
+      "package": "org.apache.logging.log4j.util"
+    },
+    {
+      "type": "ClassicConverter",
+      "package": "ch.qos.logback.classic.pattern"
+    },
+    {
+      "type": "PropertyConverter",
+      "package": "ch.qos.logback.classic.pattern"
+    },
+    {
+      "type": "ILoggingEvent",
+      "package": "ch.qos.logback.classic.spi"
+    },
+    {
+      "type": "Level",
+      "package": "ch.qos.logback.classic"
+    },
+    {
+      "type": "CompositeConverter",
+      "package": "ch.qos.logback.core.pattern"
+    },
+    {
+      "type": "MDCConverter",
+      "package": "ch.qos.logback.classic.pattern"
+    },
+    {
+      "type": "DynamicConverter",
+      "package": "ch.qos.logback.core.pattern"
+    },
+    {
+      "type": "LoggerContext",
+      "package": "ch.qos.logback.classic"
+    },
+    {
+      "type": "Appender",
+      "package": "ch.qos.logback.core"
+    },
+    {
+      "type": "Converter",
+      "package": "ch.qos.logback.core.pattern"
+    },
+    {
+      "type": "LifeCycle",
+      "package": "ch.qos.logback.core.spi"
+    },
+    {
+      "type": "InfoStatus",
+      "package": "ch.qos.logback.core.status"
+    },
+    {
+      "type": "Status",
+      "package": "ch.qos.logback.core.status"
+    },
+    {
+      "type": "PatternLayoutEncoder",
+      "package": "ch.qos.logback.classic.encoder"
+    },
+    {
+      "type": "ThresholdFilter",
+      "package": "ch.qos.logback.classic.filter"
+    },
+    {
+      "type": "ConsoleAppender",
+      "package": "ch.qos.logback.core"
+    },
+    {
+      "type": "OutputStreamAppender",
+      "package": "ch.qos.logback.core"
+    },
+    {
+      "type": "Encoder",
+      "package": "ch.qos.logback.core.encoder"
+    },
+    {
+      "type": "RollingFileAppender",
+      "package": "ch.qos.logback.core.rolling"
+    },
+    {
+      "type": "SizeAndTimeBasedRollingPolicy",
+      "package": "ch.qos.logback.core.rolling"
+    },
+    {
+      "type": "ScanException",
+      "package": "ch.qos.logback.core.spi"
+    },
+    {
+      "type": "FileSize",
+      "package": "ch.qos.logback.core.util"
+    },
+    {
+      "type": "OptionHelper",
+      "package": "ch.qos.logback.core.util"
+    },
+    {
+      "type": "ThrowableProxyConverter",
+      "package": "ch.qos.logback.classic.pattern"
+    },
+    {
+      "type": "IThrowableProxy",
+      "package": "ch.qos.logback.classic.spi"
+    },
+    {
+      "type": "Marker",
+      "package": "org.slf4j"
+    },
+    {
+      "type": "KeyValuePair",
+      "package": "org.slf4j.event"
+    },
+    {
+      "type": "ExtendedThrowableProxyConverter",
+      "package": "ch.qos.logback.classic.pattern"
+    },
+    {
+      "type": "CoreConstants",
+      "package": "ch.qos.logback.core"
+    },
+    {
+      "type": "ThrowableProxy",
+      "package": "ch.qos.logback.classic.spi"
+    },
+    {
+      "type": "LevelToSyslogSeverity",
+      "package": "ch.qos.logback.classic.util"
+    },
+    {
+      "type": "Logger",
+      "package": "ch.qos.logback.classic"
+    },
+    {
+      "type": "ContextAware",
+      "package": "ch.qos.logback.core.spi"
+    },
+    {
+      "type": "PrintStream",
+      "package": "java.io"
+    },
+    {
+      "type": "CodeSource",
+      "package": "java.security"
+    },
+    {
+      "type": "ProtectionDomain",
+      "package": "java.security"
+    },
+    {
+      "type": "JoranConfigurator",
+      "package": "ch.qos.logback.classic.joran"
+    },
+    {
+      "type": "LevelChangePropagator",
+      "package": "ch.qos.logback.classic.jul"
+    },
+    {
+      "type": "TurboFilterList",
+      "package": "ch.qos.logback.classic.spi"
+    },
+    {
+      "type": "TurboFilter",
+      "package": "ch.qos.logback.classic.turbo"
+    },
+    {
+      "type": "JoranException",
+      "package": "ch.qos.logback.core.joran.spi"
+    },
+    {
+      "type": "FilterReply",
+      "package": "ch.qos.logback.core.spi"
+    },
+    {
+      "type": "StatusUtil",
+      "package": "ch.qos.logback.core.status"
+    },
+    {
+      "type": "StatusPrinter2",
+      "package": "ch.qos.logback.core.util"
+    },
+    {
+      "type": "ILoggerFactory",
+      "package": "org.slf4j"
+    },
+    {
+      "type": "Logger",
+      "package": "org.slf4j"
+    },
+    {
+      "type": "LoggerFactory",
+      "package": "org.slf4j"
+    },
+    {
+      "type": "SLF4JBridgeHandler",
+      "package": "org.slf4j.bridge"
+    },
+    {
+      "type": "SubstituteLoggerFactory",
+      "package": "org.slf4j.helpers"
+    },
+    {
+      "type": "SyslogStartConverter",
+      "package": "ch.qos.logback.classic.pattern"
+    },
+    {
+      "type": "DateTokenConverter",
+      "package": "ch.qos.logback.core.rolling.helper"
+    },
+    {
+      "type": "IntegerTokenConverter",
+      "package": "ch.qos.logback.core.rolling.helper"
+    },
+    {
+      "type": "PairExtractor",
+      "package": "org.springframework.boot.json.JsonWriter"
+    },
+    {
+      "type": "Configurator",
+      "package": "ch.qos.logback.classic.spi"
+    },
+    {
+      "type": "ContextAwareBase",
+      "package": "ch.qos.logback.core.spi"
+    },
+    {
+      "type": "ObjectInputStream",
+      "package": "java.io"
+    },
+    {
+      "type": "ObjectOutputStream",
+      "package": "java.io"
+    },
+    {
+      "type": "Serializable",
+      "package": "java.io"
+    },
+    {
+      "type": "Context",
+      "package": "ch.qos.logback.core"
+    },
+    {
+      "type": "ElementSelector",
+      "package": "ch.qos.logback.core.joran.spi"
+    },
+    {
+      "type": "RuleStore",
+      "package": "ch.qos.logback.core.joran.spi"
+    },
+    {
+      "type": "PropertySetter",
+      "package": "ch.qos.logback.core.joran.util"
+    },
+    {
+      "type": "BeanDescription",
+      "package": "ch.qos.logback.core.joran.util.beans"
+    },
+    {
+      "type": "ComponentModel",
+      "package": "ch.qos.logback.core.model"
+    },
+    {
+      "type": "IncludeModel",
+      "package": "ch.qos.logback.core.model"
+    },
+    {
+      "type": "Model",
+      "package": "ch.qos.logback.core.model"
+    },
+    {
+      "type": "ModelUtil",
+      "package": "ch.qos.logback.core.model"
+    },
+    {
+      "type": "DefaultProcessor",
+      "package": "ch.qos.logback.core.model.processor"
+    },
+    {
+      "type": "ModelInterpretationContext",
+      "package": "ch.qos.logback.core.model.processor"
+    },
+    {
+      "type": "AggregationType",
+      "package": "ch.qos.logback.core.util"
+    },
+    {
+      "type": "FileHandler",
+      "package": "org.springframework.aot.generate.GeneratedFiles"
+    },
+    {
+      "type": "Kind",
+      "package": "org.springframework.aot.generate.GeneratedFiles"
+    },
+    {
+      "type": "SerializationHints",
+      "package": "org.springframework.aot.hint"
+    },
+    {
+      "type": "AbstractAotProcessor",
+      "package": "org.springframework.context.aot"
+    },
+    {
+      "type": "NativeDetector",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "BaseModelAction",
+      "package": "ch.qos.logback.core.joran.action"
+    },
+    {
+      "type": "SaxEventInterpretationContext",
+      "package": "ch.qos.logback.core.joran.spi"
+    },
+    {
+      "type": "Attributes",
+      "package": "org.xml.sax"
+    },
+    {
+      "type": "IfNestedWithinSecondPhaseElementSC",
+      "package": "ch.qos.logback.classic.joran.sanity"
+    },
+    {
+      "type": "LoggerModel",
+      "package": "ch.qos.logback.classic.model"
+    },
+    {
+      "type": "RootLoggerModel",
+      "package": "ch.qos.logback.classic.model"
+    },
+    {
+      "type": "Pair",
+      "package": "ch.qos.logback.core.joran.sanity"
+    },
+    {
+      "type": "SanityChecker",
+      "package": "ch.qos.logback.core.joran.sanity"
+    },
+    {
+      "type": "AppenderModel",
+      "package": "ch.qos.logback.core.model"
+    },
+    {
+      "type": "NamedModel",
+      "package": "ch.qos.logback.core.model"
+    },
+    {
+      "type": "ModelHandlerBase",
+      "package": "ch.qos.logback.core.model.processor"
+    },
+    {
+      "type": "ModelHandlerException",
+      "package": "ch.qos.logback.core.model.processor"
+    },
+    {
+      "type": "ActionUtil",
+      "package": "ch.qos.logback.core.joran.action"
+    },
+    {
+      "type": "Scope",
+      "package": "ch.qos.logback.core.joran.action.ActionUtil"
+    },
+    {
+      "type": "PropertyModelHandlerHelper",
+      "package": "ch.qos.logback.core.model.util"
+    },
+    {
+      "type": "EncoderBase",
+      "package": "ch.qos.logback.core.encoder"
+    },
+    {
+      "type": "AvailableParameters",
+      "package": "org.springframework.boot.util.Instantiator"
+    },
+    {
+      "type": "BasicStatusManager",
+      "package": "ch.qos.logback.core"
+    },
+    {
+      "type": "OnConsoleStatusListener",
+      "package": "ch.qos.logback.core.status"
+    },
+    {
+      "type": "StatusListener",
+      "package": "ch.qos.logback.core.status"
+    },
+    {
+      "type": "StatusListenerConfigHelper",
+      "package": "ch.qos.logback.core.util"
+    },
+    {
+      "type": "FailureHandler",
+      "package": "org.springframework.boot.util.Instantiator"
+    },
+    {
+      "type": "GenericTypeResolver",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "StandardStackTracePrinter",
+      "package": "org.springframework.boot.logging"
+    },
+    {
+      "type": "StackTrace",
+      "package": "org.springframework.boot.logging.structured.StructuredLoggingJsonProperties"
+    },
+    {
+      "type": "Line",
+      "package": "org.springframework.boot.logging.DeferredLog"
+    },
+    {
+      "type": "Lines",
+      "package": "org.springframework.boot.logging.DeferredLog"
+    },
+    {
+      "type": "IdentityHashMap",
+      "package": "java.util"
+    },
+    {
+      "type": "ToIntFunction",
+      "package": "java.util.function"
+    },
+    {
+      "type": "ReadableByteChannel",
+      "package": "java.nio.channels"
+    },
+    {
+      "type": "Identifier",
+      "package": "org.hibernate.boot.model.naming"
+    },
+    {
+      "type": "ImplicitJoinTableNameSource",
+      "package": "org.hibernate.boot.model.naming"
+    },
+    {
+      "type": "ImplicitNamingStrategy",
+      "package": "org.hibernate.boot.model.naming"
+    },
+    {
+      "type": "ImplicitNamingStrategyJpaCompliantImpl",
+      "package": "org.hibernate.boot.model.naming"
+    },
+    {
+      "type": "UserTransaction",
+      "package": "jakarta.transaction"
+    },
+    {
+      "type": "AbstractJtaPlatform",
+      "package": "org.hibernate.engine.transaction.jta.platform.internal"
+    },
+    {
+      "type": "JtaTransactionManager",
+      "package": "org.springframework.transaction.jta"
+    },
+    {
+      "type": "AsyncTaskExecutor",
+      "package": "org.springframework.core.task"
+    },
+    {
+      "type": "JpaVendorAdapter",
+      "package": "org.springframework.orm.jpa"
+    },
+    {
+      "type": "LocalContainerEntityManagerFactoryBean",
+      "package": "org.springframework.orm.jpa"
+    },
+    {
+      "type": "PersistenceManagedTypes",
+      "package": "org.springframework.orm.jpa.persistenceunit"
+    },
+    {
+      "type": "PersistenceUnitManager",
+      "package": "org.springframework.orm.jpa.persistenceunit"
+    },
+    {
+      "type": "PersistenceUnitPostProcessor",
+      "package": "org.springframework.orm.jpa.persistenceunit"
+    },
+    {
+      "type": "EntityManagerFactory",
+      "package": "jakarta.persistence"
+    },
+    {
+      "type": "AbstractEntityManagerFactoryBean",
+      "package": "org.springframework.orm.jpa"
+    },
+    {
+      "type": "ConnectionFactory",
+      "package": "io.r2dbc.spi"
+    },
+    {
+      "type": "EmbeddedDatabaseConnection",
+      "package": "org.springframework.boot.r2dbc"
+    },
+    {
+      "type": "ResourceDatabasePopulator",
+      "package": "org.springframework.r2dbc.connection.init"
+    },
+    {
+      "type": "ConnectionPool",
+      "package": "io.r2dbc.pool"
+    },
+    {
+      "type": "ConnectionPoolConfiguration",
+      "package": "io.r2dbc.pool"
+    },
+    {
+      "type": "PoolingConnectionFactoryProvider",
+      "package": "io.r2dbc.pool"
+    },
+    {
+      "type": "Connection",
+      "package": "io.r2dbc.spi"
+    },
+    {
+      "type": "ConnectionFactories",
+      "package": "io.r2dbc.spi"
+    },
+    {
+      "type": "ConnectionFactoryOptions",
+      "package": "io.r2dbc.spi"
+    },
+    {
+      "type": "Builder",
+      "package": "io.r2dbc.spi.ConnectionFactoryOptions"
+    },
+    {
+      "type": "ValidationDepth",
+      "package": "io.r2dbc.spi"
+    },
+    {
+      "type": "Publisher",
+      "package": "org.reactivestreams"
+    },
+    {
+      "type": "ConnectionFactoryMetadata",
+      "package": "io.r2dbc.spi"
+    },
+    {
+      "type": "Wrapped",
+      "package": "io.r2dbc.spi"
+    },
+    {
+      "type": "JavaVersion",
+      "package": "org.springframework.boot.system"
+    },
+    {
+      "type": "Value",
+      "package": "org.springframework.beans.factory.annotation"
+    },
+    {
+      "type": "RSocketServer",
+      "package": "org.springframework.boot.rsocket.server"
+    },
+    {
+      "type": "SocketAcceptor",
+      "package": "io.rsocket"
+    },
+    {
+      "type": "RSocketServerFactory",
+      "package": "org.springframework.boot.rsocket.server"
+    },
+    {
+      "type": "ApplicationEventPublisherAware",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "RSocketStrategies",
+      "package": "org.springframework.messaging.rsocket"
+    },
+    {
+      "type": "InetSocketAddress",
+      "package": "java.net"
+    },
+    {
+      "type": "CloseableChannel",
+      "package": "io.rsocket.transport.netty.server"
+    },
+    {
+      "type": "Mono",
+      "package": "reactor.core.publisher"
+    },
+    {
+      "type": "RSocketServerException",
+      "package": "org.springframework.boot.rsocket.server"
+    },
+    {
+      "type": "ServerTransport",
+      "package": "io.rsocket.transport"
+    },
+    {
+      "type": "TcpServerTransport",
+      "package": "io.rsocket.transport.netty.server"
+    },
+    {
+      "type": "WebsocketServerTransport",
+      "package": "io.rsocket.transport.netty.server"
+    },
+    {
+      "type": "HttpServer",
+      "package": "reactor.netty.http.server"
+    },
+    {
+      "type": "GenericSslContextSpec",
+      "package": "reactor.netty.tcp.SslProvider"
+    },
+    {
+      "type": "TcpServer",
+      "package": "reactor.netty.tcp"
+    },
+    {
+      "type": "ConfigurableRSocketServerFactory",
+      "package": "org.springframework.boot.rsocket.server"
+    },
+    {
+      "type": "RSocketServerCustomizer",
+      "package": "org.springframework.boot.rsocket.server"
+    },
+    {
+      "type": "SslServerCustomizer",
+      "package": "org.springframework.boot.web.embedded.netty"
+    },
+    {
+      "type": "Ssl",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "ClientAuth",
+      "package": "org.springframework.boot.web.server.Ssl"
+    },
+    {
+      "type": "ServerNameSslBundle",
+      "package": "org.springframework.boot.web.server.Ssl"
+    },
+    {
+      "type": "WebServerSslBundle",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "ReactorResourceFactory",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "RSocketServer",
+      "package": "io.rsocket.core"
+    },
+    {
+      "type": "AutowireCapableBeanFactory",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "ServerWebExchangeMatcher",
+      "package": "org.springframework.security.web.server.util.matcher"
+    },
+    {
+      "type": "ServerWebExchange",
+      "package": "org.springframework.web.server"
+    },
+    {
+      "type": "HttpServletRequest",
+      "package": "jakarta.servlet.http"
+    },
+    {
+      "type": "RequestMatcher",
+      "package": "org.springframework.security.web.util.matcher"
+    },
+    {
+      "type": "WebApplicationContext",
+      "package": "org.springframework.web.context"
+    },
+    {
+      "type": "WebApplicationContextUtils",
+      "package": "org.springframework.web.context.support"
+    },
+    {
+      "type": "BeanFactoryUtils",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "BeanFactoryPostProcessor",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "ResourceLoaderAware",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "ResourcePatternUtils",
+      "package": "org.springframework.core.io.support"
+    },
+    {
+      "type": "NoSuchAlgorithmException",
+      "package": "java.security"
+    },
+    {
+      "type": "NoSuchProviderException",
+      "package": "java.security"
+    },
+    {
+      "type": "CertificateException",
+      "package": "java.security.cert"
+    },
+    {
+      "type": "SslStoreBundle",
+      "package": "org.springframework.boot.ssl"
+    },
+    {
+      "type": "PrivateKey",
+      "package": "java.security"
+    },
+    {
+      "type": "ThrowingSupplier",
+      "package": "org.springframework.util.function"
+    },
+    {
+      "type": "CertificateFactory",
+      "package": "java.security.cert"
+    },
+    {
+      "type": "StandardOpenOption",
+      "package": "java.nio.file"
+    },
+    {
+      "type": "StreamUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "ByteBuffer",
+      "package": "java.nio"
+    },
+    {
+      "type": "AlgorithmParameters",
+      "package": "java.security"
+    },
+    {
+      "type": "GeneralSecurityException",
+      "package": "java.security"
+    },
+    {
+      "type": "KeyFactory",
+      "package": "java.security"
+    },
+    {
+      "type": "InvalidKeySpecException",
+      "package": "java.security.spec"
+    },
+    {
+      "type": "PKCS8EncodedKeySpec",
+      "package": "java.security.spec"
+    },
+    {
+      "type": "Cipher",
+      "package": "javax.crypto"
+    },
+    {
+      "type": "EncryptedPrivateKeyInfo",
+      "package": "javax.crypto"
+    },
+    {
+      "type": "SecretKey",
+      "package": "javax.crypto"
+    },
+    {
+      "type": "SecretKeyFactory",
+      "package": "javax.crypto"
+    },
+    {
+      "type": "PBEKeySpec",
+      "package": "javax.crypto.spec"
+    },
+    {
+      "type": "TagType",
+      "package": "org.springframework.boot.ssl.pem.PemPrivateKeyParser.DerElement"
+    },
+    {
+      "type": "ValueType",
+      "package": "org.springframework.boot.ssl.pem.PemPrivateKeyParser.DerElement"
+    },
+    {
+      "type": "Socket",
+      "package": "java.net"
+    },
+    {
+      "type": "InvalidAlgorithmParameterException",
+      "package": "java.security"
+    },
+    {
+      "type": "Principal",
+      "package": "java.security"
+    },
+    {
+      "type": "UnrecoverableKeyException",
+      "package": "java.security"
+    },
+    {
+      "type": "KeyManager",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "KeyManagerFactory",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "KeyManagerFactorySpi",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "ManagerFactoryParameters",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "SSLEngine",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "X509ExtendedKeyManager",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "CopyOnWriteArrayList",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "TrustManagerFactory",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "Provider",
+      "package": "java.security"
+    },
+    {
+      "type": "TrustManager",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "TrustManagerFactorySpi",
+      "package": "javax.net.ssl"
+    },
+    {
+      "type": "SpringBootVersion",
+      "package": "org.springframework.boot"
+    },
+    {
+      "type": "JarURLConnection",
+      "package": "java.net"
+    },
+    {
+      "type": "URISyntaxException",
+      "package": "java.net"
+    },
+    {
+      "type": "JarFile",
+      "package": "java.util.jar"
+    },
+    {
+      "type": "Manifest",
+      "package": "java.util.jar"
+    },
+    {
+      "type": "FileWriter",
+      "package": "java.io"
+    },
+    {
+      "type": "PosixFilePermission",
+      "package": "java.nio.file.attribute"
+    },
+    {
+      "type": "FileSystem",
+      "package": "java.nio.file"
+    },
+    {
+      "type": "FileAttribute",
+      "package": "java.nio.file.attribute"
+    },
+    {
+      "type": "PosixFilePermissions",
+      "package": "java.nio.file.attribute"
+    },
+    {
+      "type": "MessageDigest",
+      "package": "java.security"
+    },
+    {
+      "type": "Reader",
+      "package": "java.io"
+    },
+    {
+      "type": "NumberFormat",
+      "package": "java.text"
+    },
+    {
+      "type": "SortedSet",
+      "package": "java.util"
+    },
+    {
+      "type": "Future",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "SimpleAsyncTaskExecutor",
+      "package": "org.springframework.core.task"
+    },
+    {
+      "type": "TaskDecorator",
+      "package": "org.springframework.core.task"
+    },
+    {
+      "type": "SimpleAsyncTaskScheduler",
+      "package": "org.springframework.scheduling.concurrent"
+    },
+    {
+      "type": "ThreadPoolTaskExecutor",
+      "package": "org.springframework.scheduling.concurrent"
+    },
+    {
+      "type": "ThreadPoolTaskScheduler",
+      "package": "org.springframework.scheduling.concurrent"
+    },
+    {
+      "type": "CachingMetadataReaderFactory",
+      "package": "org.springframework.core.type.classreading"
+    },
+    {
+      "type": "SimpleMetadataReaderFactory",
+      "package": "org.springframework.core.type.classreading"
+    },
+    {
+      "type": "AnnotationAwareOrderComparator",
+      "package": "org.springframework.core.annotation"
+    },
+    {
+      "type": "ClassFilter",
+      "package": "org.springframework.aop"
+    },
+    {
+      "type": "MethodMatcher",
+      "package": "org.springframework.aop"
+    },
+    {
+      "type": "ComposablePointcut",
+      "package": "org.springframework.aop.support"
+    },
+    {
+      "type": "DefaultPointcutAdvisor",
+      "package": "org.springframework.aop.support"
+    },
+    {
+      "type": "MethodValidationPostProcessor",
+      "package": "org.springframework.validation.beanvalidation"
+    },
+    {
+      "type": "MessageInterpolator",
+      "package": "jakarta.validation"
+    },
+    {
+      "type": "Validation",
+      "package": "jakarta.validation"
+    },
+    {
+      "type": "ObjectFactory",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "MessageSource",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "HttpHeaders",
+      "package": "org.springframework.http"
+    },
+    {
+      "type": "ClientHttpRequestFactoryBuilder",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "JdkClientHttpRequestFactoryBuilder",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "RestClient",
+      "package": "org.springframework.web.client"
+    },
+    {
+      "type": "ClientHttpRequestFactorySettings",
+      "package": "org.springframework.boot.http.client"
+    },
+    {
+      "type": "ClientHttpRequest",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "ClientHttpRequestInterceptor",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "HttpMessageConverter",
+      "package": "org.springframework.http.converter"
+    },
+    {
+      "type": "ResponseErrorHandler",
+      "package": "org.springframework.web.client"
+    },
+    {
+      "type": "RestTemplate",
+      "package": "org.springframework.web.client"
+    },
+    {
+      "type": "UriTemplateHandler",
+      "package": "org.springframework.web.util"
+    },
+    {
+      "type": "ClientHttpRequestInitializer",
+      "package": "org.springframework.http.client"
+    },
+    {
+      "type": "UriBuilder",
+      "package": "org.springframework.web.util"
+    },
+    {
+      "type": "UriBuilderFactory",
+      "package": "org.springframework.web.util"
+    },
+    {
+      "type": "UriComponentsBuilder",
+      "package": "org.springframework.web.util"
+    },
+    {
+      "type": "CodecConfigurer",
+      "package": "org.springframework.http.codec"
+    },
+    {
+      "type": "WebServerFactory",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "WebServer",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "Server",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "ThreadPool",
+      "package": "org.eclipse.jetty.util.thread"
+    },
+    {
+      "type": "ConfigurableWebServerFactory",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "ConnectionFactory",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "Connector",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "ForwardedRequestCustomizer",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "HttpConfiguration",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "GracefulShutdownCallback",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "GracefulShutdownResult",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "URLStreamHandler",
+      "package": "java.net"
+    },
+    {
+      "type": "URLStreamHandlerFactory",
+      "package": "java.net"
+    },
+    {
+      "type": "ServletContainerInitializer",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "WebAppContext",
+      "package": "org.eclipse.jetty.ee10.webapp"
+    },
+    {
+      "type": "AbstractLifeCycle",
+      "package": "org.eclipse.jetty.util.component"
+    },
+    {
+      "type": "ErrorPageErrorHandler",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "HttpMethod",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "ServletHandler",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "ClassMatcher",
+      "package": "org.eclipse.jetty.util"
+    },
+    {
+      "type": "Mutable",
+      "package": "org.eclipse.jetty.http.HttpFields"
+    },
+    {
+      "type": "Handler",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "Request",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "Response",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "GzipHandler",
+      "package": "org.eclipse.jetty.server.handler.gzip"
+    },
+    {
+      "type": "Callback",
+      "package": "org.eclipse.jetty.util"
+    },
+    {
+      "type": "Compression",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "ServletContextHandler",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "ServletHolder",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "HTTP2CServerConnectionFactory",
+      "package": "org.eclipse.jetty.http2.server"
+    },
+    {
+      "type": "AbstractConnector",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "ConnectionLimit",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "HttpConnectionFactory",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "ServerConnector",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "StatisticsHandler",
+      "package": "org.eclipse.jetty.server.handler"
+    },
+    {
+      "type": "AbstractReactiveWebServerFactory",
+      "package": "org.springframework.boot.web.reactive.server"
+    },
+    {
+      "type": "ReactiveWebServerFactory",
+      "package": "org.springframework.boot.web.reactive.server"
+    },
+    {
+      "type": "Shutdown",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "JettyResourceFactory",
+      "package": "org.springframework.http.client.reactive"
+    },
+    {
+      "type": "HttpHandler",
+      "package": "org.springframework.http.server.reactive"
+    },
+    {
+      "type": "JettyHttpHandlerAdapter",
+      "package": "org.springframework.http.server.reactive"
+    },
+    {
+      "type": "Cookie",
+      "package": "jakarta.servlet.http"
+    },
+    {
+      "type": "ErrorHandler",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "ListenerHolder",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "ServletMapping",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "SessionHandler",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "Source",
+      "package": "org.eclipse.jetty.ee10.servlet"
+    },
+    {
+      "type": "AbstractConfiguration",
+      "package": "org.eclipse.jetty.ee10.webapp"
+    },
+    {
+      "type": "Configuration",
+      "package": "org.eclipse.jetty.ee10.webapp"
+    },
+    {
+      "type": "WebInfConfiguration",
+      "package": "org.eclipse.jetty.ee10.webapp"
+    },
+    {
+      "type": "CookieCompliance",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "HttpCookie",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "HttpField",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "HttpFields",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "HttpHeader",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "MimeTypes",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "Wrapper",
+      "package": "org.eclipse.jetty.http.MimeTypes"
+    },
+    {
+      "type": "SetCookieParser",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "HttpCookieUtils",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "DefaultSessionCache",
+      "package": "org.eclipse.jetty.session"
+    },
+    {
+      "type": "FileSessionDataStore",
+      "package": "org.eclipse.jetty.session"
+    },
+    {
+      "type": "SessionConfig",
+      "package": "org.eclipse.jetty.session"
+    },
+    {
+      "type": "Resource",
+      "package": "org.eclipse.jetty.util.resource"
+    },
+    {
+      "type": "ResourceFactory",
+      "package": "org.eclipse.jetty.util.resource"
+    },
+    {
+      "type": "URLResourceFactory",
+      "package": "org.eclipse.jetty.util.resource"
+    },
+    {
+      "type": "SameSite",
+      "package": "org.springframework.boot.web.server.Cookie"
+    },
+    {
+      "type": "ErrorPage",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "MimeMappings",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "ServletContextInitializer",
+      "package": "org.springframework.boot.web.servlet"
+    },
+    {
+      "type": "AbstractServletWebServerFactory",
+      "package": "org.springframework.boot.web.servlet.server"
+    },
+    {
+      "type": "CookieSameSiteSupplier",
+      "package": "org.springframework.boot.web.servlet.server"
+    },
+    {
+      "type": "ServletWebServerFactory",
+      "package": "org.springframework.boot.web.servlet.server"
+    },
+    {
+      "type": "NetworkConnector",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "ContextHandler",
+      "package": "org.eclipse.jetty.server.handler"
+    },
+    {
+      "type": "WebServerException",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "Spliterator",
+      "package": "java.util"
+    },
+    {
+      "type": "CombinedResource",
+      "package": "org.eclipse.jetty.util.resource"
+    },
+    {
+      "type": "ServletException",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "ALPNServerConnectionFactory",
+      "package": "org.eclipse.jetty.alpn.server"
+    },
+    {
+      "type": "HttpVersion",
+      "package": "org.eclipse.jetty.http"
+    },
+    {
+      "type": "HTTP2Cipher",
+      "package": "org.eclipse.jetty.http2"
+    },
+    {
+      "type": "HTTP2ServerConnectionFactory",
+      "package": "org.eclipse.jetty.http2.server"
+    },
+    {
+      "type": "SecureRequestCustomizer",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "SslConnectionFactory",
+      "package": "org.eclipse.jetty.server"
+    },
+    {
+      "type": "SslBundleKey",
+      "package": "org.springframework.boot.ssl"
+    },
+    {
+      "type": "Http2",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "HttpHeaderNames",
+      "package": "io.netty.handler.codec.http"
+    },
+    {
+      "type": "HttpHeaders",
+      "package": "io.netty.handler.codec.http"
+    },
+    {
+      "type": "HttpServerRequest",
+      "package": "reactor.netty.http.server"
+    },
+    {
+      "type": "HttpServerResponse",
+      "package": "reactor.netty.http.server"
+    },
+    {
+      "type": "InvalidMimeTypeException",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "MimeType",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "MimeTypeUtils",
+      "package": "org.springframework.util"
+    },
+    {
+      "type": "DisposableServer",
+      "package": "reactor.netty"
+    },
+    {
+      "type": "HttpProtocol",
+      "package": "reactor.netty.http"
+    },
+    {
+      "type": "ReactorHttpHandlerAdapter",
+      "package": "org.springframework.http.server.reactive"
+    },
+    {
+      "type": "HttpServerRoutes",
+      "package": "reactor.netty.http.server"
+    },
+    {
+      "type": "DefaultChannelGroup",
+      "package": "io.netty.channel.group"
+    },
+    {
+      "type": "NativeIoException",
+      "package": "io.netty.channel.unix.Errors"
+    },
+    {
+      "type": "DefaultEventExecutor",
+      "package": "io.netty.util.concurrent"
+    },
+    {
+      "type": "ChannelBindException",
+      "package": "reactor.netty"
+    },
+    {
+      "type": "LoopResources",
+      "package": "reactor.netty.resources"
+    },
+    {
+      "type": "ClientAuth",
+      "package": "io.netty.handler.ssl"
+    },
+    {
+      "type": "Http11SslContextSpec",
+      "package": "reactor.netty.http"
+    },
+    {
+      "type": "Http2SslContextSpec",
+      "package": "reactor.netty.http"
+    },
+    {
+      "type": "AbstractProtocolSslContextSpec",
+      "package": "reactor.netty.tcp"
+    },
+    {
+      "type": "SslProvider",
+      "package": "reactor.netty.tcp"
+    },
+    {
+      "type": "Connector",
+      "package": "org.apache.catalina.connector"
+    },
+    {
+      "type": "ProtocolHandler",
+      "package": "org.apache.coyote"
+    },
+    {
+      "type": "AbstractHttp11Protocol",
+      "package": "org.apache.coyote.http11"
+    },
+    {
+      "type": "Context",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "Engine",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "Valve",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "StandardContext",
+      "package": "org.apache.catalina.core"
+    },
+    {
+      "type": "CountDownLatch",
+      "package": "java.util.concurrent"
+    },
+    {
+      "type": "Container",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "Service",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "StandardWrapper",
+      "package": "org.apache.catalina.core"
+    },
+    {
+      "type": "Tomcat",
+      "package": "org.apache.catalina.startup"
+    },
+    {
+      "type": "LifecycleException",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "LifecycleState",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "StandardSessionIdGenerator",
+      "package": "org.apache.catalina.util"
+    },
+    {
+      "type": "Attributes",
+      "package": "java.util.jar"
+    },
+    {
+      "type": "Name",
+      "package": "java.util.jar.Attributes"
+    },
+    {
+      "type": "JarEntry",
+      "package": "java.util.jar"
+    },
+    {
+      "type": "WebResource",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "WebResourceRoot",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "WebResourceSet",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "AbstractSingleArchiveResourceSet",
+      "package": "org.apache.catalina.webresources"
+    },
+    {
+      "type": "JarResource",
+      "package": "org.apache.catalina.webresources"
+    },
+    {
+      "type": "SSLHostConfig",
+      "package": "org.apache.tomcat.util.net"
+    },
+    {
+      "type": "SSLHostConfigCertificate",
+      "package": "org.apache.tomcat.util.net"
+    },
+    {
+      "type": "Type",
+      "package": "org.apache.tomcat.util.net.SSLHostConfigCertificate"
+    },
+    {
+      "type": "Manager",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "Wrapper",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "ManagerBase",
+      "package": "org.apache.catalina.session"
+    },
+    {
+      "type": "ParallelWebappClassLoader",
+      "package": "org.apache.catalina.loader"
+    },
+    {
+      "type": "JreCompat",
+      "package": "org.apache.tomcat.util.compat"
+    },
+    {
+      "type": "Executor",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "Host",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "LifecycleListener",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "AprLifecycleListener",
+      "package": "org.apache.catalina.core"
+    },
+    {
+      "type": "WebappLoader",
+      "package": "org.apache.catalina.loader"
+    },
+    {
+      "type": "FixContextListener",
+      "package": "org.apache.catalina.startup.Tomcat"
+    },
+    {
+      "type": "StandardRoot",
+      "package": "org.apache.catalina.webresources"
+    },
+    {
+      "type": "AbstractProtocol",
+      "package": "org.apache.coyote"
+    },
+    {
+      "type": "Http2Protocol",
+      "package": "org.apache.coyote.http2"
+    },
+    {
+      "type": "Registry",
+      "package": "org.apache.tomcat.util.modeler"
+    },
+    {
+      "type": "StandardJarScanFilter",
+      "package": "org.apache.tomcat.util.scan"
+    },
+    {
+      "type": "TomcatHttpHandlerAdapter",
+      "package": "org.springframework.http.server.reactive"
+    },
+    {
+      "type": "MalformedURLException",
+      "package": "java.net"
+    },
+    {
+      "type": "Lifecycle",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "LifecycleEvent",
+      "package": "org.apache.catalina"
+    },
+    {
+      "type": "ResourceSetType",
+      "package": "org.apache.catalina.WebResourceRoot"
+    },
+    {
+      "type": "StandardManager",
+      "package": "org.apache.catalina.session"
+    },
+    {
+      "type": "LifecycleBase",
+      "package": "org.apache.catalina.util"
+    },
+    {
+      "type": "SessionConfig",
+      "package": "org.apache.catalina.util"
+    },
+    {
+      "type": "AbstractResourceSet",
+      "package": "org.apache.catalina.webresources"
+    },
+    {
+      "type": "EmptyResource",
+      "package": "org.apache.catalina.webresources"
+    },
+    {
+      "type": "Rfc6265CookieProcessor",
+      "package": "org.apache.tomcat.util.http"
+    },
+    {
+      "type": "ServletContext",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "NamingException",
+      "package": "javax.naming"
+    },
+    {
+      "type": "ContextBindings",
+      "package": "org.apache.naming"
+    },
+    {
+      "type": "Undertow",
+      "package": "io.undertow"
+    },
+    {
+      "type": "HttpHandler",
+      "package": "io.undertow.server"
+    },
+    {
+      "type": "AccessLogHandler",
+      "package": "io.undertow.server.handlers.accesslog"
+    },
+    {
+      "type": "DefaultAccessLogReceiver",
+      "package": "io.undertow.server.handlers.accesslog"
+    },
+    {
+      "type": "OptionMap",
+      "package": "org.xnio"
+    },
+    {
+      "type": "Options",
+      "package": "org.xnio"
+    },
+    {
+      "type": "Xnio",
+      "package": "org.xnio"
+    },
+    {
+      "type": "XnioWorker",
+      "package": "org.xnio"
+    },
+    {
+      "type": "UndertowMessages",
+      "package": "io.undertow"
+    },
+    {
+      "type": "Resource",
+      "package": "io.undertow.server.handlers.resource"
+    },
+    {
+      "type": "ResourceChangeListener",
+      "package": "io.undertow.server.handlers.resource"
+    },
+    {
+      "type": "ResourceManager",
+      "package": "io.undertow.server.handlers.resource"
+    },
+    {
+      "type": "RequestHeaderAttribute",
+      "package": "io.undertow.attribute"
+    },
+    {
+      "type": "Predicate",
+      "package": "io.undertow.predicate"
+    },
+    {
+      "type": "Predicates",
+      "package": "io.undertow.predicate"
+    },
+    {
+      "type": "HttpServerExchange",
+      "package": "io.undertow.server"
+    },
+    {
+      "type": "ContentEncodingRepository",
+      "package": "io.undertow.server.handlers.encoding"
+    },
+    {
+      "type": "EncodingHandler",
+      "package": "io.undertow.server.handlers.encoding"
+    },
+    {
+      "type": "GzipEncodingProvider",
+      "package": "io.undertow.server.handlers.encoding"
+    },
+    {
+      "type": "Headers",
+      "package": "io.undertow.util"
+    },
+    {
+      "type": "HttpString",
+      "package": "io.undertow.util"
+    },
+    {
+      "type": "Builder",
+      "package": "io.undertow.Undertow"
+    },
+    {
+      "type": "DeploymentManager",
+      "package": "io.undertow.servlet.api"
+    },
+    {
+      "type": "FileInputStream",
+      "package": "java.io"
+    },
+    {
+      "type": "FileOutputStream",
+      "package": "java.io"
+    },
+    {
+      "type": "UndertowServletLogger",
+      "package": "io.undertow.servlet"
+    },
+    {
+      "type": "SessionPersistenceManager",
+      "package": "io.undertow.servlet.api"
+    },
+    {
+      "type": "ConfigurableObjectInputStream",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "GracefulShutdownHandler",
+      "package": "io.undertow.server.handlers"
+    },
+    {
+      "type": "URLResource",
+      "package": "io.undertow.server.handlers.resource"
+    },
+    {
+      "type": "SNIContextMatcher",
+      "package": "io.undertow.protocols.ssl"
+    },
+    {
+      "type": "SNISSLContext",
+      "package": "io.undertow.protocols.ssl"
+    },
+    {
+      "type": "Sequence",
+      "package": "org.xnio"
+    },
+    {
+      "type": "SslClientAuthMode",
+      "package": "org.xnio"
+    },
+    {
+      "type": "DeploymentInfo",
+      "package": "io.undertow.servlet.api"
+    },
+    {
+      "type": "UndertowHttpHandlerAdapter",
+      "package": "org.springframework.http.server.reactive"
+    },
+    {
+      "type": "Handlers",
+      "package": "io.undertow"
+    },
+    {
+      "type": "URLEncoder",
+      "package": "java.net"
+    },
+    {
+      "type": "Cookie",
+      "package": "io.undertow.server.handlers"
+    },
+    {
+      "type": "FileResourceManager",
+      "package": "io.undertow.server.handlers.resource"
+    },
+    {
+      "type": "SessionManager",
+      "package": "io.undertow.server.session"
+    },
+    {
+      "type": "Servlets",
+      "package": "io.undertow.servlet"
+    },
+    {
+      "type": "Deployment",
+      "package": "io.undertow.servlet.api"
+    },
+    {
+      "type": "ListenerInfo",
+      "package": "io.undertow.servlet.api"
+    },
+    {
+      "type": "MimeMapping",
+      "package": "io.undertow.servlet.api"
+    },
+    {
+      "type": "ServletContainerInitializerInfo",
+      "package": "io.undertow.servlet.api"
+    },
+    {
+      "type": "ServletStackTraces",
+      "package": "io.undertow.servlet.api"
+    },
+    {
+      "type": "DeploymentImpl",
+      "package": "io.undertow.servlet.core"
+    },
+    {
+      "type": "DefaultServlet",
+      "package": "io.undertow.servlet.handlers"
+    },
+    {
+      "type": "ImmediateInstanceFactory",
+      "package": "io.undertow.servlet.util"
+    },
+    {
+      "type": "Mapping",
+      "package": "org.springframework.boot.web.server.MimeMappings"
+    },
+    {
+      "type": "SocketAddress",
+      "package": "java.net"
+    },
+    {
+      "type": "BoundChannel",
+      "package": "org.xnio.channels"
+    },
+    {
+      "type": "UndertowOptions",
+      "package": "io.undertow"
+    },
+    {
+      "type": "AbstractConfigurableWebServerFactory",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "MessageSourceResolvable",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "DefaultListableBeanFactory",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "AnnotationConfigApplicationContext",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "AnnotatedBeanDefinitionReader",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "AnnotationConfigRegistry",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "ClassPathBeanDefinitionScanner",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "AbstractResource",
+      "package": "org.springframework.core.io"
+    },
+    {
+      "type": "GenericApplicationContext",
+      "package": "org.springframework.context.support"
+    },
+    {
+      "type": "ConfigurableWebServerApplicationContext",
+      "package": "org.springframework.boot.web.context"
+    },
+    {
+      "type": "MissingWebServerFactoryBeanException",
+      "package": "org.springframework.boot.web.context"
+    },
+    {
+      "type": "WebServerGracefulShutdownLifecycle",
+      "package": "org.springframework.boot.web.context"
+    },
+    {
+      "type": "ApplicationContextException",
+      "package": "org.springframework.context"
+    },
+    {
+      "type": "ServerHttpRequest",
+      "package": "org.springframework.http.server.reactive"
+    },
+    {
+      "type": "ServerHttpResponse",
+      "package": "org.springframework.http.server.reactive"
+    },
+    {
+      "type": "Error",
+      "package": "org.springframework.boot.web.error"
+    },
+    {
+      "type": "ErrorAttributeOptions",
+      "package": "org.springframework.boot.web.error"
+    },
+    {
+      "type": "Include",
+      "package": "org.springframework.boot.web.error.ErrorAttributeOptions"
+    },
+    {
+      "type": "HttpStatus",
+      "package": "org.springframework.http"
+    },
+    {
+      "type": "BindingResult",
+      "package": "org.springframework.validation"
+    },
+    {
+      "type": "MethodValidationResult",
+      "package": "org.springframework.validation.method"
+    },
+    {
+      "type": "ResponseStatus",
+      "package": "org.springframework.web.bind.annotation"
+    },
+    {
+      "type": "ServerRequest",
+      "package": "org.springframework.web.reactive.function.server"
+    },
+    {
+      "type": "ResponseStatusException",
+      "package": "org.springframework.web.server"
+    },
+    {
+      "type": "ServerResponse",
+      "package": "org.springframework.web.reactive.function.server"
+    },
+    {
+      "type": "WebExceptionHandler",
+      "package": "org.springframework.web.server"
+    },
+    {
+      "type": "HiddenHttpMethodFilter",
+      "package": "org.springframework.web.filter.reactive"
+    },
+    {
+      "type": "WebFilter",
+      "package": "org.springframework.web.server"
+    },
+    {
+      "type": "WebClient",
+      "package": "org.springframework.web.reactive.function.client"
+    },
+    {
+      "type": "Compiler",
+      "package": "com.samskivert.mustache.Mustache"
+    },
+    {
+      "type": "Template",
+      "package": "com.samskivert.mustache"
+    },
+    {
+      "type": "Flux",
+      "package": "reactor.core.publisher"
+    },
+    {
+      "type": "DataBuffer",
+      "package": "org.springframework.core.io.buffer"
+    },
+    {
+      "type": "DataBufferUtils",
+      "package": "org.springframework.core.io.buffer"
+    },
+    {
+      "type": "DefaultDataBufferFactory",
+      "package": "org.springframework.core.io.buffer"
+    },
+    {
+      "type": "MediaType",
+      "package": "org.springframework.http"
+    },
+    {
+      "type": "AbstractUrlBasedView",
+      "package": "org.springframework.web.reactive.result.view"
+    },
+    {
+      "type": "View",
+      "package": "org.springframework.web.reactive.result.view"
+    },
+    {
+      "type": "Mustache",
+      "package": "com.samskivert.mustache"
+    },
+    {
+      "type": "UrlBasedViewResolver",
+      "package": "org.springframework.web.reactive.result.view"
+    },
+    {
+      "type": "ViewResolver",
+      "package": "org.springframework.web.reactive.result.view"
+    },
+    {
+      "type": "DurationUnit",
+      "package": "org.springframework.boot.convert"
+    },
+    {
+      "type": "Entry",
+      "package": "java.util.Map"
+    },
+    {
+      "type": "BindException",
+      "package": "java.net"
+    },
+    {
+      "type": "IntSupplier",
+      "package": "java.util.function"
+    },
+    {
+      "type": "JksSslStoreBundle",
+      "package": "org.springframework.boot.ssl.jks"
+    },
+    {
+      "type": "JksSslStoreDetails",
+      "package": "org.springframework.boot.ssl.jks"
+    },
+    {
+      "type": "PemSslStoreBundle",
+      "package": "org.springframework.boot.ssl.pem"
+    },
+    {
+      "type": "PemSslStoreDetails",
+      "package": "org.springframework.boot.ssl.pem"
+    },
+    {
+      "type": "BeanDefinitionCustomizer",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "GenericWebApplicationContext",
+      "package": "org.springframework.web.context.support"
+    },
+    {
+      "type": "Filter",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "Servlet",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "ServletConfig",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "Scope",
+      "package": "org.springframework.beans.factory.config"
+    },
+    {
+      "type": "FilterRegistrationBean",
+      "package": "org.springframework.boot.web.servlet"
+    },
+    {
+      "type": "ServletContextInitializerBeans",
+      "package": "org.springframework.boot.web.servlet"
+    },
+    {
+      "type": "ServletRegistrationBean",
+      "package": "org.springframework.boot.web.servlet"
+    },
+    {
+      "type": "ContextLoaderListener",
+      "package": "org.springframework.web.context"
+    },
+    {
+      "type": "ServletContextAware",
+      "package": "org.springframework.web.context"
+    },
+    {
+      "type": "ServletContextAwareProcessor",
+      "package": "org.springframework.web.context.support"
+    },
+    {
+      "type": "ServletContextResource",
+      "package": "org.springframework.web.context.support"
+    },
+    {
+      "type": "ServletContextScope",
+      "package": "org.springframework.web.context.support"
+    },
+    {
+      "type": "ConfigurableWebApplicationContext",
+      "package": "org.springframework.web.context"
+    },
+    {
+      "type": "XmlBeanDefinitionReader",
+      "package": "org.springframework.beans.factory.xml"
+    },
+    {
+      "type": "XmlWebApplicationContext",
+      "package": "org.springframework.web.context.support"
+    },
+    {
+      "type": "RequestDispatcher",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "HttpServletResponse",
+      "package": "jakarta.servlet.http"
+    },
+    {
+      "type": "RequestAttributes",
+      "package": "org.springframework.web.context.request"
+    },
+    {
+      "type": "WebRequest",
+      "package": "org.springframework.web.context.request"
+    },
+    {
+      "type": "HandlerExceptionResolver",
+      "package": "org.springframework.web.servlet"
+    },
+    {
+      "type": "ModelAndView",
+      "package": "org.springframework.web.servlet"
+    },
+    {
+      "type": "ResponseBody",
+      "package": "org.springframework.web.bind.annotation"
+    },
+    {
+      "type": "Controller",
+      "package": "org.springframework.stereotype"
+    },
+    {
+      "type": "FilterChain",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "OncePerRequestFilter",
+      "package": "org.springframework.web.filter"
+    },
+    {
+      "type": "CharacterEncodingFilter",
+      "package": "org.springframework.web.filter"
+    },
+    {
+      "type": "FormContentFilter",
+      "package": "org.springframework.web.filter"
+    },
+    {
+      "type": "HiddenHttpMethodFilter",
+      "package": "org.springframework.web.filter"
+    },
+    {
+      "type": "RequestContextFilter",
+      "package": "org.springframework.web.filter"
+    },
+    {
+      "type": "SessionCookieConfig",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "Cookie",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "WebServerFactoryCustomizer",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "WebListenerRegistry",
+      "package": "org.springframework.boot.web.servlet"
+    },
+    {
+      "type": "ApplicationHome",
+      "package": "org.springframework.boot.system"
+    },
+    {
+      "type": "ApplicationTemp",
+      "package": "org.springframework.boot.system"
+    },
+    {
+      "type": "URLClassLoader",
+      "package": "java.net"
+    },
+    {
+      "type": "InvalidPathException",
+      "package": "java.nio.file"
+    },
+    {
+      "type": "FilterConfig",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "ServletOutputStream",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "ServletRequest",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "ServletResponse",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "HttpServletResponseWrapper",
+      "package": "jakarta.servlet.http"
+    },
+    {
+      "type": "ErrorPageRegistrar",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "ErrorPageRegistry",
+      "package": "org.springframework.boot.web.server"
+    },
+    {
+      "type": "DispatcherType",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "Driver",
+      "package": "java.sql"
+    },
+    {
+      "type": "DriverManager",
+      "package": "java.sql"
+    },
+    {
+      "type": "ServletContextEvent",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "Schedulers",
+      "package": "reactor.core.scheduler"
+    },
+    {
+      "type": "ParentContextApplicationContextInitializer",
+      "package": "org.springframework.boot.builder"
+    },
+    {
+      "type": "SpringApplicationBuilder",
+      "package": "org.springframework.boot.builder"
+    },
+    {
+      "type": "LoggingApplicationListener",
+      "package": "org.springframework.boot.context.logging"
+    },
+    {
+      "type": "AnnotationConfigServletWebServerApplicationContext",
+      "package": "org.springframework.boot.web.servlet.context"
+    },
+    {
+      "type": "WebApplicationInitializer",
+      "package": "org.springframework.web"
+    },
+    {
+      "type": "ConfigurableWebEnvironment",
+      "package": "org.springframework.web.context"
+    },
+    {
+      "type": "View",
+      "package": "org.springframework.web.servlet"
+    },
+    {
+      "type": "AbstractTemplateView",
+      "package": "org.springframework.web.servlet.view"
+    },
+    {
+      "type": "ViewResolver",
+      "package": "org.springframework.web.servlet"
+    },
+    {
+      "type": "AbstractTemplateViewResolver",
+      "package": "org.springframework.web.servlet.view"
+    },
+    {
+      "type": "AbstractUrlBasedView",
+      "package": "org.springframework.web.servlet.view"
+    },
+    {
+      "type": "FilterRegistration",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "Dynamic",
+      "package": "jakarta.servlet.FilterRegistration"
+    },
+    {
+      "type": "DelegatingFilterProxy",
+      "package": "org.springframework.web.filter"
+    },
+    {
+      "type": "Registration",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "BeanNameAware",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "WebInitParam",
+      "package": "jakarta.servlet.annotation"
+    },
+    {
+      "type": "MultipartConfigElement",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "MockServletContext",
+      "package": "org.springframework.mock.web"
+    },
+    {
+      "type": "WebFilter",
+      "package": "jakarta.servlet.annotation"
+    },
+    {
+      "type": "WebListener",
+      "package": "jakarta.servlet.annotation"
+    },
+    {
+      "type": "WebServlet",
+      "package": "jakarta.servlet.annotation"
+    },
+    {
+      "type": "SpringServletContainerInitializer",
+      "package": "org.springframework.web"
+    },
+    {
+      "type": "AbstractCollection",
+      "package": "java.util"
+    },
+    {
+      "type": "ServletContextAttributeListener",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "ServletContextListener",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "ServletRequestAttributeListener",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "ServletRequestListener",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "HttpSessionAttributeListener",
+      "package": "jakarta.servlet.http"
+    },
+    {
+      "type": "HttpSessionIdListener",
+      "package": "jakarta.servlet.http"
+    },
+    {
+      "type": "HttpSessionListener",
+      "package": "jakarta.servlet.http"
+    },
+    {
+      "type": "MultipartConfig",
+      "package": "jakarta.servlet.annotation"
+    },
+    {
+      "type": "ServletRegistration",
+      "package": "jakarta.servlet"
+    },
+    {
+      "type": "WebServiceMessageSender",
+      "package": "org.springframework.ws.transport"
+    },
+    {
+      "type": "ClientHttpRequestMessageSender",
+      "package": "org.springframework.ws.transport.http"
+    },
+    {
+      "type": "TransformerFactory",
+      "package": "javax.xml.transform"
+    },
+    {
+      "type": "Marshaller",
+      "package": "org.springframework.oxm"
+    },
+    {
+      "type": "Unmarshaller",
+      "package": "org.springframework.oxm"
+    },
+    {
+      "type": "WebServiceMessageFactory",
+      "package": "org.springframework.ws"
+    },
+    {
+      "type": "FaultMessageResolver",
+      "package": "org.springframework.ws.client.core"
+    },
+    {
+      "type": "WebServiceTemplate",
+      "package": "org.springframework.ws.client.core"
+    },
+    {
+      "type": "DestinationProvider",
+      "package": "org.springframework.ws.client.support.destination"
+    },
+    {
+      "type": "ClientInterceptor",
+      "package": "org.springframework.ws.client.support.interceptor"
+    },
+    {
+      "type": "Mode",
+      "package": "org.springframework.boot.Banner"
+    },
+    {
+      "type": "Closure",
+      "package": "groovy.lang"
+    },
+    {
+      "type": "BeanDefinitionStoreException",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "GroovyBeanDefinitionReader",
+      "package": "org.springframework.beans.factory.groovy"
+    },
+    {
+      "type": "AbstractBeanDefinitionReader",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "BeanDefinitionReader",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "PathMatchingResourcePatternResolver",
+      "package": "org.springframework.core.io.support"
+    },
+    {
+      "type": "AbstractTypeHierarchyTraversingFilter",
+      "package": "org.springframework.core.type.filter"
+    },
+    {
+      "type": "SimpleCommandLinePropertySource",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "SmartInitializingSingleton",
+      "package": "org.springframework.beans.factory"
+    },
+    {
+      "type": "AbstractBeanDefinition",
+      "package": "org.springframework.beans.factory.support"
+    },
+    {
+      "type": "AnsiPropertySource",
+      "package": "org.springframework.boot.ansi"
+    },
+    {
+      "type": "StackFrame",
+      "package": "java.lang.StackWalker"
+    },
+    {
+      "type": "CRaCMXBean",
+      "package": "org.crac.management"
+    },
+    {
+      "type": "AnnotationConfigReactiveWebServerApplicationContext",
+      "package": "org.springframework.boot.web.reactive.context"
+    },
+    {
+      "type": "ConfigurationClassPostProcessor",
+      "package": "org.springframework.context.annotation"
+    },
+    {
+      "type": "AotApplicationContextInitializer",
+      "package": "org.springframework.context.aot"
+    },
+    {
+      "type": "ApplicationContextEvent",
+      "package": "org.springframework.context.event"
+    },
+    {
+      "type": "OrderSourceProvider",
+      "package": "org.springframework.core.OrderComparator"
+    },
+    {
+      "type": "CompositePropertySource",
+      "package": "org.springframework.core.env"
+    },
+    {
+      "type": "AbandonedRunException",
+      "package": "org.springframework.boot.SpringApplication"
+    },
+    {
+      "type": "ContextAotProcessor",
+      "package": "org.springframework.context.aot"
+    },
+    {
+      "type": "UnsupportedEncodingException",
+      "package": "java.io"
+    },
+    {
+      "type": "WeakHashMap",
+      "package": "java.util"
+    },
+    {
+      "type": "UncaughtExceptionHandler",
+      "package": "java.lang.Thread"
+    },
+    {
+      "type": "Startup",
+      "package": "org.springframework.boot.SpringApplication"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "className": "ApplicationRunner",
+  "usedTypes": [
+    {
+      "type": "Ordered",
+      "package": "org.springframework.core"
+    },
+    {
+      "type": "Order",
+      "package": "org.springframework.core.annotation"
+    }
+  ]
+}
