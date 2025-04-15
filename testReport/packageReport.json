@@ -1,93 +1,106 @@
 {
   "packageName": "admin",
-  "usedTypes": [
+  "classReports": [
     {
-      "type": "ManagementFactory",
-      "package": "java.lang.management"
+      "className": "SpringApplicationAdminMXBean",
+      "usedTypes": []
     },
     {
-      "type": "MBeanServer",
-      "package": "javax.management"
+      "className": "SpringApplicationAdminMXBeanRegistrar",
+      "usedTypes": [
+        {
+          "type": "ManagementFactory",
+          "package": "java.lang.management"
+        },
+        {
+          "type": "MBeanServer",
+          "package": "javax.management"
+        },
+        {
+          "type": "MalformedObjectNameException",
+          "package": "javax.management"
+        },
+        {
+          "type": "ObjectName",
+          "package": "javax.management"
+        },
+        {
+          "type": "Log",
+          "package": "org.apache.commons.logging"
+        },
+        {
+          "type": "LogFactory",
+          "package": "org.apache.commons.logging"
+        },
+        {
+          "type": "BeansException",
+          "package": "org.springframework.beans"
+        },
+        {
+          "type": "DisposableBean",
+          "package": "org.springframework.beans.factory"
+        },
+        {
+          "type": "InitializingBean",
+          "package": "org.springframework.beans.factory"
+        },
+        {
+          "type": "ApplicationReadyEvent",
+          "package": "org.springframework.boot.context.event"
+        },
+        {
+          "type": "WebServerInitializedEvent",
+          "package": "org.springframework.boot.web.context"
+        },
+        {
+          "type": "ApplicationContext",
+          "package": "org.springframework.context"
+        },
+        {
+          "type": "ApplicationContextAware",
+          "package": "org.springframework.context"
+        },
+        {
+          "type": "ApplicationEvent",
+          "package": "org.springframework.context"
+        },
+        {
+          "type": "ConfigurableApplicationContext",
+          "package": "org.springframework.context"
+        },
+        {
+          "type": "EnvironmentAware",
+          "package": "org.springframework.context"
+        },
+        {
+          "type": "GenericApplicationListener",
+          "package": "org.springframework.context.event"
+        },
+        {
+          "type": "Ordered",
+          "package": "org.springframework.core"
+        },
+        {
+          "type": "ResolvableType",
+          "package": "org.springframework.core"
+        },
+        {
+          "type": "Environment",
+          "package": "org.springframework.core.env"
+        },
+        {
+          "type": "StandardEnvironment",
+          "package": "org.springframework.core.env"
+        },
+        {
+          "type": "Assert",
+          "package": "org.springframework.util"
+        }
+      ]
     },
     {
-      "type": "MalformedObjectNameException",
-      "package": "javax.management"
-    },
-    {
-      "type": "ObjectName",
-      "package": "javax.management"
-    },
-    {
-      "type": "Log",
-      "package": "org.apache.commons.logging"
-    },
-    {
-      "type": "LogFactory",
-      "package": "org.apache.commons.logging"
-    },
-    {
-      "type": "BeansException",
-      "package": "org.springframework.beans"
-    },
-    {
-      "type": "DisposableBean",
-      "package": "org.springframework.beans.factory"
-    },
-    {
-      "type": "InitializingBean",
-      "package": "org.springframework.beans.factory"
-    },
-    {
-      "type": "ApplicationReadyEvent",
-      "package": "org.springframework.boot.context.event"
-    },
-    {
-      "type": "WebServerInitializedEvent",
-      "package": "org.springframework.boot.web.context"
-    },
-    {
-      "type": "ApplicationContext",
-      "package": "org.springframework.context"
-    },
-    {
-      "type": "ApplicationContextAware",
-      "package": "org.springframework.context"
-    },
-    {
-      "type": "ApplicationEvent",
-      "package": "org.springframework.context"
-    },
-    {
-      "type": "ConfigurableApplicationContext",
-      "package": "org.springframework.context"
-    },
-    {
-      "type": "EnvironmentAware",
-      "package": "org.springframework.context"
-    },
-    {
-      "type": "GenericApplicationListener",
-      "package": "org.springframework.context.event"
-    },
-    {
-      "type": "Ordered",
-      "package": "org.springframework.core"
-    },
-    {
-      "type": "ResolvableType",
-      "package": "org.springframework.core"
-    },
-    {
-      "type": "Environment",
-      "package": "org.springframework.core.env"
-    },
-    {
-      "type": "StandardEnvironment",
-      "package": "org.springframework.core.env"
-    },
-    {
-      "type": "Assert",
-      "package": "org.springframework.util"
+      "className": "package-info",
+      "usedTypes": []
     }
   ]
 }

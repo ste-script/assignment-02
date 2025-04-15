@@ -10,15 +10,16 @@ class ClassDepsReport {
 }
 
 class PackageDepsReport {
-  constructor(packageName, usedTypes) {
+  constructor(packageName, classReports) {
     this.packageName = packageName;
-    this.usedTypes = usedTypes;
+    this.classReports = classReports;
   }
 }
 
 class ProjectDepsReport {
-  constructor(usedTypes) {
-    this.usedTypes = usedTypes;
+  constructor(projectName, packageReports) {
+    this.projectName = projectName;
+    this.packageReports = packageReports;
   }
 }
 
@@ -43,10 +44,8 @@ async function getPackageDependencies(packageSrcFolder) {
     const classReports = await Promise.all(
       javaFiles.map((file) => getClassDependencies(file))
     );
-    const allUsedTypes = classReports.flatMap((report) => report.usedTypes);
-    const uniqueTypes = await deduplicateTypes(allUsedTypes);
     const packageName = basename(packageSrcFolder);
-    return new PackageDepsReport(packageName, uniqueTypes);
+    return new PackageDepsReport(packageName, classReports);
   } catch (error) {
     throw new Error(
       `Error analyzing package ${packageSrcFolder}: ${error.message}`
@@ -60,9 +59,8 @@ async function getProjectDependencies(projectSrcFolder) {
     const packageReports = await Promise.all(
       packageDirs.map((dir) => getPackageDependencies(dir))
     );
-    const allUsedTypes = packageReports.flatMap((report) => report.usedTypes);
-    const uniqueTypes = await deduplicateTypes(allUsedTypes);
-    return new ProjectDepsReport(uniqueTypes);
+    const projectName = basename(projectSrcFolder);
+    return new ProjectDepsReport(projectName, packageReports);
   } catch (error) {
     throw new Error(
       `Error analyzing project ${projectSrcFolder}: ${error.message}`
