@@ -5,48 +5,61 @@ import {
 } from "../src/main.js";
 import fs from "fs/promises";
 const baseFolder = "../testReport/";
+
 async function runTests(unique) {
   const compositeFolder = baseFolder + (unique ? "unique/" : "all/");
   try {
     //create files if not exist
     await fs.mkdir(compositeFolder, { recursive: true });
+    const classFilename = "classReport.json";
+    const packageFilename = "packageReport.json";
+    const projectFilename = "projectReport.json";
 
     // Test getClassDependencies
-    const classReport = await getClassDependencies(
+    const classReport = getClassDependencies(
       "../resources/spring-boot/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/ApplicationRunner.java",
       unique
     );
-    console.log("Class Dependencies Report:");
-    await fs.writeFile(
-      compositeFolder + "classReport.json",
-      JSON.stringify(classReport, null, 2)
-    );
-
-    // Test getPackageDependencies
-    const packageReport = await getPackageDependencies(
+    const packageReport = getPackageDependencies(
       "../resources/spring-boot/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/admin",
       unique
     );
-    console.log("\nPackage Dependencies Report:");
-    await fs.writeFile(
-      compositeFolder + "packageReport.json",
-      JSON.stringify(packageReport, null, 2)
-    );
-
-    // Test getProjectDependencies
-    const projectReport = await getProjectDependencies(
+    const projectReport = getProjectDependencies(
       "../resources/spring-boot/spring-boot-project/spring-boot/src/main/java/org/springframework/boot",
       unique
     );
-    console.log("\nProject Dependencies Report:");
-    await fs.writeFile(
-      compositeFolder + "projectReport.json",
-      JSON.stringify(projectReport, null, 2)
-    );
+    const results = await Promise.all([
+      classReport,
+      packageReport,
+      projectReport,
+    ]);
+
+    writeToFile(compositeFolder + classFilename, results[0]).then(() => {
+      console.log("Class Dependencies Report written to file.");
+    });
+    writeToFile(compositeFolder + packageFilename, results[1]).then(() => {
+      console.log("Package Dependencies Report written to file.");
+    });
+    writeToFile(compositeFolder + projectFilename, results[2]).then(() => {
+      console.log("Project Dependencies Report written to file.");
+    });
   } catch (error) {
     console.error("Test Error:", error);
   }
 }
 
-runTests(false);
-runTests(true);
+async function writeToFile(filePath, data) {
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+}
+
+const startTime = new Date();
+runTests(false).finally(() => {
+  const endTime = new Date();
+  const duration = endTime - startTime;
+  console.log(`Execution time: ${duration} ms`);
+});
+runTests(true).finally(() => {
+  const endTime = new Date();
+  const duration = endTime - startTime;
+  console.log(`Execution time: ${duration} ms`);
+});
