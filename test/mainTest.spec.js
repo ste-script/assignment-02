@@ -1,8 +1,8 @@
-const {
+import {
   getClassDependencies,
   getPackageDependencies,
   getProjectDependencies,
-} = require("../src/main").default;
+} from "../src/main.js";
 
 async function runTests() {
   try {
