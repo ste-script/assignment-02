@@ -2,7 +2,7 @@ import {
   getClassDependencies,
   getPackageDependencies,
   getProjectDependencies,
-} from "../src/main.js";
+} from "../src/main.mjs";
 
 async function runTests() {
   try {

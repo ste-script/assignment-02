@@ -2,7 +2,7 @@ import {
   getClassDependencies,
   getPackageDependencies,
   getProjectDependencies,
-} from "../src/main.js";
+} from "../src/main.mjs";
 import fs from "fs/promises";
 const baseFolder = "../testReport/";
 
@@ -16,34 +16,33 @@ async function runTests(unique) {
     const projectFilename = "projectReport.json";
 
     // Test getClassDependencies
-    const classReport = getClassDependencies(
+    const classPromise = getClassDependencies(
       "../resources/spring-boot/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/ApplicationRunner.java",
       unique
     );
-    const packageReport = getPackageDependencies(
+    const packagePromise = getPackageDependencies(
       "../resources/spring-boot/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/admin",
       unique
     );
-    const projectReport = getProjectDependencies(
+    const projectPromise = getProjectDependencies(
       "../resources/spring-boot/spring-boot-project/spring-boot/src/main/java/org/springframework/boot",
       unique
     );
-    const results = await Promise.all([
-      classReport,
-      packageReport,
-      projectReport,
+    const [classResult, packageResult, projectResult] = await Promise.all([
+      classPromise,
+      packagePromise,
+      projectPromise,
     ]);
 
-    writeToFile(compositeFolder + classFilename, results[0]).then(() => {
+    writeToFile(compositeFolder + classFilename, classResult).then(() => {
       console.log("Class Dependencies Report written to file.");
     });
-    writeToFile(compositeFolder + packageFilename, results[1]).then(() => {
+    writeToFile(compositeFolder + packageFilename, packageResult).then(() => {
       console.log("Package Dependencies Report written to file.");
     });
-    writeToFile(compositeFolder + projectFilename, results[2]).then(() => {
+    writeToFile(compositeFolder + projectFilename, projectResult).then(() => {
       console.log("Project Dependencies Report written to file.");
     });
-    
   } catch (error) {
     console.error("Test Error:", error);
   }
@@ -53,5 +52,5 @@ async function writeToFile(filePath, data) {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }
 
-runTests(false)
-runTests(true)
+runTests(false);
+runTests(true);
