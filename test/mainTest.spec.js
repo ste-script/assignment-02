@@ -1,3 +1,4 @@
+import path from "path";
 import {
   getClassDependencies,
   getPackageDependencies,
@@ -8,21 +9,21 @@ async function runTests() {
   try {
     // Test getClassDependencies
     const classReport = await getClassDependencies(
-      "../resources/assignment-01/src/main/java/pcd/ass01/BoidsSimulation.java"
+      path.join("..", "resources", "assignment-01", "src", "main", "java", "pcd", "ass01", "BoidsSimulation.java")
     );
     console.log("Class Dependencies Report:");
     console.log(classReport);
 
     // Test getPackageDependencies
     const packageReport = await getPackageDependencies(
-      "../resources/assignment-01/src/main/java/pcd/ass01/Controller"
+      path.join("..", "resources", "assignment-01", "src", "main", "java", "pcd", "ass01", "Controller")
     );
     console.log("\nPackage Dependencies Report:");
     console.log(packageReport);
 
     // Test getProjectDependencies
     const projectReport = await getProjectDependencies(
-      "../resources/assignment-01/src/main/java/pcd/ass01/"
+      path.join("..", "resources", "assignment-01", "src", "main", "java", "pcd", "ass01")
     );
     console.log("\nProject Dependencies Report:");
     console.log(projectReport);
