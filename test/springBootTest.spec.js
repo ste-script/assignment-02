@@ -43,6 +43,7 @@ async function runTests(unique) {
     writeToFile(compositeFolder + projectFilename, results[2]).then(() => {
       console.log("Project Dependencies Report written to file.");
     });
+    
   } catch (error) {
     console.error("Test Error:", error);
   }
@@ -52,14 +53,5 @@ async function writeToFile(filePath, data) {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }
 
-const startTime = new Date();
-runTests(false).finally(() => {
-  const endTime = new Date();
-  const duration = endTime - startTime;
-  console.log(`Execution time: ${duration} ms`);
-});
-runTests(true).finally(() => {
-  const endTime = new Date();
-  const duration = endTime - startTime;
-  console.log(`Execution time: ${duration} ms`);
-});
+runTests(false)
+runTests(true)

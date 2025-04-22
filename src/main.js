@@ -165,11 +165,11 @@ async function deduplicateTypes(types) {
   const seen = new Set();
   return types.filter((t) => {
     const key = `${t.package}.${t.type}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      return true;
+    if (seen.has(key)) {
+      return false;
     }
-    return false;
+    seen.add(key);
+    return true;
   });
 }
 
