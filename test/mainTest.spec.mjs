@@ -10,7 +10,6 @@ describe("Dependency Analysis Tests", () => {
   it("should analyze class dependencies correctly", async () => {
     const classReport = await getClassDependencies(
       path.join(
-        "..",
         "resources",
         "assignment-01",
         "src",
@@ -27,7 +26,6 @@ describe("Dependency Analysis Tests", () => {
   it("should analyze package dependencies correctly", async () => {
     const packageReport = await getPackageDependencies(
       path.join(
-        "..",
         "resources",
         "assignment-01",
         "src",
@@ -44,7 +42,6 @@ describe("Dependency Analysis Tests", () => {
   it("should analyze project dependencies correctly", async () => {
     const projectReport = await getProjectDependencies(
       path.join(
-        "..",
         "resources",
         "assignment-01",
         "src",

@@ -1,17 +1,19 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import path from "path";
 import fs from "fs/promises";
+import { lastValueFrom, firstValueFrom } from "rxjs"; // Use lastValueFrom or firstValueFrom
 import {
-  getClassDependencies,
-  getPackageDependencies,
-  getProjectDependencies,
+  // filepath: src/reactive.test.js
+  getClassDependenciesRx,
+  getPackageDependenciesRx,
+  getProjectDependenciesRx,
   ClassDepsReport,
   PackageDepsReport,
   ProjectDepsReport,
-} from "../src/async.mjs"; // Using async version as in the original test file
+} from "../src/reactive.mjs"; // Import from reactive.js
 
-// Define base paths relative to project root
-const baseFolder = path.join("testReport");
+// Define base paths relative to project root (assuming tests run from root)
+const baseFolder = path.join("testReport"); // Output folder for optional reports
 const resourcesBase = path.join(
   "resources",
   "spring-boot",
@@ -46,7 +48,7 @@ async function writeToFile(filePath, data) {
 
 // --- Test Suite ---
 
-describe("Dependency Analysis (async)", () => {
+describe("Dependency Analysis (reactive)", () => {
   // --- Tests for unique = false ---
   describe("Composite Reports (unique=false)", () => {
     const unique = false;
@@ -59,18 +61,19 @@ describe("Dependency Analysis (async)", () => {
       const packagePath = path.join(resourcesBase, "admin");
       const projectPath = resourcesBase; // Analyze the 'boot' package as the project root
 
+      // Use lastValueFrom to get the final emitted value from the observables
       [classResult, packageResult, projectResult] = await Promise.all([
-        getClassDependencies(classPath), // unique flag doesn't apply here
-        getPackageDependencies(packagePath, unique),
-        getProjectDependencies(projectPath, unique),
+        lastValueFrom(getClassDependenciesRx(classPath)), // unique flag doesn't apply here
+        lastValueFrom(getPackageDependenciesRx(packagePath, unique)),
+        lastValueFrom(getProjectDependenciesRx(projectPath, unique)),
       ]);
 
       // Optional: Write results to files for manual inspection or baseline
       // await ensureDir(outputDir);
       // await Promise.all([
-      //     writeToFile(path.join(outputDir, 'classReport.async.json'), classResult),
-      //     writeToFile(path.join(outputDir, 'packageReport.async.json'), packageResult),
-      //     writeToFile(path.join(outputDir, 'projectReport.async.json'), projectResult),
+      //     writeToFile(path.join(outputDir, 'classReport.reactive.json'), classResult),
+      //     writeToFile(path.join(outputDir, 'packageReport.reactive.json'), packageResult),
+      //     writeToFile(path.join(outputDir, 'projectReport.reactive.json'), projectResult),
       // ]);
     });
 
@@ -86,6 +89,7 @@ describe("Dependency Analysis (async)", () => {
       expect(packageResult).toBeInstanceOf(PackageDepsReport);
       expect(packageResult.packageName).toBe("admin");
       expect(Array.isArray(packageResult.classReports)).toBe(true);
+      expect(packageResult.uniqueTypes).toBeNull(); // unique=false
       // Check if the package contains class reports (assuming it's not empty)
       if (packageResult.classReports.length > 0) {
         expect(packageResult.classReports[0]).toBeInstanceOf(ClassDepsReport);
@@ -98,11 +102,18 @@ describe("Dependency Analysis (async)", () => {
       expect(projectResult).toBeInstanceOf(ProjectDepsReport);
       expect(projectResult.projectName).toBe("boot");
       expect(Array.isArray(projectResult.packageReports)).toBe(true);
+      expect(projectResult.uniqueTypes).toBeNull(); // unique=false
       // Check if the project contains package reports (assuming it's not empty)
       if (projectResult.packageReports.length > 0) {
         expect(projectResult.packageReports[0]).toBeInstanceOf(
           PackageDepsReport
         );
+        // Check nested structure if needed
+        if (projectResult.packageReports[0].classReports?.length > 0) {
+          expect(
+            projectResult.packageReports[0].classReports[0]
+          ).toBeInstanceOf(ClassDepsReport);
+        }
       }
       // Use snapshot testing
       expect(projectResult).toMatchSnapshot();
@@ -123,17 +134,17 @@ describe("Dependency Analysis (async)", () => {
 
       [classResultUnique, packageResultUnique, projectResultUnique] =
         await Promise.all([
-          getClassDependencies(classPath), // unique flag doesn't apply here
-          getPackageDependencies(packagePath, unique),
-          getProjectDependencies(projectPath, unique),
+          lastValueFrom(getClassDependenciesRx(classPath)), // unique flag doesn't apply here
+          lastValueFrom(getPackageDependenciesRx(packagePath, unique)),
+          lastValueFrom(getProjectDependenciesRx(projectPath, unique)),
         ]);
 
       // Optional: Write results to files for manual inspection or baseline
       // await ensureDir(outputDir);
       // await Promise.all([
-      //     writeToFile(path.join(outputDir, 'classReport.async.unique.json'), classResultUnique),
-      //     writeToFile(path.join(outputDir, 'packageReport.async.unique.json'), packageResultUnique),
-      //     writeToFile(path.join(outputDir, 'projectReport.async.unique.json'), projectResultUnique),
+      //     writeToFile(path.join(outputDir, 'classReport.reactive.unique.json'), classResultUnique),
+      //     writeToFile(path.join(outputDir, 'packageReport.reactive.unique.json'), packageResultUnique),
+      //     writeToFile(path.join(outputDir, 'projectReport.reactive.unique.json'), projectResultUnique),
       // ]);
     });
 
@@ -148,20 +159,17 @@ describe("Dependency Analysis (async)", () => {
     it("should generate PackageDepsReport with unique types", () => {
       expect(packageResultUnique).toBeInstanceOf(PackageDepsReport);
       expect(packageResultUnique.packageName).toBe("admin");
-      // The structure depends on the implementation in async.mjs when unique=true.
-      // Assuming it correctly returns unique types in some form:
-      // Verify the structure containing unique types (e.g., might be in classReports based on potential bug)
-      expect(Array.isArray(packageResultUnique.classReports)).toBe(true); // Adjust if implementation differs
-      // Check for uniqueness if the structure allows
-      if (
-        Array.isArray(packageResultUnique.classReports) &&
-        packageResultUnique.classReports.length > 0 &&
-        packageResultUnique.classReports[0].type
-      ) {
-        const typeStrings = packageResultUnique.classReports.map(
+      expect(packageResultUnique.classReports).toBeNull(); // unique=true
+      expect(Array.isArray(packageResultUnique.uniqueTypes)).toBe(true);
+      // Check for uniqueness
+      if (packageResultUnique.uniqueTypes.length > 0) {
+        const typeStrings = packageResultUnique.uniqueTypes.map(
           (t) => `${t.package}.${t.type}`
         );
         expect(new Set(typeStrings).size).toBe(typeStrings.length);
+        // Check structure of one element
+        expect(packageResultUnique.uniqueTypes[0]).toHaveProperty("type");
+        expect(packageResultUnique.uniqueTypes[0]).toHaveProperty("package");
       }
       // Use snapshot testing
       expect(packageResultUnique).toMatchSnapshot();
@@ -170,20 +178,17 @@ describe("Dependency Analysis (async)", () => {
     it("should generate ProjectDepsReport with unique types", () => {
       expect(projectResultUnique).toBeInstanceOf(ProjectDepsReport);
       expect(projectResultUnique.projectName).toBe("boot");
-      // The structure depends on the implementation in async.mjs when unique=true.
-      // Assuming it correctly returns unique types in some form:
-      // Verify the structure containing unique types (e.g., might be in packageReports based on potential bug)
-      expect(Array.isArray(projectResultUnique.packageReports)).toBe(true); // Adjust if implementation differs
-      // Check for uniqueness if the structure allows
-      if (
-        Array.isArray(projectResultUnique.packageReports) &&
-        projectResultUnique.packageReports.length > 0 &&
-        projectResultUnique.packageReports[0].type
-      ) {
-        const typeStrings = projectResultUnique.packageReports.map(
+      expect(projectResultUnique.packageReports).toBeNull(); // unique=true
+      expect(Array.isArray(projectResultUnique.uniqueTypes)).toBe(true);
+      // Check for uniqueness
+      if (projectResultUnique.uniqueTypes.length > 0) {
+        const typeStrings = projectResultUnique.uniqueTypes.map(
           (t) => `${t.package}.${t.type}`
         );
         expect(new Set(typeStrings).size).toBe(typeStrings.length);
+        // Check structure of one element
+        expect(projectResultUnique.uniqueTypes[0]).toHaveProperty("type");
+        expect(projectResultUnique.uniqueTypes[0]).toHaveProperty("package");
       }
       // Use snapshot testing
       expect(projectResultUnique).toMatchSnapshot();
@@ -194,35 +199,34 @@ describe("Dependency Analysis (async)", () => {
   describe("Error Handling", () => {
     it("should reject with an error for a non-existent class file", async () => {
       const nonExistentFile = path.join(resourcesBase, "NonExistentClass.java");
-      // Use expect(...).rejects to test async errors
-      await expect(getClassDependencies(nonExistentFile)).rejects.toThrowError(
+      const observable = getClassDependenciesRx(nonExistentFile);
+      // Use expect(...).rejects with lastValueFrom
+      await expect(lastValueFrom(observable)).rejects.toThrowError(
         /Error analyzing class .*NonExistentClass\.java/
       );
     });
 
     it("should reject with an error for a non-existent package folder", async () => {
       const nonExistentFolder = path.join(resourcesBase, "nonexistentpackage");
-      await expect(
-        getPackageDependencies(nonExistentFolder)
-      ).rejects.toThrowError(/Error analyzing package .*nonexistentpackage/);
-      // Can also check for specific error codes like ENOENT if needed
-      await expect(
-        getPackageDependencies(nonExistentFolder)
-      ).rejects.toThrowError(/ENOENT/);
+      const observable = getPackageDependenciesRx(nonExistentFolder);
+      await expect(lastValueFrom(observable)).rejects.toThrowError(
+        /Error analyzing package .*nonexistentpackage/
+      );
+      // Check for specific underlying error (like ENOENT) if needed
+      await expect(lastValueFrom(observable)).rejects.toThrowError(/ENOENT/); // Check if the error message contains ENOENT
     });
 
     it("should reject with an error for a non-existent project folder", async () => {
       const nonExistentFolder = path.join("resources", "nonexistentproject");
-      await expect(
-        getProjectDependencies(nonExistentFolder)
-      ).rejects.toThrowError(/Error analyzing project .*nonexistentproject/);
-      await expect(
-        getProjectDependencies(nonExistentFolder)
-      ).rejects.toThrowError(/ENOENT/);
+      const observable = getProjectDependenciesRx(nonExistentFolder);
+      await expect(lastValueFrom(observable)).rejects.toThrowError(
+        /Error analyzing project .*nonexistentproject/
+      );
+      await expect(lastValueFrom(observable)).rejects.toThrowError(/ENOENT/); // Check if the error message contains ENOENT
     });
   });
 });
 
 // Note: Run `npx vitest` to execute these tests.
-// Snapshot files will be created in `test/__snapshots__/springBootTest.spec.mjs.snap` on the first run.
+// Snapshot files will be created in `src/__snapshots__/reactive.test.js.snap` on the first run.
 // Review these snapshots carefully to ensure they capture the correct expected output.
