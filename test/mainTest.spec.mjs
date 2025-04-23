@@ -1,64 +1,60 @@
 import path from "path";
 import {
-    getClassDependencies,
-    getPackageDependencies,
-    getProjectDependencies,
-} from "../src/main.mjs";
+  getClassDependencies,
+  getPackageDependencies,
+  getProjectDependencies,
+} from "../src/async.mjs";
+import { describe, it, expect } from "vitest";
 
-async function runTests() {
-    try {
-        // Test getClassDependencies
-        const classReport = await getClassDependencies(
-            path.join(
-                "..",
-                "resources",
-                "assignment-01",
-                "src",
-                "main",
-                "java",
-                "pcd",
-                "ass01",
-                "BoidsSimulation.java"
-            )
-        );
-        console.log("Class Dependencies Report:");
-        console.log(classReport);
-
-        // Test getPackageDependencies
-        const packageReport = await getPackageDependencies(
-            path.join(
-                "..",
-                "resources",
-                "assignment-01",
-                "src",
-                "main",
-                "java",
-                "pcd",
-                "ass01",
-                "Controller"
-            )
-        );
-        console.log("\nPackage Dependencies Report:");
-        console.log(packageReport);
-
-        // Test getProjectDependencies
-        const projectReport = await getProjectDependencies(
-            path.join(
-                "..",
-                "resources",
-                "assignment-01",
-                "src",
-                "main",
-                "java",
-                "pcd",
-                "ass01"
-            )
-        );
-        console.log("\nProject Dependencies Report:");
-        console.log(projectReport);
-    } catch (error) {
-        console.error("Test Error:", error);
-    }
-}
-
-runTests();
+describe("Dependency Analysis Tests", () => {
+  it("should analyze class dependencies correctly", async () => {
+    const classReport = await getClassDependencies(
+      path.join(
+        "..",
+        "resources",
+        "assignment-01",
+        "src",
+        "main",
+        "java",
+        "pcd",
+        "ass01",
+        "BoidsSimulation.java"
+      )
+    );
+    expect(classReport).toBeDefined();
+    expect(classReport.className).toBe("BoidsSimulation");
+  });
+  it("should analyze package dependencies correctly", async () => {
+    const packageReport = await getPackageDependencies(
+      path.join(
+        "..",
+        "resources",
+        "assignment-01",
+        "src",
+        "main",
+        "java",
+        "pcd",
+        "ass01",
+        "Controller"
+      )
+    );
+    expect(packageReport).toBeDefined();
+    expect(packageReport.packageName).toBe("Controller");
+  });
+  it("should analyze project dependencies correctly", async () => {
+    const projectReport = await getProjectDependencies(
+      path.join(
+        "..",
+        "resources",
+        "assignment-01",
+        "src",
+        "main",
+        "java",
+        "pcd",
+        "ass01"
+      )
+    );
+    expect(projectReport).toBeDefined();
+    expect(projectReport.projectName).toBe("ass01");
+  });
+});
