@@ -81,54 +81,6 @@ class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults {
       }
     }
   }
-
-  // Extract class or interface type references
-  classOrInterfaceType(ctx) {
-    if (ctx.children && ctx.children.Identifier) {
-      const identifiers = ctx.children.Identifier;
-      if (identifiers.length > 0) {
-        const typeName = identifiers[identifiers.length - 1].image;
-        let packageName = "default"; // Assume default if no package specified
-
-        // Check if there's a qualifier (package name)
-        if (ctx.children.DOT) {
-          // This logic might need refinement based on java-parser specifics
-          // Assuming the structure allows easy access to the qualifier part
-          // For simplicity, let's stick to the original logic for now
-        }
-
-        // If more than one identifier, assume the preceding ones form the package
-        if (identifiers.length > 1) {
-          packageName = identifiers
-            .slice(0, identifiers.length - 1)
-            .map((id) => id.image)
-            .join(".");
-        }
-
-        this.customResult.push({ type: typeName, package: packageName });
-      }
-    }
-  }
-
-  // Extract types from object creation expressions
-  creator(ctx) {
-    if (ctx.createdName && ctx.createdName[0].children.Identifier) {
-      const identifiers = ctx.createdName[0].children.Identifier;
-      if (identifiers.length > 0) {
-        const typeName = identifiers[identifiers.length - 1].image;
-        let packageName = "default";
-
-        if (identifiers.length > 1) {
-          packageName = identifiers
-            .slice(0, identifiers.length - 1)
-            .map((id) => id.image)
-            .join(".");
-        }
-
-        this.customResult.push({ type: typeName, package: packageName });
-      }
-    }
-  }
 }
 
 // --- Helper Functions (sync part, unchanged) ---
@@ -186,14 +138,6 @@ function getPackageDependenciesRx(packageSrcFolder, unique = false) {
     ),
     // Process each java file
     mergeMap((javaFiles) => {
-      if (javaFiles.length === 0) {
-        // Handle empty packages
-        return of(
-          unique
-            ? new PackageDepsReport(packageName, [])
-            : new PackageDepsReport(packageName, [])
-        );
-      }
       // Create an observable for each class dependency analysis
       const classObservables = javaFiles.map((file) =>
         getClassDependenciesRx(file)
@@ -237,9 +181,6 @@ function findPackageDirectoriesRx(dir) {
       } else if (entry.isFile() && entry.name.endsWith(".java")) {
         // If a java file is found, this directory is a package directory
         return of({ isPackage: true, path: dir });
-      } else {
-        // Ignore other files/types
-        return EMPTY; // Use EMPTY instead of of(null) or of(undefined)
       }
     }),
     // Collect results, ensuring we only add package paths once
@@ -298,13 +239,6 @@ function getProjectDependenciesRx(projectSrcFolder, unique = false) {
   const projectName = basename(projectSrcFolder);
   return findPackageDirectoriesRx(projectSrcFolder).pipe(
     mergeMap((packageDirs) => {
-      if (packageDirs.length === 0) {
-        return of(
-          unique
-            ? new ProjectDepsReport(projectName, [])
-            : new ProjectDepsReport(projectName, [])
-        );
-      }
       // Get dependencies for each package
       const packageObservables = packageDirs.map(
         (dir) => getPackageDependenciesRx(dir, unique && !unique) // Pass false if project unique is true
@@ -319,11 +253,9 @@ function getProjectDependenciesRx(projectSrcFolder, unique = false) {
           mergeMap((pkgReport) =>
             // If the package report already contains unique types (because unique=true was passed down)
             // use pkgReport.uniqueTypes, otherwise flatten classReports
-            pkgReport.uniqueTypes
-              ? from(pkgReport.uniqueTypes)
-              : from(pkgReport.classReports).pipe(
-                  mergeMap((classReport) => from(classReport.usedTypes))
-                )
+            from(pkgReport.classReports).pipe(
+              mergeMap((classReport) => from(classReport.usedTypes))
+            )
           ),
           distinct((t) => `${t.package}.${t.type}`), // Deduplicate across the whole project
           toArray(), // Collect unique types for the project

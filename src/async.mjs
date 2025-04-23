@@ -101,46 +101,6 @@ class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults {
       }
     }
   }
-
-  // Extract class or interface type references
-  classOrInterfaceType(ctx) {
-    if (ctx.children && ctx.children.Identifier) {
-      const identifiers = ctx.children.Identifier;
-      if (identifiers.length > 0) {
-        const typeName = identifiers[identifiers.length - 1].image;
-        let packageName = "default";
-
-        if (identifiers.length > 1) {
-          packageName = identifiers
-            .slice(0, identifiers.length - 1)
-            .map((id) => id.image)
-            .join(".");
-        }
-
-        this.customResult.push({ type: typeName, package: packageName });
-      }
-    }
-  }
-
-  // Extract types from object creation expressions
-  creator(ctx) {
-    if (ctx.createdName && ctx.createdName[0].children.Identifier) {
-      const identifiers = ctx.createdName[0].children.Identifier;
-      if (identifiers.length > 0) {
-        const typeName = identifiers[identifiers.length - 1].image;
-        let packageName = "default";
-
-        if (identifiers.length > 1) {
-          packageName = identifiers
-            .slice(0, identifiers.length - 1)
-            .map((id) => id.image)
-            .join(".");
-        }
-
-        this.customResult.push({ type: typeName, package: packageName });
-      }
-    }
-  }
 }
 
 async function extractDependenciesFromAST(ast) {
