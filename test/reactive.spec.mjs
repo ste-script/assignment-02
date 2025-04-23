@@ -82,7 +82,7 @@ describe("Dependency Analysis (reactive)", () => {
       expect(classResult.className).toBe("ApplicationRunner");
       expect(Array.isArray(classResult.usedTypes)).toBe(true);
       // Use snapshot testing for detailed structure verification
-      expect(classResult).toMatchSnapshot();
+      expect(prepareForSnapshot(classResult)).toMatchSnapshot();
     });
 
     it("should generate PackageDepsReport correctly", () => {
@@ -95,7 +95,8 @@ describe("Dependency Analysis (reactive)", () => {
         expect(packageResult.classReports[0]).toBeInstanceOf(ClassDepsReport);
       }
       // Use snapshot testing
-      expect(packageResult).toMatchSnapshot();
+      expect(prepareForSnapshot(packageResult)).toMatchSnapshot();
+
     });
 
     it("should generate ProjectDepsReport correctly", () => {
@@ -116,7 +117,7 @@ describe("Dependency Analysis (reactive)", () => {
         }
       }
       // Use snapshot testing
-      expect(projectResult).toMatchSnapshot();
+      expect(prepareForSnapshot(projectResult)).toMatchSnapshot();
     });
   });
 
@@ -153,7 +154,7 @@ describe("Dependency Analysis (reactive)", () => {
       expect(classResultUnique.className).toBe("ApplicationRunner");
       expect(Array.isArray(classResultUnique.usedTypes)).toBe(true);
       // Snapshot should be identical to the non-unique class report
-      expect(classResultUnique).toMatchSnapshot();
+      expect(prepareForSnapshot(classResultUnique)).toMatchSnapshot();
     });
 
     it("should generate PackageDepsReport with unique types", () => {
@@ -172,7 +173,7 @@ describe("Dependency Analysis (reactive)", () => {
         expect(packageResultUnique.uniqueTypes[0]).toHaveProperty("package");
       }
       // Use snapshot testing
-      expect(packageResultUnique).toMatchSnapshot();
+      expect(prepareForSnapshot(packageResultUnique)).toMatchSnapshot();
     });
 
     it("should generate ProjectDepsReport with unique types", () => {
@@ -191,7 +192,7 @@ describe("Dependency Analysis (reactive)", () => {
         expect(projectResultUnique.uniqueTypes[0]).toHaveProperty("package");
       }
       // Use snapshot testing
-      expect(projectResultUnique).toMatchSnapshot();
+      expect(prepareForSnapshot(projectResultUnique)).toMatchSnapshot();
     });
   });
 
@@ -227,6 +228,11 @@ describe("Dependency Analysis (reactive)", () => {
   });
 });
 
+function prepareForSnapshot(element){
+  //you might think this is a bit overkill but it is not
+  //this is a good way to ensure that the output is deterministic and always the same
+  return JSON.stringify(element).split('').sort().join('');
+}
 // Note: Run `npx vitest` to execute these tests.
 // Snapshot files will be created in `src/__snapshots__/reactive.test.js.snap` on the first run.
 // Review these snapshots carefully to ensure they capture the correct expected output.

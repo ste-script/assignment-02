@@ -6,10 +6,7 @@ import {
   of,
   throwError,
   forkJoin,
-  Observable,
   EMPTY,
-} from "rxjs";
-import {
   map,
   mergeMap,
   toArray,
@@ -17,9 +14,8 @@ import {
   filter,
   distinct,
   reduce,
-  tap,
   switchMap,
-} from "rxjs/operators";
+} from "rxjs";
 
 // --- Report Classes (unchanged) ---
 class ClassDepsReport {
@@ -170,7 +166,8 @@ function getClassDependenciesRx(classSrcFile) {
     }),
     catchError((error) =>
       throwError(
-        () => new Error(`Error analyzing class ${classSrcFile}: ${error.message}`)
+        () =>
+          new Error(`Error analyzing class ${classSrcFile}: ${error.message}`)
       )
     )
   );
@@ -309,8 +306,8 @@ function getProjectDependenciesRx(projectSrcFolder, unique = false) {
         );
       }
       // Get dependencies for each package
-      const packageObservables = packageDirs.map((dir) =>
-        getPackageDependenciesRx(dir, unique && !unique) // Pass false if project unique is true
+      const packageObservables = packageDirs.map(
+        (dir) => getPackageDependenciesRx(dir, unique && !unique) // Pass false if project unique is true
       );
       return forkJoin(packageObservables);
     }),
