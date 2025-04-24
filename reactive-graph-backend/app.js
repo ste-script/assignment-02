@@ -4,7 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var app = express();
-var javaDepsLibrary = require("../src/async.mjs");
+var javaDepsLibrary = require("../src/reactive.mjs");
 var path = require("path");
 // view engine setup
 app.use(logger("dev"));
@@ -22,82 +22,133 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use("/", async function (req, res) {
-  const rawDeps = await javaDepsLibrary.getProjectDependencies(
-    path.join(
-      "..",
-      "resources",
-      "assignment-01",
-      "src",
-      "main",
-      "java",
-      "pcd",
-      "ass01",
-      "Controller"
-    )
+// Add the new SSE handler
+app.get("/", function (req, res) {
+  // Set headers for SSE
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders(); // Flush the headers to establish the connection
+
+  const projectPath = path.join(
+    "..",
+    "resources",
+    "assignment-01",
+    "src",
+    "main",
+    "java",
+    "pcd",
+    "ass01",
+    "Controller" // Assuming this is the entry point or directory
   );
 
-  // Transform data for react-d3-graph
+  // --- Data structures to hold the graph state ---
   const nodes = [];
   const links = [];
   const nodeIds = new Set();
   const linkIds = new Set(); // Keep track of unique links
 
-  if (rawDeps && rawDeps.packageReports) {
-    rawDeps.packageReports.forEach((pkg) => {
-      const currentPackageName = pkg.packageName;
-      if (pkg.classReports) {
-        pkg.classReports.forEach((cls) => {
-          // Skip package-info classes for cleaner graph if desired
-          if (cls.className === "package-info") {
-            return;
-          }
+  // --- Function to send updates to the client ---
+  const sendUpdate = (data) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
 
-          const sourceNodeId = `${currentPackageName}.${cls.className}`;
+  // --- Subscribe to the observable ---
+  // Assuming getProjectDependenciesRx returns an Observable that emits
+  // individual class reports or similar granular data.
+  // You might need to adjust the processing logic based on what exactly it emits.
+  const dependencySubscription = javaDepsLibrary
+    .getProjectDependenciesRx(projectPath) // Assuming this returns an Observable<ClassReport | PackageReport | etc.>
+    .subscribe({
+      next: (reportItem) => {
+        // --- Process each emitted item incrementally ---
+        // This logic assumes reportItem is structured similarly to how
+        // you processed cls and pkg before, but emitted one by one.
+        // Adjust based on the actual structure emitted by the observable.
 
-          // Add source node if it doesn't exist
-          if (!nodeIds.has(sourceNodeId)) {
-            nodes.push({ id: sourceNodeId });
-            nodeIds.add(sourceNodeId);
-          }
+        let itemProcessed = false; // Flag to check if we added anything
 
-          if (cls.usedTypes) {
-            cls.usedTypes.forEach((usedType) => {
-              // Ensure package and type are defined to avoid "undefined.undefined" IDs
-              if (!usedType.package || !usedType.type) {
-                console.warn(
-                  "Skipping usedType with missing package or type:",
-                  usedType,
-                  "for class:",
-                  sourceNodeId
-                );
-                return;
-              }
-              const targetNodeId = `${usedType.package}.${usedType.type}`;
+        // Example: Assuming it emits class reports directly
+        if (reportItem && reportItem.className && reportItem.packageName) {
+           // Skip package-info classes
+           if (reportItem.className === "package-info") {
+             return;
+           }
 
-              // Add target node if it doesn't exist
-              if (!nodeIds.has(targetNodeId)) {
-                nodes.push({ id: targetNodeId });
-                nodeIds.add(targetNodeId);
-              }
+           const currentPackageName = reportItem.packageName;
+           const sourceNodeId = `${currentPackageName}.${reportItem.className}`;
 
-              // Create a unique identifier for the link
-              const linkId = `${sourceNodeId}->${targetNodeId}`;
+           // Add source node if new
+           if (!nodeIds.has(sourceNodeId)) {
+             const newNode = { id: sourceNodeId };
+             nodes.push(newNode);
+             nodeIds.add(sourceNodeId);
+             itemProcessed = true;
+             // Optional: Send just the new node
+             // sendUpdate({ type: 'add_node', payload: newNode });
+           }
 
-              // Add link only if it's unique
-              if (!linkIds.has(linkId)) {
-                links.push({ source: sourceNodeId, target: targetNodeId });
-                linkIds.add(linkId);
-              }
-            });
-          }
-        });
-      }
+           if (reportItem.usedTypes) {
+             reportItem.usedTypes.forEach((usedType) => {
+               if (!usedType.package || !usedType.type) {
+                 console.warn(/* ... */);
+                 return;
+               }
+               const targetNodeId = `${usedType.package}.${usedType.type}`;
+
+               // Add target node if new
+               if (!nodeIds.has(targetNodeId)) {
+                 const newNode = { id: targetNodeId };
+                 nodes.push(newNode);
+                 nodeIds.add(targetNodeId);
+                 itemProcessed = true;
+                 // Optional: Send just the new node
+                 // sendUpdate({ type: 'add_node', payload: newNode });
+               }
+
+               // Add link if new
+               const linkId = `${sourceNodeId}->${targetNodeId}`;
+               if (!linkIds.has(linkId)) {
+                 const newLink = { source: sourceNodeId, target: targetNodeId };
+                 links.push(newLink);
+                 linkIds.add(linkId);
+                 itemProcessed = true;
+                 // Optional: Send just the new link
+                 // sendUpdate({ type: 'add_link', payload: newLink });
+               }
+             });
+           }
+        } else {
+             console.warn("Received unexpected item from observable:", reportItem);
+        }
+
+
+        // --- Send the current full graph state on each update ---
+        // This is simpler for the client to handle than deltas.
+        if (itemProcessed) {
+            const currentGraphData = { nodes: [...nodes], links: [...links] }; // Send copies
+            sendUpdate({ type: 'update', payload: currentGraphData });
+        }
+      },
+      error: (err) => {
+        console.error("Error in dependency stream:", err);
+        // Send an error event to the client
+        res.write(`event: error\ndata: ${JSON.stringify({ message: "Error processing dependencies." })}\n\n`);
+        res.end(); // Close the connection on error
+      },
+      complete: () => {
+        console.log("Dependency stream completed.");
+        // Send a completion event to the client
+        res.write(`event: complete\ndata: ${JSON.stringify({ message: "Analysis complete." })}\n\n`);
+        res.end(); // Close the connection when the observable completes
+      },
     });
-  }
 
-  const graphData = { nodes, links };
-  res.json(graphData); // Send the transformed data
+  // --- Handle client disconnect ---
+  req.on("close", () => {
+    console.log("Client disconnected.");
+    dependencySubscription.unsubscribe(); // Clean up the subscription
+  });
 });
 
 // catch 404 and forward to error handler

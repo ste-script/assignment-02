@@ -5,57 +5,35 @@ import {
   from,
   of,
   throwError,
-  forkJoin,
   EMPTY,
   map,
   mergeMap,
-  toArray,
   catchError,
   filter,
-  distinct,
-  reduce,
-  switchMap,
 } from "rxjs";
 
-// --- Report Classes (unchanged) ---
+// --- Report Classes (Add packageName to ClassDepsReport) ---
 class ClassDepsReport {
-  constructor(className, usedTypes) {
+  constructor(packageName, className, usedTypes) { // Added packageName
+    this.packageName = packageName;
     this.className = className;
     this.usedTypes = usedTypes; // Array of { type: string, package: string }
   }
 }
 
-class PackageDepsReport {
-  constructor(packageName, classReportsOrUniqueTypes) {
+class PackageDepsReport { // This class might become less central for incremental emission
+  constructor(packageName, classReports) {
     this.packageName = packageName;
-    // Depending on the 'unique' flag, this could be ClassDepsReport[] or unique {type, package}[]
-    if (
-      Array.isArray(classReportsOrUniqueTypes) &&
-      classReportsOrUniqueTypes[0] instanceof ClassDepsReport
-    ) {
-      this.classReports = classReportsOrUniqueTypes;
-      this.uniqueTypes = null;
-    } else {
-      this.classReports = null;
-      this.uniqueTypes = classReportsOrUniqueTypes;
-    }
+    this.classReports = classReports; // Array of ClassDepsReport
+    // Remove uniqueTypes logic for simplicity with incremental class emission
   }
 }
 
-class ProjectDepsReport {
-  constructor(projectName, packageReportsOrUniqueTypes) {
+class ProjectDepsReport { // This class might become less central for incremental emission
+  constructor(projectName, packageReports) {
     this.projectName = projectName;
-    // Depending on the 'unique' flag, this could be PackageDepsReport[] or unique {type, package}[]
-    if (
-      Array.isArray(packageReportsOrUniqueTypes) &&
-      packageReportsOrUniqueTypes[0] instanceof PackageDepsReport
-    ) {
-      this.packageReports = packageReportsOrUniqueTypes;
-      this.uniqueTypes = null;
-    } else {
-      this.packageReports = null;
-      this.uniqueTypes = packageReportsOrUniqueTypes;
-    }
+    this.packageReports = packageReports; // Array of PackageDepsReport
+    // Remove uniqueTypes logic for simplicity with incremental class emission
   }
 }
 
@@ -66,7 +44,6 @@ class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults {
     this.customResult = [];
     this.validateVisitor();
   }
-  // Extract types from import statements
   importDeclaration(ctx) {
     if (ctx.packageOrTypeName && ctx.packageOrTypeName[0].children.Identifier) {
       const identifiers = ctx.packageOrTypeName[0].children.Identifier;
@@ -76,11 +53,18 @@ class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults {
           .slice(0, identifiers.length - 1)
           .map((id) => id.image)
           .join(".");
-
+        // Basic check to avoid adding self-package imports if needed, though maybe not necessary
+        // if (packageName !== this.currentPackageName) { // Requires passing currentPackageName
         this.customResult.push({ type: typeName, package: packageName });
+        // }
       }
     }
   }
+  // Potentially add visits to other constructs like:
+  // - explicitConstructorInvocation: For super() or this() calls if needed.
+  // - classOrInterfaceType: To find types used in variable declarations, method signatures, etc.
+  // - methodInvocation: To find types used in static method calls.
+  // - annotations: If dependencies via annotations are relevant.
 }
 
 // --- Helper Functions (sync part, unchanged) ---
@@ -90,7 +74,6 @@ function extractDependenciesFromASTSync(ast) {
   visitorCollector.visit(ast);
   const customResult = visitorCollector.customResult;
 
-  // Deduplicate within the class itself before returning
   const seen = new Set();
   const uniqueResult = [];
   customResult.forEach((type) => {
@@ -108,179 +91,136 @@ function extractDependenciesFromASTSync(ast) {
 
 // --- Reactive Functions ---
 
-function getClassDependenciesRx(classSrcFile) {
+// getClassDependenciesRx: Now takes packageName to include it in the report
+function getClassDependenciesRx(packageName, classSrcFile) {
   return from(fs.readFile(classSrcFile, "utf8")).pipe(
     map((content) => {
-      const ast = parse(content);
-      const usedTypes = extractDependenciesFromASTSync(ast); // Use sync version here
-      const className = basename(classSrcFile, ".java");
-      return new ClassDepsReport(className, usedTypes);
+      try {
+        const ast = parse(content);
+        const usedTypes = extractDependenciesFromASTSync(ast); // Use sync version here
+        const className = basename(classSrcFile, ".java");
+        // Create report including the packageName
+        return new ClassDepsReport(packageName, className, usedTypes);
+      } catch (parseError) {
+        // Throw a specific error for parsing issues
+        throw new Error(`Error parsing ${classSrcFile}: ${parseError.message}`);
+      }
     }),
-    catchError((error) =>
-      throwError(
-        () =>
-          new Error(`Error analyzing class ${classSrcFile}: ${error.message}`)
-      )
-    )
+    catchError((error) => {
+      // Catch both file read and parsing errors
+      // Log the error server-side for debugging
+      console.error(`Error processing class ${classSrcFile}: ${error.message}`);
+      // Emit an empty observable or a specific error object if needed downstream
+      // For incremental updates, skipping the problematic file might be best
+      return EMPTY; // Skip this class on error
+      // Alternatively, throw a structured error:
+      // return throwError(() => ({ type: 'class_error', file: classSrcFile, message: error.message }));
+    })
   );
 }
 
-function getPackageDependenciesRx(packageSrcFolder, unique = false) {
+// getPackageDependenciesRx: Modified to emit ClassDepsReport incrementally
+function getPackageDependenciesRx(packageSrcFolder) {
   const packageName = basename(packageSrcFolder);
   return from(fs.readdir(packageSrcFolder)).pipe(
     // Find all .java files
     mergeMap((files) =>
       from(files).pipe(
         filter((file) => file.endsWith(".java")),
-        map((file) => join(packageSrcFolder, file)),
-        toArray() // Collect java file paths into an array
+        map((file) => join(packageSrcFolder, file))
+        // Don't collect toArray here, process files individually
       )
     ),
-    // Process each java file
-    mergeMap((javaFiles) => {
-      // Create an observable for each class dependency analysis
-      const classObservables = javaFiles.map((file) =>
-        getClassDependenciesRx(file)
+    // Process each java file individually and emit its ClassDepsReport
+    mergeMap((javaFile) =>
+      // Pass packageName to getClassDependenciesRx
+      getClassDependenciesRx(packageName, javaFile)
+      // No need for forkJoin or collecting results here
+    ),
+    catchError((error) => {
+      // Catch errors related to reading the directory itself
+      console.error(
+        `Error reading package directory ${packageSrcFolder}: ${error.message}`
       );
-      return forkJoin(classObservables); // Run analyses in parallel
-    }),
-    // Process the results based on the 'unique' flag
-    mergeMap((classReports) => {
-      if (unique) {
-        // Flatten all used types from all class reports
-        return from(classReports).pipe(
-          mergeMap((report) => from(report.usedTypes)), // Emit each type individually
-          distinct((t) => `${t.package}.${t.type}`), // Deduplicate based on package.type
-          toArray(), // Collect unique types
-          map((uniqueTypes) => new PackageDepsReport(packageName, uniqueTypes))
-        );
-      } else {
-        // Return the array of class reports directly
-        return of(new PackageDepsReport(packageName, classReports));
-      }
-    }),
-    catchError((error) =>
-      throwError(
-        () =>
-          new Error(
-            `Error analyzing package ${packageSrcFolder}: ${error.message}`
-          )
-      )
-    )
+      // return throwError(() => new Error(`Error analyzing package ${packageSrcFolder}: ${error.message}`));
+      return EMPTY; // Skip package on directory read error
+    })
   );
 }
 
+// findPackageDirectoriesRx: (Refined logic from previous state)
 function findPackageDirectoriesRx(dir) {
-  return from(fs.readdir(dir, { withFileTypes: true })).pipe(
-    mergeMap((entries) => from(entries)), // Emit each entry
-    mergeMap((entry) => {
-      const fullPath = join(dir, entry.name);
-      if (entry.isDirectory()) {
-        // Recursively find packages in subdirectories
-        return findPackageDirectoriesRx(fullPath);
-      } else if (entry.isFile() && entry.name.endsWith(".java")) {
-        // If a java file is found, this directory is a package directory
-        return of({ isPackage: true, path: dir });
-      }
-    }),
-    // Collect results, ensuring we only add package paths once
-    reduce(
-      (acc, curr) => {
-        if (curr.isPackage && !acc.paths.has(curr.path)) {
-          acc.paths.add(curr.path);
-          acc.results.push(curr.path);
-        }
-        return acc;
-      },
-      { paths: new Set(), results: [] }
-    ),
-    map((acc) => acc.results), // Return only the array of paths
-    // If the initial directory itself contained Java files but no subpackages were found
-    // the reduce step might yield an empty array. We need to check the root dir itself.
-    // This part is tricky with pure recursion. Let's refine.
+  // Check if the current directory `dir` contains any .java files
+  const hasJavaFilesInCurrentDir$ = from(fs.readdir(dir)).pipe(
+    map((files) => files.some((file) => file.endsWith(".java"))),
+    catchError((err) => {
+      console.error(`Error reading directory ${dir}: ${err.message}`);
+      return of(false); // Assume no java files if error reading dir
+    })
+  );
 
-    // Alternative approach: Check current dir first, then recurse.
-    switchMap(() => {
-      // Check if the current directory `dir` contains any .java files
-      return from(fs.readdir(dir)).pipe(
-        map((files) => files.some((file) => file.endsWith(".java"))),
-        mergeMap((hasJavaFile) => {
-          // Find subdirectories
-          return from(fs.readdir(dir, { withFileTypes: true })).pipe(
-            mergeMap((entries) => from(entries)),
-            filter((entry) => entry.isDirectory()),
-            map((entry) => join(dir, entry.name)),
-            // Recursively call for subdirectories
-            mergeMap((subDir) => findPackageDirectoriesRx(subDir)),
-            toArray(), // Collect results from all subdirectories
-            // Combine results: current dir (if it's a package) + subpackages
-            map((subPackagesArrays) => {
-              const allSubPackages = subPackagesArrays.flat(); // Flatten the array of arrays
-              if (hasJavaFile) {
-                // Add current dir if it has Java files and isn't already included
-                // (Set prevents duplicates if added by a sub-call somehow)
-                return Array.from(new Set([dir, ...allSubPackages]));
-              } else {
-                return allSubPackages;
-              }
-            })
-          );
-        })
+  // Find subdirectories
+  const subDirectories$ = from(fs.readdir(dir, { withFileTypes: true })).pipe(
+    mergeMap((entries) => from(entries)), // Emit each entry
+    filter((entry) => entry.isDirectory()),
+    map((entry) => join(dir, entry.name)),
+    catchError((err) => {
+      console.error(
+        `Error reading directory entries in ${dir}: ${err.message}`
       );
-    }),
-    // Final distinct check just in case
-    mergeMap((paths) => from(paths)),
-    distinct(),
-    toArray()
+      return EMPTY; // Ignore errors listing subdirs
+    })
+  );
+
+  // Recursively find package directories in subdirectories
+  const subPackages$ = subDirectories$.pipe(
+    mergeMap((subDir) => findPackageDirectoriesRx(subDir), 1) // Concurrency 1 for depth-first like traversal
+  );
+
+  return hasJavaFilesInCurrentDir$.pipe(
+    mergeMap((hasJavaFile) => {
+      const currentDir$ = hasJavaFile ? of(dir) : EMPTY;
+      // Concatenate the current directory (if it's a package) with results from subdirectories
+      return from([currentDir$, subPackages$]).pipe(
+        mergeMap((obs) => obs) // Flatten the streams: emits currentDir (if applicable), then emits subpackages
+      );
+    })
   );
 }
 
-function getProjectDependenciesRx(projectSrcFolder, unique = false) {
-  const projectName = basename(projectSrcFolder);
+// getProjectDependenciesRx: Modified to emit ClassDepsReport incrementally
+function getProjectDependenciesRx(projectSrcFolder) {
+  // const projectName = basename(projectSrcFolder); // Not strictly needed if emitting class reports
+
+  // findPackageDirectoriesRx now emits package paths one by one
   return findPackageDirectoriesRx(projectSrcFolder).pipe(
-    mergeMap((packageDirs) => {
-      // Get dependencies for each package
-      const packageObservables = packageDirs.map(
-        (dir) => getPackageDependenciesRx(dir, unique && !unique) // Pass false if project unique is true
+    // For each package directory found, get its class dependencies incrementally
+    mergeMap((packageDir) =>
+      getPackageDependenciesRx(packageDir) // This now emits ClassDepsReport objects
+      // No need for forkJoin or collecting results here
+    ),
+    // No need to construct ProjectDepsReport here, as we are emitting ClassDepsReport
+    catchError((error) => {
+      // Catch errors from findPackageDirectoriesRx or downstream
+      console.error(
+        `Error analyzing project ${projectSrcFolder}: ${error.message}`
       );
-      return forkJoin(packageObservables);
-    }),
-    // Process results based on the 'unique' flag
-    mergeMap((packageReports) => {
-      if (unique) {
-        // Flatten all used types from all package reports
-        return from(packageReports).pipe(
-          mergeMap((pkgReport) =>
-            // If the package report already contains unique types (because unique=true was passed down)
-            // use pkgReport.uniqueTypes, otherwise flatten classReports
-            from(pkgReport.classReports).pipe(
-              mergeMap((classReport) => from(classReport.usedTypes))
-            )
-          ),
-          distinct((t) => `${t.package}.${t.type}`), // Deduplicate across the whole project
-          toArray(), // Collect unique types for the project
-          map(
-            (uniqueProjectTypes) =>
-              new ProjectDepsReport(projectName, uniqueProjectTypes)
-          )
-        );
-      } else {
-        // Return the array of package reports directly
-        return of(new ProjectDepsReport(projectName, packageReports));
-      }
-    }),
-    catchError((error) =>
-      throwError(
+      // Decide how to handle project-level errors. Maybe send an error event?
+      return throwError(
         () =>
           new Error(
             `Error analyzing project ${projectSrcFolder}: ${error.message}`
           )
-      )
-    )
+      );
+      // Or return EMPTY to just stop emitting
+      // return EMPTY;
+    })
+    // We are now emitting a stream of ClassDepsReport objects
   );
 }
 
 export {
+  // Keep exports, even if some classes are less central now
   getClassDependenciesRx,
   getPackageDependenciesRx,
   getProjectDependenciesRx,
