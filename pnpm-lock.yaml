@@ -48,9 +48,18 @@ importers:
 
   reactive-graph-frontend:
     dependencies:
+      '@react-sigma/core':
+        specifier: ^5.0.2
+        version: 5.0.2(graphology@0.26.0(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.1(graphology-types@0.24.8))
+      '@react-sigma/layout-forceatlas2':
+        specifier: ^5.0.2
+        version: 5.0.2(graphology-layout-forceatlas2@0.10.1(graphology-types@0.24.8))(graphology@0.26.0(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.1(graphology-types@0.24.8))
       d3:
         specifier: '^5.5.0  '
         version: 5.16.0
+      graphology:
+        specifier: ^0.26.0
+        version: 0.26.0(graphology-types@0.24.8)
       pnpm:
         specifier: ^10.9.0
         version: 10.9.0
@@ -63,6 +72,9 @@ importers:
       rxjs:
         specifier: ^7.0.0
         version: 7.8.2
+      sigma:
+        specifier: ^3.0.1
+        version: 3.0.1(graphology-types@0.24.8)
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^1.0.0
@@ -379,6 +391,21 @@ packages:
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
+
+  '@react-sigma/core@5.0.2':
+    resolution: {integrity: sha512-yzGYD0Oxp8rVqhCckCRee0tMr3fJmkIB6JJFOL6McNYEek5AAyC1WRon0Dw/IaRVhNbSt8lZHplrMVgKkWw4Ng==}
+    peerDependencies:
+      graphology: ^0.25.4
+      react: ^18.0.0 || ^19.0.0
+      sigma: ^3.0.0
+
+  '@react-sigma/layout-core@5.0.2':
+    resolution: {integrity: sha512-kBD/nkgKMBlDOlYslaG/n71JiWXEYwcTIhfTBkYqXh8Ukipxm/O4TdUpJeyUpjcLT/92tRnTN7m8KaGGWNpH+A==}
+
+  '@react-sigma/layout-forceatlas2@5.0.2':
+    resolution: {integrity: sha512-+x05LMmjVOtwiu9EJ7CbgtRVDo/0jNT6dXqjLWvXPVy7BD/uRF4iMs/1KhSmnR5R9TTbznkpUd4iX7o/CLkxRg==}
+    peerDependencies:
+      graphology-layout-forceatlas2: ^0.10.1
 
   '@rollup/pluginutils@4.2.1':
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -985,6 +1012,10 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
+  events@3.3.0:
+    resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
+    engines: {node: '>=0.8.x'}
+
   expect-type@1.2.1:
     resolution: {integrity: sha512-/kP8CAwxzLVEeFrMm4kMmy4CCDlpipyA7MYLVrdJIkV0fYF0UaigQHRsxHiuY/GEea+bh4KSv3TIlgr+2UL6bw==}
     engines: {node: '>=12.0.0'}
@@ -1048,6 +1079,24 @@ packages:
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
+
+  graphology-layout-forceatlas2@0.10.1:
+    resolution: {integrity: sha512-ogzBeF1FvWzjkikrIFwxhlZXvD2+wlY54lqhsrWprcdPjopM2J9HoMweUmIgwaTvY4bUYVimpSsOdvDv1gPRFQ==}
+    peerDependencies:
+      graphology-types: '>=0.19.0'
+
+  graphology-types@0.24.8:
+    resolution: {integrity: sha512-hDRKYXa8TsoZHjgEaysSRyPdT6uB78Ci8WnjgbStlQysz7xR52PInxNsmnB7IBOM1BhikxkNyCVEFgmPKnpx3Q==}
+
+  graphology-utils@2.5.2:
+    resolution: {integrity: sha512-ckHg8MXrXJkOARk56ZaSCM1g1Wihe2d6iTmz1enGOz4W/l831MBCKSayeFQfowgF8wd+PQ4rlch/56Vs/VZLDQ==}
+    peerDependencies:
+      graphology-types: '>=0.23.0'
+
+  graphology@0.26.0:
+    resolution: {integrity: sha512-8SSImzgUUYC89Z042s+0r/vMibY7GX/Emz4LDO5e7jYXhuoWfHISPFJYjpRLUSJGq6UQ6xlenvX1p/hJdfXuXg==}
+    peerDependencies:
+      graphology-types: '>=0.24.0'
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -1429,6 +1478,9 @@ packages:
 
   siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
+
+  sigma@3.0.1:
+    resolution: {integrity: sha512-z67BX1FhIpD+wLs2WJ7QS2aR49TcSr3YaVZ2zU8cAc5jMiUYlSbeDp4EI6euBDUpm3/lzO4pfytP/gW4BhXWuA==}
 
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
@@ -1902,6 +1954,29 @@ snapshots:
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
+
+  '@react-sigma/core@5.0.2(graphology@0.26.0(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.1(graphology-types@0.24.8))':
+    dependencies:
+      graphology: 0.26.0(graphology-types@0.24.8)
+      react: 18.3.1
+      sigma: 3.0.1(graphology-types@0.24.8)
+
+  '@react-sigma/layout-core@5.0.2(graphology@0.26.0(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.1(graphology-types@0.24.8))':
+    dependencies:
+      '@react-sigma/core': 5.0.2(graphology@0.26.0(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.1(graphology-types@0.24.8))
+    transitivePeerDependencies:
+      - graphology
+      - react
+      - sigma
+
+  '@react-sigma/layout-forceatlas2@5.0.2(graphology-layout-forceatlas2@0.10.1(graphology-types@0.24.8))(graphology@0.26.0(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.1(graphology-types@0.24.8))':
+    dependencies:
+      '@react-sigma/layout-core': 5.0.2(graphology@0.26.0(graphology-types@0.24.8))(react@18.3.1)(sigma@3.0.1(graphology-types@0.24.8))
+      graphology-layout-forceatlas2: 0.10.1(graphology-types@0.24.8)
+    transitivePeerDependencies:
+      - graphology
+      - react
+      - sigma
 
   '@rollup/pluginutils@4.2.1':
     dependencies:
@@ -2567,6 +2642,8 @@ snapshots:
 
   etag@1.8.1: {}
 
+  events@3.3.0: {}
+
   expect-type@1.2.1: {}
 
   express@4.21.2:
@@ -2667,6 +2744,22 @@ snapshots:
   globals@11.12.0: {}
 
   gopd@1.2.0: {}
+
+  graphology-layout-forceatlas2@0.10.1(graphology-types@0.24.8):
+    dependencies:
+      graphology-types: 0.24.8
+      graphology-utils: 2.5.2(graphology-types@0.24.8)
+
+  graphology-types@0.24.8: {}
+
+  graphology-utils@2.5.2(graphology-types@0.24.8):
+    dependencies:
+      graphology-types: 0.24.8
+
+  graphology@0.26.0(graphology-types@0.24.8):
+    dependencies:
+      events: 3.3.0
+      graphology-types: 0.24.8
 
   has-flag@4.0.0: {}
 
@@ -3052,6 +3145,13 @@ snapshots:
       side-channel-weakmap: 1.0.2
 
   siginfo@2.0.0: {}
+
+  sigma@3.0.1(graphology-types@0.24.8):
+    dependencies:
+      events: 3.3.0
+      graphology-utils: 2.5.2(graphology-types@0.24.8)
+    transitivePeerDependencies:
+      - graphology-types
 
   signal-exit@4.1.0: {}
 
