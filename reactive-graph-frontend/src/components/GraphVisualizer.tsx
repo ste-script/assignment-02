@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { SigmaContainer, useLoadGraph, useRegisterEvents, useSigma } from "@react-sigma/core";
-import { useLayoutForceAtlas2 } from "@react-sigma/layout-forceatlas2";
-import Graph from "graphology";
+import React, { useState, useEffect, useRef } from "react";
+import CytoscapeComponent from "react-cytoscapejs";
+import cytoscape from "cytoscape";
+// Consider using a layout extension like cose-bilkent for better layouts
+// import coseBilkent from 'cytoscape-cose-bilkent';
+// cytoscape.use(coseBilkent);
 
 interface GraphVisualizerProps {}
 interface GraphData {
@@ -13,43 +15,19 @@ interface SseMessage {
   payload: GraphData | { message: string };
 }
 
-const LoadGraphologyGraph: React.FC<{ graphData: GraphData }> = ({ graphData }) => {
-  const loadGraph = useLoadGraph();
-  const sigma = useSigma();
-  const registerEvents = useRegisterEvents();
-  const { start, stop } = useLayoutForceAtlas2({ settings: { slowDown: 10 } });
-
-  useEffect(() => {
-    const graph = new Graph({ multi: true, type: "directed" });
-
-    graphData.nodes.forEach((node) => {
-      if (!graph.hasNode(node.id)) {
-        graph.addNode(node.id, { label: node.id, x: Math.random(), y: Math.random(), size: 5 });
-      }
-    });
-    graphData.links.forEach((link, index) => {
-      const edgeKey = `${link.source}->${link.target}_${index}`;
-      if (!graph.hasEdge(edgeKey) && graph.hasNode(link.source) && graph.hasNode(link.target)) {
-        graph.addEdgeWithKey(edgeKey, link.source, link.target, { size: 1 });
-      }
-    });
-
-    loadGraph(graph);
-
-    start();
-    const timeoutId = setTimeout(() => stop(), 3000);
-
-    registerEvents({
-      clickNode: (event) => console.log("Node clicked:", event.node),
-    });
-
-    return () => {
-      stop();
-      clearTimeout(timeoutId);
-    };
-  }, [graphData, loadGraph, registerEvents, start, stop]);
-
-  return null;
+// Helper to convert GraphData to Cytoscape elements
+const convertToCytoscapeElements = (graphData: GraphData) => {
+  const nodes = graphData.nodes.map((node) => ({
+    data: { id: node.id, label: node.id },
+  }));
+  const edges = graphData.links.map((link, index) => ({
+    data: {
+      id: `e${index}_${link.source}_${link.target}`, // Ensure unique edge IDs
+      source: link.source,
+      target: link.target,
+    },
+  }));
+  return [...nodes, ...edges];
 };
 
 const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
@@ -58,10 +36,13 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
   const [isComplete, setIsComplete] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [serverSentError, setServerSentError] = useState<boolean>(false);
+  const cyRef = useRef<cytoscape.Core | null>(null);
 
   useEffect(() => {
     if (isComplete || serverSentError) {
-      console.log("Skipping SSE connection setup (already complete or errored).");
+      console.log(
+        "Skipping SSE connection setup (already complete or errored)."
+      );
       return;
     }
 
@@ -82,13 +63,40 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
         const messageData: SseMessage = JSON.parse(event.data);
 
         if (messageData.type === "update" && messageData.payload) {
-          if ("nodes" in messageData.payload && "links" in messageData.payload) {
+          if (
+            "nodes" in messageData.payload &&
+            "links" in messageData.payload
+          ) {
             setData(messageData.payload as GraphData);
           } else {
-            console.warn("Received update message with unexpected payload:", messageData.payload);
+            console.warn(
+              "Received update message with unexpected payload:",
+              messageData.payload
+            );
           }
+        } else if (messageData.type === "complete") {
+          console.log("Received complete message from server:", messageData);
+          setIsComplete(true);
+        } else if (messageData.type === "error") {
+          console.error(
+            "Received error message from server:",
+            messageData.payload
+          );
+          if (
+            typeof messageData.payload === "object" &&
+            messageData.payload &&
+            "message" in messageData.payload
+          ) {
+            setError(`Server error: ${messageData.payload.message}`);
+          } else {
+            setError("Received unknown server error structure.");
+          }
+          setServerSentError(true);
         } else {
-          console.log("Received non-update message or message without payload:", messageData);
+          console.log(
+            "Received non-update/complete/error message or message without payload:",
+            messageData
+          );
         }
       } catch (e) {
         console.error("Failed to parse SSE message data:", event.data, e);
@@ -96,9 +104,38 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
       }
     };
 
+    eventSource.onerror = (err) => {
+      if (eventSource.readyState === EventSource.CLOSED) {
+        if (isComplete || serverSentError) {
+          console.log(
+            `SSE connection closed by server (Complete: ${isComplete}, ServerError: ${serverSentError}).`
+          );
+        } else {
+          console.error("EventSource connection closed unexpectedly:", err);
+          setError("Connection to server lost or failed unexpectedly.");
+          setIsConnected(false);
+        }
+      } else {
+        console.error("EventSource encountered an unknown error:", err);
+        setError("An unknown error occurred with the connection.");
+        setIsConnected(false);
+      }
+    };
+
+    eventSource.addEventListener("complete", (event: MessageEvent) => {
+      console.log(
+        "Received explicit 'complete' event from server:",
+        event.data
+      );
+      setIsComplete(true);
+    });
+
     eventSource.addEventListener("error", (event: MessageEvent) => {
       setServerSentError(true);
-      console.error("Received custom error event from server. Data:", event.data);
+      console.error(
+        "Received explicit 'error' event from server. Data:",
+        event.data
+      );
       let errorMessage = "Unknown server error.";
       if (event.data) {
         try {
@@ -114,27 +151,6 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
       setError(`Server error: ${errorMessage}`);
     });
 
-    eventSource.addEventListener("complete", (event: MessageEvent) => {
-      console.log("Received complete event from server:", event.data);
-      setIsComplete(true);
-    });
-
-    eventSource.onerror = (err) => {
-      if (eventSource.readyState === EventSource.CLOSED) {
-        if (isComplete || serverSentError) {
-          console.log(`SSE connection closed by server (Complete: ${isComplete}, ServerError: ${serverSentError}).`);
-        } else {
-          console.error("EventSource connection closed unexpectedly:", err);
-          setError("Connection to server lost or failed unexpectedly.");
-          setIsConnected(false);
-        }
-      } else {
-        console.error("EventSource encountered an unknown error:", err);
-        setError("An unknown error occurred with the connection.");
-        setIsConnected(false);
-      }
-    };
-
     return () => {
       console.log("Cleaning up SSE connection.");
       if (eventSource && eventSource.readyState !== EventSource.CLOSED) {
@@ -142,6 +158,24 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
       }
     };
   }, [isComplete, serverSentError]);
+
+  const elements = React.useMemo(
+    () => convertToCytoscapeElements(data),
+    [data]
+  );
+
+  useEffect(() => {
+    if (cyRef.current && elements.length > 0) {
+      const layout = cyRef.current.layout({
+        name: "cose",
+        animate: true,
+        padding: 30,
+        nodeRepulsion: () => 400000,
+        idealEdgeLength: () => 100,
+      });
+      layout.run();
+    }
+  }, [elements]);
 
   let statusMessage = "";
   if (error) {
@@ -159,7 +193,14 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
   }
 
   return (
-    <div style={{ width: "90vw", height: "80vh", position: "relative", border: "1px solid #eee" }}>
+    <div
+      style={{
+        width: "90vw",
+        height: "80vh",
+        position: "relative",
+        border: "1px solid #eee",
+      }}
+    >
       <div
         style={{
           position: "absolute",
@@ -174,17 +215,46 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
         {statusMessage}
       </div>
 
-      <SigmaContainer
-        style={{ height: "100%", width: "100%" }}
-        settings={{
-          allowInvalidContainer: true,
-          renderEdgeLabels: false,
-          defaultNodeType: "circle",
-          defaultEdgeType: "arrow",
+      <CytoscapeComponent
+        elements={elements}
+        style={{ width: "100%", height: "100%" }}
+        stylesheet={[
+          {
+            selector: "node",
+            style: {
+              label: "data(label)",
+              "background-color": "#666",
+              "text-valign": "center",
+              "text-halign": "center",
+              "font-size": "10px",
+              color: "#fff",
+              "text-outline-width": 2,
+              "text-outline-color": "#666",
+              width: "20px",
+              height: "20px",
+            },
+          },
+          {
+            selector: "edge",
+            style: {
+              width: 2,
+              "line-color": "#ccc",
+              "target-arrow-color": "#ccc",
+              "target-arrow-shape": "triangle",
+              "curve-style": "bezier",
+            },
+          },
+        ]}
+        cy={(cy) => {
+          cyRef.current = cy;
+          cy.removeListener("tap", "node");
+          cy.on("tap", "node", (event) => {
+            const node = event.target;
+            console.log("Node clicked:", node.id());
+          });
         }}
-      >
-        <LoadGraphologyGraph graphData={data} />
-      </SigmaContainer>
+        layout={{ name: "preset" }}
+      />
     </div>
   );
 };

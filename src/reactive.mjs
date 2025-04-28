@@ -1,11 +1,6 @@
 import { promises as fs } from "fs";
 import { basename, join } from "path";
-import {
-  DependecyAnalyserCstVisitor,
-  ClassDepsReport,
-  PackageDepsReport,
-  ProjectDepsReport, // Keep if needed elsewhere
-} from "./parser.mjs";
+import { DependecyAnalyserCstVisitor, ClassDepsReport } from "./parser.mjs";
 import { parse } from "java-parser";
 import {
   from,
@@ -19,7 +14,6 @@ import {
   concat, // Added for findPackageDirectoriesRx
   take, // Added for findPackageDirectoriesRx
   defaultIfEmpty, // Added for findPackageDirectoriesRx
-  toArray, // Added for getPackageDependenciesRx
 } from "rxjs";
 
 function extractDependenciesFromAST(ast) {
@@ -29,7 +23,12 @@ function extractDependenciesFromAST(ast) {
   return Array.from(visitorCollector.customResult);
 }
 
-// --- Reactive Functions ---
+class ClassDepsReportRx extends ClassDepsReport {
+  constructor(className, usedTypes, packageName) {
+    super(className, usedTypes);
+    this.packageName = packageName; // Store package name
+  }
+}
 
 // getClassDependenciesRx: Takes only the class source file path
 function getClassDependenciesRx(classSrcFile) {
@@ -44,7 +43,7 @@ function getClassDependenciesRx(classSrcFile) {
         const filteredTypes = usedTypes.filter(
           (type) => !ownNameRegex.test(type)
         );
-        return new ClassDepsReport(className, filteredTypes);
+        return new ClassDepsReportRx(className, filteredTypes);
       } catch (parseError) {
         // Throw a specific error for parsing issues
         throw new Error(`Error parsing ${classSrcFile}: ${parseError.message}`);
@@ -71,48 +70,17 @@ function getPackageDependenciesRx(packageSrcFolder) {
     // Map to the full path of the java file
     map((dirent) => join(packageSrcFolder, dirent.name)),
     // Process each java file individually and get its ClassDepsReport
-    mergeMap(
-      (javaFile) => getClassDependenciesRx(javaFile)
-      // Optional: Limit concurrency if needed
-      // 4
+    mergeMap((javaFile) =>
+      getClassDependenciesRx(javaFile)
+        //add package name to the report
+        .pipe(
+          map((report) => {
+            // Add package name to the report
+            report.packageName = packageName;
+            return report;
+          })
+        )
     ),
-    filter((report) => report !== null),
-    catchError((error) => {
-      // Catch errors related to reading the directory itself
-      console.error(
-        `Error analyzing package ${packageSrcFolder}: ${error.message}`
-      );
-      return EMPTY; // Skip package on directory read error or other errors in the chain
-    })
-  );
-}
-
-function getPackageDependenciesRxForProjectDeps(packageSrcFolder) {
-  const packageName = basename(packageSrcFolder); // Get package name from folder path
-  return from(fs.readdir(packageSrcFolder, { withFileTypes: true })).pipe(
-    // Process directory entries
-    mergeMap((dirents) => from(dirents)), // Emit each Dirent object individually
-    // Filter for actual files ending with .java
-    filter((dirent) => dirent.isFile() && dirent.name.endsWith(".java")),
-    // Map to the full path of the java file
-    map((dirent) => join(packageSrcFolder, dirent.name)),
-    // Process each java file individually and get its ClassDepsReport
-    mergeMap(
-      (javaFile) => getClassDependenciesRx(javaFile)
-      // Optional: Limit concurrency if needed
-      // 4
-    ),
-    // Collect all ClassDepsReport objects for this package into an array
-    toArray(),
-    // Map the array of ClassDepsReport objects to a single PackageDepsReport
-    map((classReports) => {
-      // Only create a report if there were successfully processed classes
-      if (classReports && classReports.length > 0) {
-        return new PackageDepsReport(packageName, classReports);
-      }
-      return null; // Indicate no report generated for this package (e.g., all files failed)
-    }),
-    // Filter out packages that resulted in no reports
     filter((report) => report !== null),
     catchError((error) => {
       // Catch errors related to reading the directory itself
@@ -182,7 +150,7 @@ function getProjectDependenciesRx(projectSrcFolder) {
   return findPackageDirectoriesRx(projectSrcFolder).pipe(
     // For each package directory found, get its consolidated PackageDepsReport
     mergeMap(
-      (packageDir) => getPackageDependenciesRxForProjectDeps(packageDir) // This now emits PackageDepsReport objects
+      (packageDir) => getPackageDependenciesRx(packageDir) // This now emits PackageDepsReport objects
     ),
     // No need to collect into ProjectDepsReport here, as we are emitting PackageDepsReport incrementally
     catchError((error) => {
@@ -203,12 +171,9 @@ function getProjectDependenciesRx(projectSrcFolder) {
     // We are now emitting a stream of PackageDepsReport objects
   );
 }
-
 export {
   getClassDependenciesRx,
   getPackageDependenciesRx,
   getProjectDependenciesRx,
-  ClassDepsReport,
-  PackageDepsReport, // Ensure this is exported
-  ProjectDepsReport,
+  ClassDepsReportRx,
 };

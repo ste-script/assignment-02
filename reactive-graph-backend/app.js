@@ -54,23 +54,13 @@ app.get("/", function (req, res) {
   };
 
   // --- Subscribe to the observable ---
-  // Assuming getProjectDependenciesRx returns an Observable that emits
-  // individual class reports or similar granular data.
-  // You might need to adjust the processing logic based on what exactly it emits.
   const dependencySubscription = javaDepsLibrary
-    .getProjectDependenciesRx(projectPath) // Assuming this returns an Observable<ClassReport | PackageReport | etc.>
+    .getProjectDependenciesRx(projectPath)
     .subscribe({
       next: (reportItem) => {
-        // --- Process each emitted item incrementally ---
-        // This logic assumes reportItem is structured similarly to how
-        // you processed cls and pkg before, but emitted one by one.
-        // Adjust based on the actual structure emitted by the observable.
+        let itemProcessed = false;
 
-        let itemProcessed = false; // Flag to check if we added anything
-
-        // Example: Assuming it emits class reports directly
         if (reportItem && reportItem.className && reportItem.packageName) {
-           // Skip package-info classes
            if (reportItem.className === "package-info") {
              return;
            }
@@ -78,43 +68,64 @@ app.get("/", function (req, res) {
            const currentPackageName = reportItem.packageName;
            const sourceNodeId = `${currentPackageName}.${reportItem.className}`;
 
-           // Add source node if new
            if (!nodeIds.has(sourceNodeId)) {
              const newNode = { id: sourceNodeId };
              nodes.push(newNode);
              nodeIds.add(sourceNodeId);
              itemProcessed = true;
-             // Optional: Send just the new node
-             // sendUpdate({ type: 'add_node', payload: newNode });
            }
 
            if (reportItem.usedTypes) {
-             reportItem.usedTypes.forEach((usedType) => {
-               if (!usedType.package || !usedType.type) {
-                 console.warn(/* ... */);
-                 return;
-               }
-               const targetNodeId = `${usedType.package}.${usedType.type}`;
+             reportItem.usedTypes.forEach((usedTypeString) => {
+               let targetNodeId = null;
 
-               // Add target node if new
-               if (!nodeIds.has(targetNodeId)) {
-                 const newNode = { id: targetNodeId };
-                 nodes.push(newNode);
-                 nodeIds.add(targetNodeId);
-                 itemProcessed = true;
-                 // Optional: Send just the new node
-                 // sendUpdate({ type: 'add_node', payload: newNode });
+               // 1. Check if usedTypeString is already a known FQN
+               if (nodeIds.has(usedTypeString)) {
+                   targetNodeId = usedTypeString;
+               }
+               // 2. Check if it's a simple name in the same package
+               else {
+                   const potentialFqnInSamePackage = `${currentPackageName}.${usedTypeString}`;
+                   if (nodeIds.has(potentialFqnInSamePackage)) {
+                       targetNodeId = potentialFqnInSamePackage;
+                   }
+                   // 3. Search all known nodes for a matching simple name (heuristic)
+                   else {
+                       // Construct the pattern to search for: ".SimpleName"
+                       const simpleNamePattern = `.${usedTypeString}`;
+                       // Iterate through existing node IDs
+                       for (const existingNodeId of nodeIds) {
+                           if (existingNodeId.endsWith(simpleNamePattern)) {
+                               // Found a potential match based on simple name
+                               targetNodeId = existingNodeId;
+                               break; // Use the first match found
+                           }
+                       }
+                   }
                }
 
-               // Add link if new
-               const linkId = `${sourceNodeId}->${targetNodeId}`;
-               if (!linkIds.has(linkId)) {
-                 const newLink = { source: sourceNodeId, target: targetNodeId };
-                 links.push(newLink);
-                 linkIds.add(linkId);
-                 itemProcessed = true;
-                 // Optional: Send just the new link
-                 // sendUpdate({ type: 'add_link', payload: newLink });
+
+               if (targetNodeId) {
+                 // Ensure target node exists (defensive)
+                 if (!nodeIds.has(targetNodeId)) {
+                   const newNode = { id: targetNodeId };
+                   nodes.push(newNode);
+                   nodeIds.add(targetNodeId);
+                   itemProcessed = true;
+                   console.warn(`Added target node ${targetNodeId} defensively during link creation.`);
+                 }
+
+                 // Add link if new and not a self-loop
+                 const linkId = `${sourceNodeId}->${targetNodeId}`;
+                 if (!linkIds.has(linkId) && sourceNodeId !== targetNodeId) {
+                   const newLink = { source: sourceNodeId, target: targetNodeId };
+                   links.push(newLink);
+                   linkIds.add(linkId);
+                   itemProcessed = true;
+                 }
+               } else {
+                  // Optional: Log unresolved dependencies
+                  // console.log(`Dependency "${usedTypeString}" in ${sourceNodeId} could not be resolved to a project node.`);
                }
              });
            }
@@ -122,32 +133,26 @@ app.get("/", function (req, res) {
              console.warn("Received unexpected item from observable:", reportItem);
         }
 
-
-        // --- Send the current full graph state on each update ---
-        // This is simpler for the client to handle than deltas.
         if (itemProcessed) {
-            const currentGraphData = { nodes: [...nodes], links: [...links] }; // Send copies
+            const currentGraphData = { nodes: [...nodes], links: [...links] };
             sendUpdate({ type: 'update', payload: currentGraphData });
         }
       },
       error: (err) => {
         console.error("Error in dependency stream:", err);
-        // Send an error event to the client
         res.write(`event: error\ndata: ${JSON.stringify({ message: "Error processing dependencies." })}\n\n`);
-        res.end(); // Close the connection on error
+        res.end();
       },
       complete: () => {
         console.log("Dependency stream completed.");
-        // Send a completion event to the client
         res.write(`event: complete\ndata: ${JSON.stringify({ message: "Analysis complete." })}\n\n`);
-        res.end(); // Close the connection when the observable completes
+        res.end();
       },
     });
 
-  // --- Handle client disconnect ---
   req.on("close", () => {
     console.log("Client disconnected.");
-    dependencySubscription.unsubscribe(); // Clean up the subscription
+    dependencySubscription.unsubscribe();
   });
 });
 
@@ -158,11 +163,9 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render("error");
 });
