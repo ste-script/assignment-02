@@ -4,7 +4,7 @@ import {
   DependecyAnalyserCstVisitor,
   ClassDepsReport,
   PackageDepsReport,
-  ProjectDepsReport,
+  ProjectDepsReport, // Keep if needed elsewhere
 } from "./parser.mjs";
 import { parse } from "java-parser";
 import {
@@ -16,42 +16,35 @@ import {
   mergeMap,
   catchError,
   filter,
+  concat, // Added for findPackageDirectoriesRx
+  take, // Added for findPackageDirectoriesRx
+  defaultIfEmpty, // Added for findPackageDirectoriesRx
+  toArray, // Added for getPackageDependenciesRx
 } from "rxjs";
 
-// --- Helper Functions (sync part, unchanged) ---
-function extractDependenciesFromASTSync(ast) {
-  const types = new Set();
+function extractDependenciesFromAST(ast) {
   const visitorCollector = new DependecyAnalyserCstVisitor();
   visitorCollector.visit(ast);
-  const customResult = visitorCollector.customResult;
-
-  const seen = new Set();
-  const uniqueResult = [];
-  customResult.forEach((type) => {
-    const key = `${type.package}.${type.type}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      uniqueResult.push({
-        type: type.type,
-        package: type.package,
-      });
-    }
-  });
-  return uniqueResult;
+  // Return the unique type strings collected
+  return Array.from(visitorCollector.customResult);
 }
 
 // --- Reactive Functions ---
 
-// getClassDependenciesRx: Now takes packageName to include it in the report
-function getClassDependenciesRx(packageName, classSrcFile) {
+// getClassDependenciesRx: Takes only the class source file path
+function getClassDependenciesRx(classSrcFile) {
   return from(fs.readFile(classSrcFile, "utf8")).pipe(
     map((content) => {
       try {
         const ast = parse(content);
-        const usedTypes = extractDependenciesFromASTSync(ast); // Use sync version here
+        const usedTypes = extractDependenciesFromAST(ast); // Use sync version here
         const className = basename(classSrcFile, ".java");
-        // Create report including the packageName
-        return new ClassDepsReport(packageName, className, usedTypes);
+        // Filter out self-references
+        const ownNameRegex = new RegExp(`(^|\\.)${className}$`);
+        const filteredTypes = usedTypes.filter(
+          (type) => !ownNameRegex.test(type)
+        );
+        return new ClassDepsReport(className, filteredTypes);
       } catch (parseError) {
         // Throw a specific error for parsing issues
         throw new Error(`Error parsing ${classSrcFile}: ${parseError.message}`);
@@ -59,42 +52,74 @@ function getClassDependenciesRx(packageName, classSrcFile) {
     }),
     catchError((error) => {
       // Catch both file read and parsing errors
-      // Log the error server-side for debugging
-      console.error(`Error processing class ${classSrcFile}: ${error.message}`);
-      // Emit an empty observable or a specific error object if needed downstream
-      // For incremental updates, skipping the problematic file might be best
+      console.error(
+        `Error processing class ${basename(classSrcFile)}: ${error.message}`
+      );
       return EMPTY; // Skip this class on error
-      // Alternatively, throw a structured error:
-      // return throwError(() => ({ type: 'class_error', file: classSrcFile, message: error.message }));
     })
   );
 }
 
-// getPackageDependenciesRx: Modified to emit ClassDepsReport incrementally
+// getPackageDependenciesRx: Modified to emit a single PackageDepsReport
 function getPackageDependenciesRx(packageSrcFolder) {
-  const packageName = basename(packageSrcFolder);
-  return from(fs.readdir(packageSrcFolder)).pipe(
-    // Find all .java files
-    mergeMap((files) =>
-      from(files).pipe(
-        filter((file) => file.endsWith(".java")),
-        map((file) => join(packageSrcFolder, file))
-        // Don't collect toArray here, process files individually
-      )
+  const packageName = basename(packageSrcFolder); // Get package name from folder path
+  return from(fs.readdir(packageSrcFolder, { withFileTypes: true })).pipe(
+    // Process directory entries
+    mergeMap((dirents) => from(dirents)), // Emit each Dirent object individually
+    // Filter for actual files ending with .java
+    filter((dirent) => dirent.isFile() && dirent.name.endsWith(".java")),
+    // Map to the full path of the java file
+    map((dirent) => join(packageSrcFolder, dirent.name)),
+    // Process each java file individually and get its ClassDepsReport
+    mergeMap(
+      (javaFile) => getClassDependenciesRx(javaFile)
+      // Optional: Limit concurrency if needed
+      // 4
     ),
-    // Process each java file individually and emit its ClassDepsReport
-    mergeMap((javaFile) =>
-      // Pass packageName to getClassDependenciesRx
-      getClassDependenciesRx(packageName, javaFile)
-      // No need for forkJoin or collecting results here
-    ),
+    filter((report) => report !== null),
     catchError((error) => {
       // Catch errors related to reading the directory itself
       console.error(
-        `Error reading package directory ${packageSrcFolder}: ${error.message}`
+        `Error analyzing package ${packageSrcFolder}: ${error.message}`
       );
-      // return throwError(() => new Error(`Error analyzing package ${packageSrcFolder}: ${error.message}`));
-      return EMPTY; // Skip package on directory read error
+      return EMPTY; // Skip package on directory read error or other errors in the chain
+    })
+  );
+}
+
+function getPackageDependenciesRxForProjectDeps(packageSrcFolder) {
+  const packageName = basename(packageSrcFolder); // Get package name from folder path
+  return from(fs.readdir(packageSrcFolder, { withFileTypes: true })).pipe(
+    // Process directory entries
+    mergeMap((dirents) => from(dirents)), // Emit each Dirent object individually
+    // Filter for actual files ending with .java
+    filter((dirent) => dirent.isFile() && dirent.name.endsWith(".java")),
+    // Map to the full path of the java file
+    map((dirent) => join(packageSrcFolder, dirent.name)),
+    // Process each java file individually and get its ClassDepsReport
+    mergeMap(
+      (javaFile) => getClassDependenciesRx(javaFile)
+      // Optional: Limit concurrency if needed
+      // 4
+    ),
+    // Collect all ClassDepsReport objects for this package into an array
+    toArray(),
+    // Map the array of ClassDepsReport objects to a single PackageDepsReport
+    map((classReports) => {
+      // Only create a report if there were successfully processed classes
+      if (classReports && classReports.length > 0) {
+        return new PackageDepsReport(packageName, classReports);
+      }
+      return null; // Indicate no report generated for this package (e.g., all files failed)
+    }),
+    // Filter out packages that resulted in no reports
+    filter((report) => report !== null),
+    catchError((error) => {
+      // Catch errors related to reading the directory itself
+      console.error(
+        `Error analyzing package ${packageSrcFolder}: ${error.message}`
+      );
+      return EMPTY; // Skip package on directory read error or other errors in the chain
     })
   );
 }
@@ -102,10 +127,23 @@ function getPackageDependenciesRx(packageSrcFolder) {
 // findPackageDirectoriesRx: (Refined logic from previous state)
 function findPackageDirectoriesRx(dir) {
   // Check if the current directory `dir` contains any .java files
-  const hasJavaFilesInCurrentDir$ = from(fs.readdir(dir)).pipe(
-    map((files) => files.some((file) => file.endsWith(".java"))),
+  const hasJavaFilesInCurrentDir$ = from(
+    fs.readdir(dir, { withFileTypes: true })
+  ).pipe(
+    // Convert the array of dirents to an observable stream of dirents
+    mergeMap((dirents) => from(dirents)),
+    // Check if any entry is a file ending with .java
+    filter((dirent) => dirent.isFile() && dirent.name.endsWith(".java")),
+    // If we find at least one, emit true, otherwise complete without emitting (defaultIfEmpty handles this)
+    map(() => true),
+    // Take only the first emission (we just need to know if *any* exist)
+    take(1),
+    // If the stream completes without emitting (no .java files found), emit false
+    defaultIfEmpty(false),
     catchError((err) => {
-      console.error(`Error reading directory ${dir}: ${err.message}`);
+      console.error(
+        `Error reading directory ${dir} for Java files: ${err.message}`
+      );
       return of(false); // Assume no java files if error reading dir
     })
   );
@@ -132,31 +170,27 @@ function findPackageDirectoriesRx(dir) {
     mergeMap((hasJavaFile) => {
       const currentDir$ = hasJavaFile ? of(dir) : EMPTY;
       // Concatenate the current directory (if it's a package) with results from subdirectories
-      return from([currentDir$, subPackages$]).pipe(
-        mergeMap((obs) => obs) // Flatten the streams: emits currentDir (if applicable), then emits subpackages
-      );
+      // Use concat to ensure current directory is emitted before exploring subdirectories fully
+      return concat(currentDir$, subPackages$);
     })
   );
 }
 
-// getProjectDependenciesRx: Modified to emit ClassDepsReport incrementally
+// getProjectDependenciesRx: Modified to emit PackageDepsReport incrementally
 function getProjectDependenciesRx(projectSrcFolder) {
-  // const projectName = basename(projectSrcFolder); // Not strictly needed if emitting class reports
-
-  // findPackageDirectoriesRx now emits package paths one by one
+  // findPackageDirectoriesRx emits package directory paths one by one
   return findPackageDirectoriesRx(projectSrcFolder).pipe(
-    // For each package directory found, get its class dependencies incrementally
-    mergeMap((packageDir) =>
-      getPackageDependenciesRx(packageDir) // This now emits ClassDepsReport objects
-      // No need for forkJoin or collecting results here
+    // For each package directory found, get its consolidated PackageDepsReport
+    mergeMap(
+      (packageDir) => getPackageDependenciesRxForProjectDeps(packageDir) // This now emits PackageDepsReport objects
     ),
-    // No need to construct ProjectDepsReport here, as we are emitting ClassDepsReport
+    // No need to collect into ProjectDepsReport here, as we are emitting PackageDepsReport incrementally
     catchError((error) => {
-      // Catch errors from findPackageDirectoriesRx or downstream
+      // Catch errors from findPackageDirectoriesRx or downstream getPackageDependenciesRx
       console.error(
         `Error analyzing project ${projectSrcFolder}: ${error.message}`
       );
-      // Decide how to handle project-level errors. Maybe send an error event?
+      // Decide how to handle project-level errors.
       return throwError(
         () =>
           new Error(
@@ -166,16 +200,15 @@ function getProjectDependenciesRx(projectSrcFolder) {
       // Or return EMPTY to just stop emitting
       // return EMPTY;
     })
-    // We are now emitting a stream of ClassDepsReport objects
+    // We are now emitting a stream of PackageDepsReport objects
   );
 }
 
 export {
-  // Keep exports, even if some classes are less central now
   getClassDependenciesRx,
   getPackageDependenciesRx,
   getProjectDependenciesRx,
   ClassDepsReport,
-  PackageDepsReport,
+  PackageDepsReport, // Ensure this is exported
   ProjectDepsReport,
 };

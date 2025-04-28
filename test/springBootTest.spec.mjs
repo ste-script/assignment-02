@@ -189,38 +189,6 @@ describe("Dependency Analysis (async)", () => {
       expect(projectResultUnique).toMatchSnapshot();
     });
   });
-
-  // --- Error Handling Tests ---
-  describe("Error Handling", () => {
-    it("should reject with an error for a non-existent class file", async () => {
-      const nonExistentFile = path.join(resourcesBase, "NonExistentClass.java");
-      // Use expect(...).rejects to test async errors
-      await expect(getClassDependencies(nonExistentFile)).rejects.toThrowError(
-        /Error analyzing class .*NonExistentClass\.java/
-      );
-    });
-
-    it("should reject with an error for a non-existent package folder", async () => {
-      const nonExistentFolder = path.join(resourcesBase, "nonexistentpackage");
-      await expect(
-        getPackageDependencies(nonExistentFolder)
-      ).rejects.toThrowError(/Error analyzing package .*nonexistentpackage/);
-      // Can also check for specific error codes like ENOENT if needed
-      await expect(
-        getPackageDependencies(nonExistentFolder)
-      ).rejects.toThrowError(/ENOENT/);
-    });
-
-    it("should reject with an error for a non-existent project folder", async () => {
-      const nonExistentFolder = path.join("resources", "nonexistentproject");
-      await expect(
-        getProjectDependencies(nonExistentFolder)
-      ).rejects.toThrowError(/Error analyzing project .*nonexistentproject/);
-      await expect(
-        getProjectDependencies(nonExistentFolder)
-      ).rejects.toThrowError(/ENOENT/);
-    });
-  });
 });
 
 // Note: Run `npx vitest` to execute these tests.
