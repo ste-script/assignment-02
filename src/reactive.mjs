@@ -1,6 +1,12 @@
 import { promises as fs } from "fs";
 import { basename, join } from "path";
-import { parse, BaseJavaCstVisitorWithDefaults } from "java-parser";
+import {
+  DependecyAnalyserCstVisitor,
+  ClassDepsReport,
+  PackageDepsReport,
+  ProjectDepsReport,
+} from "./parser.mjs";
+import { parse } from "java-parser";
 import {
   from,
   of,
@@ -11,61 +17,6 @@ import {
   catchError,
   filter,
 } from "rxjs";
-
-// --- Report Classes (Add packageName to ClassDepsReport) ---
-class ClassDepsReport {
-  constructor(packageName, className, usedTypes) { // Added packageName
-    this.packageName = packageName;
-    this.className = className;
-    this.usedTypes = usedTypes; // Array of { type: string, package: string }
-  }
-}
-
-class PackageDepsReport { // This class might become less central for incremental emission
-  constructor(packageName, classReports) {
-    this.packageName = packageName;
-    this.classReports = classReports; // Array of ClassDepsReport
-    // Remove uniqueTypes logic for simplicity with incremental class emission
-  }
-}
-
-class ProjectDepsReport { // This class might become less central for incremental emission
-  constructor(projectName, packageReports) {
-    this.projectName = projectName;
-    this.packageReports = packageReports; // Array of PackageDepsReport
-    // Remove uniqueTypes logic for simplicity with incremental class emission
-  }
-}
-
-// --- CST Visitor (unchanged) ---
-class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults {
-  constructor() {
-    super();
-    this.customResult = [];
-    this.validateVisitor();
-  }
-  importDeclaration(ctx) {
-    if (ctx.packageOrTypeName && ctx.packageOrTypeName[0].children.Identifier) {
-      const identifiers = ctx.packageOrTypeName[0].children.Identifier;
-      if (identifiers.length > 0) {
-        const typeName = identifiers[identifiers.length - 1].image;
-        const packageName = identifiers
-          .slice(0, identifiers.length - 1)
-          .map((id) => id.image)
-          .join(".");
-        // Basic check to avoid adding self-package imports if needed, though maybe not necessary
-        // if (packageName !== this.currentPackageName) { // Requires passing currentPackageName
-        this.customResult.push({ type: typeName, package: packageName });
-        // }
-      }
-    }
-  }
-  // Potentially add visits to other constructs like:
-  // - explicitConstructorInvocation: For super() or this() calls if needed.
-  // - classOrInterfaceType: To find types used in variable declarations, method signatures, etc.
-  // - methodInvocation: To find types used in static method calls.
-  // - annotations: If dependencies via annotations are relevant.
-}
 
 // --- Helper Functions (sync part, unchanged) ---
 function extractDependenciesFromASTSync(ast) {

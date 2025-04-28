@@ -1,27 +1,12 @@
 import { promises as fs } from "fs";
 import { basename, join } from "path";
-import { parse, BaseJavaCstVisitorWithDefaults } from "java-parser";
-
-class ClassDepsReport {
-  constructor(className, usedTypes) {
-    this.className = className;
-    this.usedTypes = usedTypes; // Array of { type: string, package: string }
-  }
-}
-
-class PackageDepsReport {
-  constructor(packageName, classReports) {
-    this.packageName = packageName;
-    this.classReports = classReports;
-  }
-}
-
-class ProjectDepsReport {
-  constructor(projectName, packageReports) {
-    this.projectName = projectName;
-    this.packageReports = packageReports;
-  }
-}
+import {
+  DependecyAnalyserCstVisitor,
+  ClassDepsReport,
+  PackageDepsReport,
+  ProjectDepsReport,
+} from "./parser.mjs";
+import { parse } from "java-parser";
 
 async function getClassDependencies(classSrcFile) {
   try {
@@ -29,9 +14,15 @@ async function getClassDependencies(classSrcFile) {
     const ast = parse(content);
     const usedTypes = await extractDependenciesFromAST(ast);
     const className = basename(classSrcFile, ".java");
-    return new ClassDepsReport(className, usedTypes);
+    // Filter out the class's own name from its dependencies
+    const ownNameRegex = new RegExp(`(^|\\.)${className}$`);
+    const filteredTypes = usedTypes.filter((type) => !ownNameRegex.test(type));
+    return new ClassDepsReport(className, filteredTypes);
   } catch (error) {
-    throw new Error(`Error analyzing class ${classSrcFile}: ${error.message}`);
+    // console.error(`Error analyzing class ${classSrcFile}: ${error.message}`);
+    // Return an empty report or re-throw depending on desired error handling
+    return new ClassDepsReport(basename(classSrcFile, ".java"), []);
+    // throw new Error(`Error analyzing class ${classSrcFile}: ${error.message}`);
   }
 }
 
@@ -41,98 +32,83 @@ async function getPackageDependencies(packageSrcFolder, unique = false) {
     const javaFiles = files
       .filter((file) => file.endsWith(".java"))
       .map((file) => join(packageSrcFolder, file));
-    const classReports = await Promise.all(
-      javaFiles.map((file) => getClassDependencies(file))
+
+    // Handle potential errors during individual class analysis
+    const classReportPromises = javaFiles.map((file) =>
+      getClassDependencies(file).catch((err) => {
+        console.error(`Skipping file due to error: ${err.message}`);
+        return null; // Or return a specific error object/empty report
+      })
     );
+    const classReports = (await Promise.all(classReportPromises)).filter(
+      (report) => report !== null
+    ); // Filter out failed analyses
+
     const packageName = basename(packageSrcFolder);
     if (unique) {
       const flattenedTypes = classReports.flatMap((report) => report.usedTypes);
-      const deduplicatedTypes = await deduplicateTypes(flattenedTypes);
-      return new PackageDepsReport(packageName, deduplicatedTypes);
+      const uniqueTypes = Array.from(new Set(flattenedTypes));
+      return new PackageDepsReport(packageName, uniqueTypes); // Pass unique types array
     }
-    return new PackageDepsReport(packageName, classReports);
+    return new PackageDepsReport(packageName, classReports); // Pass class reports array
   } catch (error) {
-    throw new Error(
+    console.error(
       `Error analyzing package ${packageSrcFolder}: ${error.message}`
     );
+    // Return an empty report or re-throw
+    return new PackageDepsReport(basename(packageSrcFolder), []);
+    // throw new Error(
+    //   `Error analyzing package ${packageSrcFolder}: ${error.message}`
+    // );
   }
 }
 
 async function getProjectDependencies(projectSrcFolder, unique = false) {
   try {
     const packageDirs = await findPackageDirectories(projectSrcFolder);
-    const packageReports = await Promise.all(
-      packageDirs.map((dir) => getPackageDependencies(dir))
+
+    // Handle potential errors during individual package analysis
+    const packageReportPromises = packageDirs.map((dir) =>
+      getPackageDependencies(dir, false).catch((err) => {
+        // Always get full reports first
+        console.error(`Skipping package due to error: ${err.message}`);
+        return null;
+      })
     );
+    const packageReports = (await Promise.all(packageReportPromises)).filter(
+      (report) => report !== null
+    );
+
     const projectName = basename(projectSrcFolder);
     if (unique) {
-      const flattenedTypes = packageReports.flatMap((report) =>
-        report.classReports.flatMap((classReport) => classReport.usedTypes)
+      // Flatten all type strings from all class reports in all package reports
+      const flattenedTypes = packageReports.flatMap((pkgReport) =>
+        pkgReport.classReports.flatMap((clsReport) => clsReport.usedTypes)
       );
-      const deduplicatedTypes = await deduplicateTypes(flattenedTypes);
-      return new ProjectDepsReport(projectName, deduplicatedTypes);
+      const uniqueTypes = Array.from(new Set(flattenedTypes));
+      return new ProjectDepsReport(projectName, uniqueTypes); // Pass unique types array
     }
-    return new ProjectDepsReport(projectName, packageReports);
+    return new ProjectDepsReport(projectName, packageReports); // Pass package reports array
   } catch (error) {
-    throw new Error(
+    console.error(
       `Error analyzing project ${projectSrcFolder}: ${error.message}`
     );
-  }
-}
-
-class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults {
-  constructor() {
-    super();
-    this.customResult = [];
-    this.validateVisitor();
-  }
-  // Extract types from import statements
-  importDeclaration(ctx) {
-    if (ctx.packageOrTypeName && ctx.packageOrTypeName[0].children.Identifier) {
-      const identifiers = ctx.packageOrTypeName[0].children.Identifier;
-      if (identifiers.length > 0) {
-        const typeName = identifiers[identifiers.length - 1].image;
-        const packageName = identifiers
-          .slice(0, identifiers.length - 1)
-          .map((id) => id.image)
-          .join(".");
-
-        this.customResult.push({ type: typeName, package: packageName });
-      }
-    }
+    // Return an empty report or re-throw
+    return new ProjectDepsReport(basename(projectSrcFolder), []);
+    // throw new Error(
+    //   `Error analyzing project ${projectSrcFolder}: ${error.message}`
+    // );
   }
 }
 
 async function extractDependenciesFromAST(ast) {
-  const types = new Set();
   const visitorCollector = new DependecyAnalyserCstVisitor();
   visitorCollector.visit(ast);
-  const customResult = visitorCollector.customResult;
-  customResult.forEach((type) => {
-    types.add(type);
-  });
-  const result = Array.from(types).map((type) => {
-    const { type: typeName, package: packageName } = type;
-    return {
-      type: typeName,
-      package: packageName,
-    };
-  });
-  return result;
+  // Return the unique type strings collected
+  return Array.from(visitorCollector.customResult);
 }
 
-async function deduplicateTypes(types) {
-  const seen = new Set();
-  return types.filter((t) => {
-    const key = `${t.package}.${t.type}`;
-    if (seen.has(key)) {
-      return false;
-    }
-    seen.add(key);
-    return true;
-  });
-}
-
+// findPackageDirectories remains the same
 async function findPackageDirectories(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
   let packages = [];
@@ -141,13 +117,20 @@ async function findPackageDirectories(dir) {
   for (const entry of entries) {
     const fullPath = join(dir, entry.name);
     if (entry.isDirectory()) {
-      const subPackages = await findPackageDirectories(fullPath);
-      packages.push(...subPackages);
+      // Avoid recursing into hidden directories or common build/target folders
+      if (
+        !entry.name.startsWith(".") &&
+        !["target", "build", "out", "bin"].includes(entry.name)
+      ) {
+        const subPackages = await findPackageDirectories(fullPath);
+        packages.push(...subPackages);
+      }
     } else if (entry.isFile() && entry.name.endsWith(".java")) {
       hasJavaFile = true;
     }
   }
 
+  // Only consider a directory a package if it directly contains Java files
   if (hasJavaFile) {
     packages.push(dir);
   }
