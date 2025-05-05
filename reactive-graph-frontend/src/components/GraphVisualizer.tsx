@@ -22,7 +22,6 @@ const convertToCytoscapeElements = (graphData: GraphData) => {
   }));
   const edges = graphData.links.map((link, index) => ({
     data: {
-      id: `e${index}_${link.source}_${link.target}`, // Ensure unique edge IDs
       source: link.source,
       target: link.target,
     },
@@ -218,33 +217,6 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
       <CytoscapeComponent
         elements={elements}
         style={{ width: "100%", height: "100%" }}
-        stylesheet={[
-          {
-            selector: "node",
-            style: {
-              label: "data(label)",
-              "background-color": "#666",
-              "text-valign": "center",
-              "text-halign": "center",
-              "font-size": "10px",
-              color: "#fff",
-              "text-outline-width": 2,
-              "text-outline-color": "#666",
-              width: "20px",
-              height: "20px",
-            },
-          },
-          {
-            selector: "edge",
-            style: {
-              width: 2,
-              "line-color": "#ccc",
-              "target-arrow-color": "#ccc",
-              "target-arrow-shape": "triangle",
-              "curve-style": "bezier",
-            },
-          },
-        ]}
         cy={(cy) => {
           cyRef.current = cy;
           cy.removeListener("tap", "node");

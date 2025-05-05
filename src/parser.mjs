@@ -346,14 +346,6 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     super.typeArguments(ctx);
   }
 
-  // Catch explicit type usages (e.g., casts, instanceof, static calls, annotations)
-  annotation(ctx) {
-    if (ctx.typeName) {
-      this.addType(this.extractTypeString(ctx.typeName[0]));
-    }
-    super.annotation(ctx);
-  }
-
   castExpression(ctx) {
     // Type is in ctx.expression[0] for primitive casts,
     // or ctx.referenceType[0] for reference type casts

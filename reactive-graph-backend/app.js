@@ -87,9 +87,6 @@ app.get("/", function (req, res) {
                 nodes.push(newNode);
                 nodeIds.add(targetNodeId);
                 itemProcessed = true;
-                console.warn(
-                  `Added target node ${targetNodeId} defensively during link creation.`
-                );
               }
 
               // Add link if new and not a self-loop
