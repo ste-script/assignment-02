@@ -33,7 +33,10 @@ app.get("/", function (req, res) {
   const projectPath = path.join(
     "..",
     "resources",
-    "assignment-01"
+    "assignment-01",
+    "src",
+    "main",
+    "java"
   );
 
   // --- Data structures to hold the graph state ---
@@ -54,94 +57,76 @@ app.get("/", function (req, res) {
       next: (reportItem) => {
         let itemProcessed = false;
 
-        reportItem.className = reportItem.className.replace(projectPath.split("/").join("."), "").slice(1);
+        reportItem.className = reportItem.className
+          .replace(projectPath.split("/").join("."), "")
+          .slice(1);
 
-        if (reportItem && reportItem.className && reportItem.packageName) {
-           if (reportItem.className === "package-info") {
-             return;
-           }
+        if (reportItem && reportItem.className) {
+          if (reportItem.className === "package-info") {
+            return;
+          }
 
-           const currentPackageName = reportItem.packageName;
-           const sourceNodeId = reportItem.className
+          const sourceNodeId = reportItem.className;
 
-           if (!nodeIds.has(sourceNodeId)) {
-             const newNode = { id: sourceNodeId };
-             nodes.push(newNode);
-             nodeIds.add(sourceNodeId);
-             itemProcessed = true;
-           }
+          if (!nodeIds.has(sourceNodeId)) {
+            const newNode = { id: sourceNodeId };
+            nodes.push(newNode);
+            nodeIds.add(sourceNodeId);
+            itemProcessed = true;
+          }
 
-           if (reportItem.usedTypes) {
-             reportItem.usedTypes.forEach((usedTypeString) => {
-               let targetNodeId = null;
+          if (reportItem.usedTypes) {
+            reportItem.usedTypes.forEach((usedTypeString) => {
+              let targetNodeId = usedTypeString;
 
-               // 1. Check if usedTypeString is already a known FQN
-               if (nodeIds.has(usedTypeString)) {
-                   targetNodeId = usedTypeString;
-               }
-               // 2. Check if it's a simple name in the same package
-               else {
-                   const potentialFqnInSamePackage = `${currentPackageName}.${usedTypeString}`;
-                   if (nodeIds.has(potentialFqnInSamePackage)) {
-                       targetNodeId = potentialFqnInSamePackage;
-                   }
-                   // 3. Search all known nodes for a matching simple name (heuristic)
-                   else {
-                       // Construct the pattern to search for: ".SimpleName"
-                       const simpleNamePattern = `.${usedTypeString}`;
-                       // Iterate through existing node IDs
-                       for (const existingNodeId of nodeIds) {
-                           if (existingNodeId.endsWith(simpleNamePattern)) {
-                               // Found a potential match based on simple name
-                               targetNodeId = existingNodeId;
-                               break; // Use the first match found
-                           }
-                       }
-                   }
-               }
+              // 1. Check if usedTypeString is already a known FQN
+              // 2. Check if it's a simple name in the same package
+              // Ensure target node exists (defensive)
+              if (!nodeIds.has(targetNodeId)) {
+                const newNode = { id: targetNodeId };
+                nodes.push(newNode);
+                nodeIds.add(targetNodeId);
+                itemProcessed = true;
+                console.warn(
+                  `Added target node ${targetNodeId} defensively during link creation.`
+                );
+              }
 
-
-               if (targetNodeId) {
-                 // Ensure target node exists (defensive)
-                 if (!nodeIds.has(targetNodeId)) {
-                   const newNode = { id: targetNodeId };
-                   nodes.push(newNode);
-                   nodeIds.add(targetNodeId);
-                   itemProcessed = true;
-                   console.warn(`Added target node ${targetNodeId} defensively during link creation.`);
-                 }
-
-                 // Add link if new and not a self-loop
-                 const linkId = `${sourceNodeId}->${targetNodeId}`;
-                 if (!linkIds.has(linkId) && sourceNodeId !== targetNodeId) {
-                   const newLink = { source: sourceNodeId, target: targetNodeId };
-                   links.push(newLink);
-                   linkIds.add(linkId);
-                   itemProcessed = true;
-                 }
-               } else {
-                  // Optional: Log unresolved dependencies
-                  // console.log(`Dependency "${usedTypeString}" in ${sourceNodeId} could not be resolved to a project node.`);
-               }
-             });
-           }
+              // Add link if new and not a self-loop
+              const linkId = `${sourceNodeId}->${targetNodeId}`;
+              if (!linkIds.has(linkId) && sourceNodeId !== targetNodeId) {
+                const newLink = { source: sourceNodeId, target: targetNodeId };
+                links.push(newLink);
+                linkIds.add(linkId);
+                itemProcessed = true;
+              }
+            });
+          }
         } else {
-             console.warn("Received unexpected item from observable:", reportItem);
+          console.warn("Received unexpected item from observable:", reportItem);
         }
 
         if (itemProcessed) {
-            const currentGraphData = { nodes: [...nodes], links: [...links] };
-            sendUpdate({ type: 'update', payload: currentGraphData });
+          const currentGraphData = { nodes: [...nodes], links: [...links] };
+          sendUpdate({ type: "update", payload: currentGraphData });
         }
       },
       error: (err) => {
         console.error("Error in dependency stream:", err);
-        res.write(`event: error\ndata: ${JSON.stringify({ message: "Error processing dependencies." })}\n\n`);
+        res.write(
+          `event: error\ndata: ${JSON.stringify({
+            message: "Error processing dependencies.",
+          })}\n\n`
+        );
         res.end();
       },
       complete: () => {
         console.log("Dependency stream completed.");
-        res.write(`event: complete\ndata: ${JSON.stringify({ message: "Analysis complete." })}\n\n`);
+        res.write(
+          `event: complete\ndata: ${JSON.stringify({
+            message: "Analysis complete.",
+          })}\n\n`
+        );
         res.end();
       },
     });

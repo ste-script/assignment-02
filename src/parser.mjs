@@ -47,39 +47,142 @@ export class ProjectDepsReport {
 export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults {
   constructor() {
     super();
-    this.customResult = new Set(); // Use a Set to store unique type strings
+    this.customResult = new Set(); // Use a Set to store unique *fully qualified* type strings
+    this.currentPackage = ""; // Store the package of the current file
+    this.singleTypeImports = new Map(); // Maps simple name to fully qualified name
+    this.onDemandImports = new Set(); // Stores package prefixes for '*' imports
+    this.javaLangClasses = new Set([
+      // Common java.lang classes
+      "Object",
+      "String",
+      "Integer",
+      "Double",
+      "Boolean",
+      "Byte",
+      "Short",
+      "Long",
+      "Float",
+      "Character",
+      "System",
+      "Math",
+      "Thread",
+      "Runnable",
+      "Exception",
+      "RuntimeException",
+      "Error",
+      "Class",
+      "Void",
+      // Add more as needed
+    ]);
     this.validateVisitor();
   }
 
-  // Helper to add a type string if it's valid and not primitive/simple
+  // Store package declaration
+  packageDeclaration(ctx) {
+    if (ctx.Identifier) {
+      this.currentPackage = ctx.Identifier.map((id) => id.image).join(".");
+    }
+    // No need to call super.packageDeclaration(ctx); as we don't need to visit deeper
+  }
+  
+
+  importDeclaration(ctx) {
+    // Example: import java.util.List; (SingleTypeImportDeclaration)
+    if (ctx.singleTypeImportDeclaration) {
+      const typeNameNode =
+        ctx.singleTypeImportDeclaration[0].children.typeName[0];
+      const identifiers = typeNameNode.children.Identifier;
+      const qualifiedName = identifiers.map((id) => id.image).join(".");
+      const simpleName = identifiers[identifiers.length - 1].image;
+      this.singleTypeImports.set(simpleName, qualifiedName);
+    }
+    // Example: import java.util.*; (TypeImportOnDemandDeclaration)
+    else if (ctx.typeImportOnDemandDeclaration) {
+      const packageOrTypeNameNode =
+        ctx.typeImportOnDemandDeclaration[0].children.packageOrTypeName[0];
+      const qualifiedName = packageOrTypeNameNode.children.Identifier.map(
+        (id) => id.image
+      ).join(".");
+      this.onDemandImports.add(qualifiedName);
+    }
+    // Static imports are ignored for type dependency analysis for now
+    // No need to call super.importDeclaration(ctx);
+  }
+
+  // Helper to resolve and add a type string if it's valid and not primitive/simple
   addType(typeString) {
     if (
-      typeString &&
-      typeof typeString === "string" &&
-      typeString.trim() !== ""
+      !typeString ||
+      typeof typeString !== "string" ||
+      typeString.trim() === ""
     ) {
-      // Basic check to avoid adding noise like punctuation if extraction fails
-      // Avoid adding primitive types or void for dependency tracking
-      const primitives = [
-        "void",
-        "byte",
-        "short",
-        "int",
-        "long",
-        "float",
-        "double",
-        "boolean",
-        "char",
-      ];
-      if (
-        !primitives.includes(typeString) &&
-        /^[a-zA-Z0-9_$.<>\[\]]+$/.test(typeString)
-      ) {
-        // Further check: avoid adding single uppercase letters (likely generics like T, E, K, V)
-        if (typeString.length > 1 || typeString !== typeString.toUpperCase()) {
-          this.customResult.add(typeString);
-        }
-      }
+      return; // Ignore invalid input
+    }
+
+    // Clean up array brackets for resolution logic
+    const isArray = typeString.endsWith("[]");
+    const baseTypeString = isArray
+      ? typeString.substring(0, typeString.length - 2)
+      : typeString;
+
+    // Basic check to avoid adding noise like punctuation if extraction fails
+    // Avoid adding primitive types or void for dependency tracking
+    const primitives = [
+      "void",
+      "byte",
+      "short",
+      "int",
+      "long",
+      "float",
+      "double",
+      "boolean",
+      "char",
+    ];
+    if (primitives.includes(baseTypeString)) {
+      return; // Don't add primitive types
+    }
+
+    // Avoid adding single uppercase letters (likely generics like T, E, K, V)
+    if (
+      baseTypeString.length === 1 &&
+      baseTypeString === baseTypeString.toUpperCase()
+    ) {
+      return;
+    }
+
+    // Attempt to resolve the type to a fully qualified name
+    let resolvedType = null;
+
+    // 1. Check if it's already qualified
+    if (baseTypeString.includes(".")) {
+      resolvedType = baseTypeString;
+    }
+    // 2. Check single-type imports
+    else if (this.singleTypeImports.has(baseTypeString)) {
+      resolvedType = this.singleTypeImports.get(baseTypeString);
+    }
+    // 3. Check if it's in java.lang
+    else if (this.javaLangClasses.has(baseTypeString)) {
+      resolvedType = "java.lang." + baseTypeString;
+    }
+    // 4. Check if it's potentially in the same package
+    else if (this.currentPackage !== "") {
+      // Assumption: If not imported and not java.lang, it might be in the same package.
+      // We cannot be certain without classpath analysis, but this is a common case.
+      resolvedType = this.currentPackage + "." + baseTypeString;
+    }
+    // 5. Fallback: Could be from an on-demand import or unresolved.
+    // For simplicity, we'll add the simple name for now, acknowledging it's incomplete.
+    // A more robust solution would require checking the existence of classes within on-demand packages.
+    else {
+      resolvedType = baseTypeString + "unresolved"; // Keep simple name if unresolvable
+    }
+
+    // Basic validation for the resolved type structure
+    if (resolvedType && /^[a-zA-Z0-9_$.]+$/.test(resolvedType)) {
+      // Add back array brackets if necessary
+      const finalType = isArray ? resolvedType + "[]" : resolvedType;
+      this.customResult.add(finalType);
     }
   }
 
@@ -241,23 +344,6 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
       });
     }
     super.typeArguments(ctx);
-  }
-
-  // 8. Import Declaration
-  importDeclaration(ctx) {
-    if (ctx.packageOrTypeName) {
-      const name = ctx.packageOrTypeName[0].children.Identifier.map(
-        (i) => i.image
-      ).join(".");
-      this.addType(name); // Add the full import path
-    } else if (ctx.typeName) {
-      // Single type import
-      const name = ctx.typeName[0].children.Identifier.map((i) => i.image).join(
-        "."
-      );
-      this.addType(name);
-    }
-    // Don't call super, we've handled it.
   }
 
   // Catch explicit type usages (e.g., casts, instanceof, static calls, annotations)
