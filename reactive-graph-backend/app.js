@@ -34,12 +34,7 @@ app.get("/", function (req, res) {
     "..",
     "resources",
     "assignment-01",
-    "src",
-    "main",
-    "java",
-    "pcd",
-    "ass01",
-    "Controller" // Assuming this is the entry point or directory
+    "src"
   );
 
   // --- Data structures to hold the graph state ---
