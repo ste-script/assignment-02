@@ -37,7 +37,7 @@ function getClassDependenciesRx(classSrcFile) {
       try {
         const ast = parse(content);
         const usedTypes = extractDependenciesFromAST(ast); // Use sync version here
-        const className = basename(classSrcFile, ".java");
+        const className = classSrcFile.split("/").join(".").slice(0, -5); // Extract class name from file path
         // Filter out self-references
         const ownNameRegex = new RegExp(`(^|\\.)${className}$`);
         const filteredTypes = usedTypes.filter(

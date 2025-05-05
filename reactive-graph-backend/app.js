@@ -33,8 +33,7 @@ app.get("/", function (req, res) {
   const projectPath = path.join(
     "..",
     "resources",
-    "assignment-01",
-    "src"
+    "assignment-01"
   );
 
   // --- Data structures to hold the graph state ---
@@ -55,13 +54,15 @@ app.get("/", function (req, res) {
       next: (reportItem) => {
         let itemProcessed = false;
 
+        reportItem.className = reportItem.className.replace(projectPath.split("/").join("."), "").slice(1);
+
         if (reportItem && reportItem.className && reportItem.packageName) {
            if (reportItem.className === "package-info") {
              return;
            }
 
            const currentPackageName = reportItem.packageName;
-           const sourceNodeId = `${currentPackageName}.${reportItem.className}`;
+           const sourceNodeId = reportItem.className
 
            if (!nodeIds.has(sourceNodeId)) {
              const newNode = { id: sourceNodeId };
