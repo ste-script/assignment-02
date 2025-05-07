@@ -49,6 +49,8 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     super();
     this.customResult = new Set(); // Use a Set to store unique *fully qualified* type strings
     this.currentPackage = ""; // Store the package of the current file
+    this.currentClassSimpleName = ""; // Store the simple name of the current class
+    this.currentClassFQN = ""; // Store the fully qualified name of the current class
     this.singleTypeImports = new Map(); // Maps simple name to fully qualified name
     this.onDemandImports = new Set(); // Stores package prefixes for '*' imports
     this.javaLangClasses = new Set([
@@ -72,6 +74,50 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
       "Error",
       "Class",
       "Void",
+      "Iterable",
+      "List",
+      "Set",
+      "Map",
+      "Collection",
+      "Iterator",
+      "ListIterator",
+      "Queue",
+      "Deque",
+      "ArrayList",
+      "LinkedList",
+      "HashSet",
+      "LinkedHashSet",
+      "TreeSet",
+      "HashMap",
+      "LinkedHashMap",
+      "TreeMap",
+      "WeakHashMap",
+      "IdentityHashMap",
+      "Properties",
+      "StringBuffer",
+      "StringBuilder",
+      "Date",
+      "Calendar",
+      "TimeZone",
+      "Locale",
+      "Random",
+      "UUID",
+      "Pattern",
+      "Matcher",
+      "File",
+      "FileInputStream",
+      "FileOutputStream",
+      "FileReader",
+      "FileWriter",
+      "BufferedReader",
+      "BufferedWriter",
+      "PrintWriter",
+      "InputStream",
+      "OutputStream",
+      "Reader",
+      "Writer",
+      "Override",
+      "FunctionalInterface",
       // Add more as needed
     ]);
     this.validateVisitor();
@@ -84,29 +130,51 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     }
     // No need to call super.packageDeclaration(ctx); as we don't need to visit deeper
   }
-  
 
   importDeclaration(ctx) {
-    // Example: import java.util.List; (SingleTypeImportDeclaration)
-    if (ctx.singleTypeImportDeclaration) {
-      const typeNameNode =
-        ctx.singleTypeImportDeclaration[0].children.typeName[0];
-      const identifiers = typeNameNode.children.Identifier;
-      const qualifiedName = identifiers.map((id) => id.image).join(".");
-      const simpleName = identifiers[identifiers.length - 1].image;
-      this.singleTypeImports.set(simpleName, qualifiedName);
+    // export type ImportDeclarationCtx = {
+    //   Import?: IToken[];
+    //   Static?: IToken[];
+    //   packageOrTypeName?: PackageOrTypeNameCstNode[];
+    //   Dot?: IToken[];
+    //   Star?: IToken[];
+    //   Semicolon?: IToken[];
+    //   emptyStatement?: EmptyStatementCstNode[];
+    // };
+    // Check for static imports.
+    if (ctx.Static && ctx.Static.length > 0) {
+      // Static imports are ignored for type dependency analysis for now
+      // No need to call super.importDeclaration(ctx);
+      return;
     }
-    // Example: import java.util.*; (TypeImportOnDemandDeclaration)
-    else if (ctx.typeImportOnDemandDeclaration) {
-      const packageOrTypeNameNode =
-        ctx.typeImportOnDemandDeclaration[0].children.packageOrTypeName[0];
-      const qualifiedName = packageOrTypeNameNode.children.Identifier.map(
-        (id) => id.image
-      ).join(".");
-      this.onDemandImports.add(qualifiedName);
+
+    // Process non-static imports (single type or on-demand).
+    // These should have 'packageOrTypeName'.
+    if (ctx.packageOrTypeName && ctx.packageOrTypeName.length > 0) {
+      const nameNode = ctx.packageOrTypeName[0]; // This is a PackageOrTypeNameCstNode
+
+      // Ensure the nameNode and its children (Identifiers) are valid
+      if (
+        nameNode.children &&
+        nameNode.children.Identifier &&
+        nameNode.children.Identifier.length > 0
+      ) {
+        const identifiers = nameNode.children.Identifier;
+        const qualifiedName = identifiers.map((id) => id.image).join(".");
+
+        // Differentiate based on the presence of a Star token
+        if (ctx.Star && ctx.Star.length > 0) {
+          // TypeImportOnDemandDeclaration (e.g., import java.util.*;)
+          this.onDemandImports.add(qualifiedName);
+        } else {
+          // SingleTypeImportDeclaration (e.g., import java.util.List;)
+          // The absence of Star (and Static) indicates a single type import.
+          const simpleName = identifiers[identifiers.length - 1].image;
+          this.singleTypeImports.set(simpleName, qualifiedName);
+        }
+      }
     }
-    // Static imports are ignored for type dependency analysis for now
-    // No need to call super.importDeclaration(ctx);
+    // No need to call super.importDeclaration(ctx) as we've processed the import.
   }
 
   // Helper to resolve and add a type string if it's valid and not primitive/simple
@@ -151,8 +219,7 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     }
 
     // Attempt to resolve the type to a fully qualified name
-    let resolvedType = null;
-
+    let resolvedType = baseTypeString;
     // 1. Check if it's already qualified
     if (baseTypeString.includes(".")) {
       resolvedType = baseTypeString;
@@ -163,25 +230,49 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     }
     // 3. Check if it's in java.lang
     else if (this.javaLangClasses.has(baseTypeString)) {
-      resolvedType = "java.lang." + baseTypeString;
+      return; // Don't add java.lang classes, they are implicitly available
     }
     // 4. Check if it's potentially in the same package
-    else if (this.currentPackage !== "") {
-      // Assumption: If not imported and not java.lang, it might be in the same package.
-      // We cannot be certain without classpath analysis, but this is a common case.
+    // This assumption is only made if there are no on-demand imports that could provide the type.
+    else if (
+      this.currentPackage !== "" &&
+      baseTypeString !== this.currentClassSimpleName
+    ) {
       resolvedType = this.currentPackage + "." + baseTypeString;
     }
-    // 5. Fallback: Could be from an on-demand import or unresolved.
-    // For simplicity, we'll add the simple name for now, acknowledging it's incomplete.
-    // A more robust solution would require checking the existence of classes within on-demand packages.
+    // 5. Fallback: Could be the class itself (simple name), from an on-demand import, or unresolved.
     else {
-      resolvedType = baseTypeString + "unresolved"; // Keep simple name if unresolvable
+      // If baseTypeString is the simple name of the current class, and it hasn't been resolved
+      // by prior rules (e.g. it wasn't used as FQN), it's not an external dependency to add.
+      if (
+        baseTypeString === this.currentClassSimpleName &&
+        !baseTypeString.includes(".")
+      ) {
+        return; // Do not add the class itself as a dependency through this path.
+      }
+
+      // At this point, it's likely from an on-demand import we can't pinpoint or truly unresolved.
+      console.error(
+        `Warning: Unable to resolve type "${baseTypeString}" in class ${this.currentClassFQN}. It may be from an on-demand import or is unresolved.`
+      );
+      resolvedType = baseTypeString + " (unresolved)"; // Mark as unresolved for clarity
     }
 
     // Basic validation for the resolved type structure
-    if (resolvedType && /^[a-zA-Z0-9_$.]+$/.test(resolvedType)) {
+    // Ensure the resolvedType (before adding " (unresolved)" or "[]") is a valid Java identifier part.
+    // The regex needs to account for the " (unresolved)" marker if we test finalType,
+    // or we test resolvedType before appending the marker. Let's test before marker.
+    const typeToValidate = resolvedType.replace(" (unresolved)", "");
+    if (typeToValidate && /^[a-zA-Z0-9_$.]+$/.test(typeToValidate)) {
       // Add back array brackets if necessary
       const finalType = isArray ? resolvedType + "[]" : resolvedType;
+      // Prevent adding the current class FQN as a dependency of itself
+      if (
+        finalType === this.currentClassFQN ||
+        finalType === this.currentClassFQN + "[]"
+      ) {
+        return;
+      }
       this.customResult.add(finalType);
     }
   }
@@ -245,18 +336,45 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
   // 1. Class/Interface Declaration Name & Extends/Implements
   normalClassDeclaration(ctx) {
     // Own name (useful for context, but filtered later)
-    if (ctx.typeIdentifier) {
-      const identifier = ctx.typeIdentifier[0].children.Identifier[0];
-      // this.addType(identifier.image); // Don't add self as dependency
+    if (
+      ctx.typeIdentifier &&
+      ctx.typeIdentifier[0] &&
+      ctx.typeIdentifier[0].children.Identifier &&
+      ctx.typeIdentifier[0].children.Identifier[0]
+    ) {
+      const simpleName = ctx.typeIdentifier[0].children.Identifier[0].image;
+      this.currentClassSimpleName = simpleName;
+      if (this.currentPackage && this.currentPackage !== "") {
+        this.currentClassFQN = this.currentPackage + "." + simpleName;
+      } else {
+        this.currentClassFQN = simpleName; // Class in default package
+      }
+      // Note: We don't add this.currentClassFQN to this.customResult via this.addType()
+      // because a class is not a dependency of itself.
+      // This FQN is primarily for identifying the class being analyzed.
     }
+
     // Extends
-    if (ctx.superclass) {
+    if (
+      ctx.superclass &&
+      ctx.superclass[0] &&
+      ctx.superclass[0].children.classType &&
+      ctx.superclass[0].children.classType[0]
+    ) {
       this.addType(
         this.extractTypeString(ctx.superclass[0].children.classType[0])
       );
     }
+
     // Implements
-    if (ctx.superinterfaces) {
+    if (
+      ctx.superinterfaces &&
+      ctx.superinterfaces[0] &&
+      ctx.superinterfaces[0].children.interfaceTypeList &&
+      ctx.superinterfaces[0].children.interfaceTypeList[0] &&
+      ctx.superinterfaces[0].children.interfaceTypeList[0].children
+        .interfaceType
+    ) {
       ctx.superinterfaces[0].children.interfaceTypeList[0].children.interfaceType.forEach(
         (intType) => {
           this.addType(this.extractTypeString(intType));
