@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "cytoscape": "^3.31.2",
+    "cytoscape-cose-bilkent": "^4.1.0",
     "pnpm": "^10.9.0",
     "react": "^18.0.0",
     "react-cytoscapejs": "^2.0.0",
     "react-dom": "^18.0.0",
-    "rxjs": "^7.0.0"
+    "rxjs": "^7.0.0",
+    "types": "link:/cytoscape-cose-bilkent"
   },
   "devDependencies": {
     "@types/cytoscape": "^3.21.9",

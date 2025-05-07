@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import CytoscapeComponent from "react-cytoscapejs";
 import cytoscape from "cytoscape";
 // Consider using a layout extension like cose-bilkent for better layouts
-// import coseBilkent from 'cytoscape-cose-bilkent';
-// cytoscape.use(coseBilkent);
+import coseBilkent from "cytoscape-cose-bilkent";
+cytoscape.use(coseBilkent);
 
 interface GraphVisualizerProps {}
 interface GraphData {
@@ -166,11 +166,9 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
   useEffect(() => {
     if (cyRef.current && elements.length > 0) {
       const layout = cyRef.current.layout({
-        name: "cose",
-        animate: true,
-        padding: 30,
-        nodeRepulsion: () => 400000,
-        idealEdgeLength: () => 100,
+        name: "cose-bilkent",
+        nodeDimensionsIncludeLabels: true,
+        animate: false,
       });
       layout.run();
     }
@@ -225,7 +223,6 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = () => {
             console.log("Node clicked:", node.id());
           });
         }}
-        layout={{ name: "preset" }}
       />
     </div>
   );
