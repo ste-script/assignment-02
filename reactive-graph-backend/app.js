@@ -59,6 +59,7 @@ app.get("/", function (req, res) {
 
         reportItem.className = reportItem.className
           .replace(projectPath.split("/").join("."), "")
+          .replace(/[\\/]/g, ".")
           .slice(1);
 
         if (reportItem && reportItem.className) {
