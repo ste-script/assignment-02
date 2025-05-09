@@ -53,73 +53,6 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     this.currentClassFQN = ""; // Store the fully qualified name of the current class
     this.singleTypeImports = new Map(); // Maps simple name to fully qualified name
     this.onDemandImports = new Set(); // Stores package prefixes for '*' imports
-    this.javaLangClasses = new Set([
-      // Common java.lang classes
-      "Object",
-      "String",
-      "Integer",
-      "Double",
-      "Boolean",
-      "Byte",
-      "Short",
-      "Long",
-      "Float",
-      "Character",
-      "System",
-      "Math",
-      "Thread",
-      "Runnable",
-      "Exception",
-      "RuntimeException",
-      "Error",
-      "Class",
-      "Void",
-      "Iterable",
-      "List",
-      "Set",
-      "Map",
-      "Collection",
-      "Iterator",
-      "ListIterator",
-      "Queue",
-      "Deque",
-      "ArrayList",
-      "LinkedList",
-      "HashSet",
-      "LinkedHashSet",
-      "TreeSet",
-      "HashMap",
-      "LinkedHashMap",
-      "TreeMap",
-      "WeakHashMap",
-      "IdentityHashMap",
-      "Properties",
-      "StringBuffer",
-      "StringBuilder",
-      "Date",
-      "Calendar",
-      "TimeZone",
-      "Locale",
-      "Random",
-      "UUID",
-      "Pattern",
-      "Matcher",
-      "File",
-      "FileInputStream",
-      "FileOutputStream",
-      "FileReader",
-      "FileWriter",
-      "BufferedReader",
-      "BufferedWriter",
-      "PrintWriter",
-      "InputStream",
-      "OutputStream",
-      "Reader",
-      "Writer",
-      "Override",
-      "FunctionalInterface",
-      // Add more as needed
-    ]);
     this.validateVisitor();
   }
 
@@ -205,21 +138,19 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
       "double",
       "boolean",
       "char",
+      "var",
+      "Object",
+      "Exception",
     ];
     if (primitives.includes(baseTypeString)) {
       return; // Don't add primitive types
     }
 
-    // Avoid adding single uppercase letters (likely generics like T, E, K, V)
-    if (
-      baseTypeString.length === 1 &&
-      baseTypeString === baseTypeString.toUpperCase()
-    ) {
-      return;
-    }
-
     // Attempt to resolve the type to a fully qualified name
     let resolvedType = baseTypeString;
+    if (baseTypeString.includes("java.lang")) {
+      return; // Don't add java.lang classes, they are implicitly available
+    }
     // 1. Check if it's already qualified
     if (baseTypeString.includes(".")) {
       resolvedType = baseTypeString;
@@ -227,10 +158,6 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     // 2. Check single-type imports
     else if (this.singleTypeImports.has(baseTypeString)) {
       resolvedType = this.singleTypeImports.get(baseTypeString);
-    }
-    // 3. Check if it's in java.lang
-    else if (this.javaLangClasses.has(baseTypeString)) {
-      return; // Don't add java.lang classes, they are implicitly available
     }
     // 4. Check if it's potentially in the same package
     // This assumption is only made if there are no on-demand imports that could provide the type.
@@ -414,21 +341,63 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
         this.extractTypeString(ctx.methodHeader[0].children.result[0])
       );
     }
+
+    // Parameters
+    if (
+      ctx.methodHeader &&
+      ctx.methodHeader[0].children.formalParameterList &&
+      ctx.methodHeader[0].children.formalParameterList[0] &&
+      ctx.methodHeader[0].children.formalParameterList[0].children
+        .formalParameter
+    ) {
+      ctx.methodHeader[0].children.formalParameterList[0].children.formalParameter.forEach(
+        (param) => {
+          console.log("Visiting parameter:", param);
+          this.visit(param); // This will call the formalParameter visitor
+        }
+      );
+    } else if (
+      ctx.methodHeader &&
+      ctx.methodHeader[0].children.formalParameterList &&
+      ctx.methodHeader[0].children.formalParameterList[0] &&
+      ctx.methodHeader[0].children.formalParameterList[0].children
+        .lastFormalParameter &&
+      ctx.methodHeader[0].children.formalParameterList[0].children
+        .lastFormalParameter[0]
+    ) {
+      // Handle varargs (lastFormalParameter)
+      this.visit(
+        ctx.methodHeader[0].children.formalParameterList[0].children
+          .lastFormalParameter[0]
+      );
+    }
+
     // Throws
-    if (ctx.methodHeader && ctx.methodHeader[0].children.throws) {
+    /*if (ctx.methodHeader && ctx.methodHeader[0].children.throws) {
       ctx.methodHeader[0].children.throws[0].children.exceptionTypeList[0].children.exceptionType.forEach(
         (exType) => {
           this.addType(this.extractTypeString(exType));
         }
       );
-    }
+    }*/
     super.methodDeclaration(ctx); // Visit parameters and body
   }
 
   // Visiting formal parameters specifically
-  formalParameter(ctx) {
-    if (ctx.unannType) {
-      this.addType(this.extractTypeString(ctx.unannType[0]));
+  formalParameter(ctx) { // ctx is FormalParameterCtx
+    let parameterNode; // This will be VariableParaRegularParameterCstNode or VariableArityParameterCstNode
+
+    if (ctx.variableParaRegularParameter && ctx.variableParaRegularParameter.length > 0) {
+      parameterNode = ctx.variableParaRegularParameter[0];
+    } else if (ctx.variableArityParameter && ctx.variableArityParameter.length > 0) {
+      parameterNode = ctx.variableArityParameter[0];
+    }
+
+    // parameterNode is a CstNode (e.g., VariableParaRegularParameterCstNode).
+    // Its 'children' property (e.g., VariableParaRegularParameterCtx) contains 'unannType'.
+    if (parameterNode && parameterNode.children && parameterNode.children.unannType && parameterNode.children.unannType.length > 0) {
+      const unannTypeNode = parameterNode.children.unannType[0]; // This is UnannTypeCstNode
+      this.addType(this.extractTypeString(unannTypeNode));
     }
     super.formalParameter(ctx);
   }
@@ -445,8 +414,15 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
 
   // 6. Variable Declaration Type
   localVariableDeclaration(ctx) {
-    if (ctx.unannType) {
-      this.addType(this.extractTypeString(ctx.unannType[0]));
+    if (
+      ctx &&
+      ctx.localVariableType &&
+      ctx.localVariableType[0]?.children?.unannType &&
+      ctx.localVariableType[0].children.unannType[0]
+    ) {
+      this.addType(
+        this.extractTypeString(ctx.localVariableType[0].children.unannType[0])
+      );
     }
     super.localVariableDeclaration(ctx); // Visit initializers
   }
