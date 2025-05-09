@@ -33,8 +33,7 @@ app.get("/", function (req, res) {
   const projectPath = path.join(
     "..",
     "resources",
-    "assignment-01",
-    "src",
+    "ricci-example",
     "main",
     "java"
   );

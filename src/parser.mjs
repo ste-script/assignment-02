@@ -141,6 +141,7 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
       "var",
       "Object",
       "Exception",
+      "String",
     ];
     if (primitives.includes(baseTypeString)) {
       return; // Don't add primitive types
@@ -162,12 +163,27 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     // 4. Check if it's potentially in the same package
     // This assumption is only made if there are no on-demand imports that could provide the type.
     else if (
+      this.onDemandImports.size === 0 && // Check if there are no on-demand imports
       this.currentPackage !== "" &&
       baseTypeString !== this.currentClassSimpleName
     ) {
       resolvedType = this.currentPackage + "." + baseTypeString;
     }
-    // 5. Fallback: Could be the class itself (simple name), from an on-demand import, or unresolved.
+    // 5. Check against on-demand imports
+    else if (this.onDemandImports.size > 0) {
+      // If we have on-demand imports, we can make a reasonable guess
+      if (this.onDemandImports.size === 1) {
+        // If there's only one on-demand import, we can be more confident
+        const onDemandPackage = Array.from(this.onDemandImports)[0];
+        resolvedType = onDemandPackage + "." + baseTypeString;
+      } else {
+        // Multiple on-demand imports - we'll mention the first one but note there are others
+        const onDemandPackages = Array.from(this.onDemandImports);
+        resolvedType = onDemandPackages[0] + "." + baseTypeString + 
+                      ` (potentially from ${onDemandPackages.length} on-demand imports)`;
+      }
+    }
+    // 6. Fallback: Could be from an on-demand import or truly unresolved.
     else {
       // If baseTypeString is the simple name of the current class, and it hasn't been resolved
       // by prior rules (e.g. it wasn't used as FQN), it's not an external dependency to add.
@@ -178,9 +194,9 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
         return; // Do not add the class itself as a dependency through this path.
       }
 
-      // At this point, it's likely from an on-demand import we can't pinpoint or truly unresolved.
+      // At this point, it's likely truly unresolved
       console.error(
-        `Warning: Unable to resolve type "${baseTypeString}" in class ${this.currentClassFQN}. It may be from an on-demand import or is unresolved.`
+        `Warning: Unable to resolve type "${baseTypeString}" in class ${this.currentClassFQN}. No matching imports found.`
       );
       resolvedType = baseTypeString + " (unresolved)"; // Mark as unresolved for clarity
     }
