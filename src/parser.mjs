@@ -110,116 +110,6 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     // No need to call super.importDeclaration(ctx) as we've processed the import.
   }
 
-  // Helper to resolve and add a type string if it's valid and not primitive/simple
-  addType(typeString) {
-    if (
-      !typeString ||
-      typeof typeString !== "string" ||
-      typeString.trim() === ""
-    ) {
-      return; // Ignore invalid input
-    }
-
-    // Clean up array brackets for resolution logic
-    const isArray = typeString.endsWith("[]");
-    const baseTypeString = isArray
-      ? typeString.substring(0, typeString.length - 2)
-      : typeString;
-
-    // Basic check to avoid adding noise like punctuation if extraction fails
-    // Avoid adding primitive types or void for dependency tracking
-    const primitives = [
-      "void",
-      "byte",
-      "short",
-      "int",
-      "long",
-      "float",
-      "double",
-      "boolean",
-      "char",
-      "var",
-      "Object",
-      "Exception",
-      "String",
-    ];
-    if (primitives.includes(baseTypeString)) {
-      return; // Don't add primitive types
-    }
-
-    // Attempt to resolve the type to a fully qualified name
-    let resolvedType = baseTypeString;
-    if (baseTypeString.includes("java.lang")) {
-      return; // Don't add java.lang classes, they are implicitly available
-    }
-    // 1. Check if it's already qualified
-    if (baseTypeString.includes(".")) {
-      resolvedType = baseTypeString;
-    }
-    // 2. Check single-type imports
-    else if (this.singleTypeImports.has(baseTypeString)) {
-      resolvedType = this.singleTypeImports.get(baseTypeString);
-    }
-    // 4. Check if it's potentially in the same package
-    // This assumption is only made if there are no on-demand imports that could provide the type.
-    else if (
-      this.onDemandImports.size === 0 && // Check if there are no on-demand imports
-      this.currentPackage !== "" &&
-      baseTypeString !== this.currentClassSimpleName
-    ) {
-      resolvedType = this.currentPackage + "." + baseTypeString;
-    }
-    // 5. Check against on-demand imports
-    else if (this.onDemandImports.size > 0) {
-      // If we have on-demand imports, we can make a reasonable guess
-      if (this.onDemandImports.size === 1) {
-        // If there's only one on-demand import, we can be more confident
-        const onDemandPackage = Array.from(this.onDemandImports)[0];
-        resolvedType = onDemandPackage + "." + baseTypeString;
-      } else {
-        // Multiple on-demand imports - we'll mention the first one but note there are others
-        const onDemandPackages = Array.from(this.onDemandImports);
-        resolvedType = onDemandPackages[0] + "." + baseTypeString + 
-                      ` (potentially from ${onDemandPackages.length} on-demand imports)`;
-      }
-    }
-    // 6. Fallback: Could be from an on-demand import or truly unresolved.
-    else {
-      // If baseTypeString is the simple name of the current class, and it hasn't been resolved
-      // by prior rules (e.g. it wasn't used as FQN), it's not an external dependency to add.
-      if (
-        baseTypeString === this.currentClassSimpleName &&
-        !baseTypeString.includes(".")
-      ) {
-        return; // Do not add the class itself as a dependency through this path.
-      }
-
-      // At this point, it's likely truly unresolved
-      console.error(
-        `Warning: Unable to resolve type "${baseTypeString}" in class ${this.currentClassFQN}. No matching imports found.`
-      );
-      resolvedType = baseTypeString + " (unresolved)"; // Mark as unresolved for clarity
-    }
-
-    // Basic validation for the resolved type structure
-    // Ensure the resolvedType (before adding " (unresolved)" or "[]") is a valid Java identifier part.
-    // The regex needs to account for the " (unresolved)" marker if we test finalType,
-    // or we test resolvedType before appending the marker. Let's test before marker.
-    const typeToValidate = resolvedType.replace(" (unresolved)", "");
-    if (typeToValidate && /^[a-zA-Z0-9_$.]+$/.test(typeToValidate)) {
-      // Add back array brackets if necessary
-      const finalType = isArray ? resolvedType + "[]" : resolvedType;
-      // Prevent adding the current class FQN as a dependency of itself
-      if (
-        finalType === this.currentClassFQN ||
-        finalType === this.currentClassFQN + "[]"
-      ) {
-        return;
-      }
-      this.customResult.add(finalType);
-    }
-  }
-
   // Helper to extract type string from common type structures in CST
   extractTypeString(typeNode) {
     if (!typeNode || !typeNode.children) return null;
@@ -368,7 +258,6 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
     ) {
       ctx.methodHeader[0].children.formalParameterList[0].children.formalParameter.forEach(
         (param) => {
-          console.log("Visiting parameter:", param);
           this.visit(param); // This will call the formalParameter visitor
         }
       );
@@ -388,30 +277,34 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
       );
     }
 
-    // Throws
-    /*if (ctx.methodHeader && ctx.methodHeader[0].children.throws) {
-      ctx.methodHeader[0].children.throws[0].children.exceptionTypeList[0].children.exceptionType.forEach(
-        (exType) => {
-          this.addType(this.extractTypeString(exType));
-        }
-      );
-    }*/
     super.methodDeclaration(ctx); // Visit parameters and body
   }
 
   // Visiting formal parameters specifically
-  formalParameter(ctx) { // ctx is FormalParameterCtx
+  formalParameter(ctx) {
+    // ctx is FormalParameterCtx
     let parameterNode; // This will be VariableParaRegularParameterCstNode or VariableArityParameterCstNode
 
-    if (ctx.variableParaRegularParameter && ctx.variableParaRegularParameter.length > 0) {
+    if (
+      ctx.variableParaRegularParameter &&
+      ctx.variableParaRegularParameter.length > 0
+    ) {
       parameterNode = ctx.variableParaRegularParameter[0];
-    } else if (ctx.variableArityParameter && ctx.variableArityParameter.length > 0) {
+    } else if (
+      ctx.variableArityParameter &&
+      ctx.variableArityParameter.length > 0
+    ) {
       parameterNode = ctx.variableArityParameter[0];
     }
 
     // parameterNode is a CstNode (e.g., VariableParaRegularParameterCstNode).
     // Its 'children' property (e.g., VariableParaRegularParameterCtx) contains 'unannType'.
-    if (parameterNode && parameterNode.children && parameterNode.children.unannType && parameterNode.children.unannType.length > 0) {
+    if (
+      parameterNode &&
+      parameterNode.children &&
+      parameterNode.children.unannType &&
+      parameterNode.children.unannType.length > 0
+    ) {
       const unannTypeNode = parameterNode.children.unannType[0]; // This is UnannTypeCstNode
       this.addType(this.extractTypeString(unannTypeNode));
     }
@@ -497,5 +390,103 @@ export class DependecyAnalyserCstVisitor extends BaseJavaCstVisitorWithDefaults 
       this.visit(ctx.typeArguments);
     }
     // Don't call super here to avoid potential duplicate visits from parent nodes
+  }
+
+  // Helper to resolve and add a type string if it's valid and not primitive/simple
+  addType(typeString) {
+    if (
+      !typeString ||
+      typeof typeString !== "string" ||
+      typeString.trim() === ""
+    ) {
+      return; // Ignore invalid input
+    }
+
+    // Clean up array brackets for resolution logic
+    const isArray = typeString.endsWith("[]");
+    const baseTypeString = isArray
+      ? typeString.substring(0, typeString.length - 2)
+      : typeString;
+
+    // Basic check to avoid adding noise like punctuation if extraction fails
+    // Avoid adding primitive types or void for dependency tracking
+    const primitives = [
+      "void",
+      "byte",
+      "short",
+      "int",
+      "long",
+      "float",
+      "double",
+      "boolean",
+      "char",
+      "var",
+      "Object",
+      "Exception",
+      "String",
+    ];
+    if (primitives.includes(baseTypeString)) {
+      return; // Don't add primitive types
+    }
+
+    // Attempt to resolve the type to a fully qualified name
+    let resolvedType = baseTypeString;
+    if (baseTypeString.includes("java.lang")) {
+      return; // Don't add java.lang classes, they are implicitly available
+    }
+    // Check if it's already qualified
+    if (baseTypeString.includes(".")) {
+      resolvedType = baseTypeString;
+    }
+    // Check single-type imports
+    else if (this.singleTypeImports.has(baseTypeString)) {
+      resolvedType = this.singleTypeImports.get(baseTypeString);
+    }
+    // Check if it's potentially in the same package
+    // This assumption is only made if there are no on-demand imports that could provide the type.
+    else if (
+      this.onDemandImports.size === 0 && // Check if there are no on-demand imports
+      this.currentPackage !== "" &&
+      baseTypeString !== this.currentClassSimpleName
+    ) {
+      resolvedType = this.currentPackage + "." + baseTypeString;
+    }
+    // 5. Check against on-demand imports
+    else if (this.onDemandImports.size > 0) {
+      // If the type could be in the current package (not the current class)
+      if (
+        this.currentPackage !== "" &&
+        baseTypeString !== this.currentClassSimpleName
+      ) {
+        // Ambiguous: could be from current package or from on-demand import(s)
+        console.warn(
+          `Ambiguous type resolution for ${baseTypeString} in ${this.currentClassFQN}. ` +
+            `It could be from the current package (${this.currentPackage}) or on-demand imports.`
+        );
+        // Mention the current package and on-demand imports
+        console.log(resolvedType);
+        resolvedType =
+          baseTypeString + " (ambiguous between package and on-demand imports)";
+      } else if (this.onDemandImports.size === 1) {
+        // Only one on-demand import, so likely from there
+        const onDemandPackage = Array.from(this.onDemandImports)[0];
+        resolvedType = onDemandPackage + "." + baseTypeString;
+      } else {
+        // Multiple on-demand imports - mention the first, note ambiguity
+        const onDemandPackages = Array.from(this.onDemandImports);
+        resolvedType =
+          onDemandPackages[0] +
+          "." +
+          baseTypeString +
+          ` (potentially from ${onDemandPackages.length} on-demand imports)`;
+      }
+    }
+    // 6. Fallback: Could be from an on-demand import or truly unresolved.
+    else {
+      // At this point, it's likely truly unresolved
+      resolvedType = baseTypeString + " (unresolved)"; // Mark as unresolved for clarity
+    }
+    this.customResult.add(resolvedType);
+
   }
 }
