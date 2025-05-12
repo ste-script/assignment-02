@@ -4,7 +4,7 @@ import { GraphData } from "./types";
 
 function App() {
   const [folderPath, setFolderPath] = useState<string | null>(null);
-  const [graphData, setGraphData] = useState<GraphData>({ nodes: [], edges: [] });
+  const [graphData, setGraphData] = useState<GraphData>({ nodes: [], links: [] });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const path = event.target.value;
