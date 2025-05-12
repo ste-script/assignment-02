@@ -23,26 +23,41 @@ app.use(function (req, res, next) {
 });
 
 // Add the new SSE handler
-app.get("/", function (req, res) {
-  // Set headers for SSE
+let currentProjectPath = null;
+
+app.post("/scan", function (req, res) {
+  const projectPath = req.body.folderPath;
+
+  if (!projectPath) {
+    return res.status(400).json({ error: "Folder path is required." });
+  }
+
+  console.log(`Starting scan for folder: ${projectPath}`);
+  currentProjectPath = projectPath; // Salva il percorso per l'uso nell'endpoint SSE
+  res.status(200).json({ message: "Scan started successfully." });
+});
+
+app.get("/updates", function (req, res) {
+  if (!currentProjectPath) {
+    res.status(400).json({ error: "No scan in progress." });
+    return;
+  }
+
+  console.log(`Sending updates for folder: ${currentProjectPath}`);
+
+  // Imposta le intestazioni per SSE
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
-  res.flushHeaders(); // Flush the headers to establish the connection
 
-  const projectPath = path.join(
-    "..",
-    "resources",
-    "ricci-example",
-    "main",
-    "java"
-  );
+  // Invia un messaggio iniziale per mantenere viva la connessione
+  res.write(`data: ${JSON.stringify({ message: "Connection established" })}\n\n`);
 
   // --- Data structures to hold the graph state ---
   const nodes = [];
   const links = [];
   const nodeIds = new Set();
-  const linkIds = new Set(); // Keep track of unique links
+  const linkIds = new Set();
 
   // --- Function to send updates to the client ---
   const sendUpdate = (data) => {
@@ -51,13 +66,13 @@ app.get("/", function (req, res) {
 
   // --- Subscribe to the observable ---
   const dependencySubscription = javaDepsLibrary
-    .getProjectDependenciesRx(projectPath)
+    .getProjectDependenciesRx(currentProjectPath)
     .subscribe({
       next: (reportItem) => {
         let itemProcessed = false;
 
         reportItem.className = reportItem.className
-          .replace(projectPath.split("/").join("."), "")
+          .replace(currentProjectPath.split("/").join("."), "")
           .replace(/[\\/]/g, ".")
           .slice(1);
 
@@ -79,9 +94,6 @@ app.get("/", function (req, res) {
             reportItem.usedTypes.forEach((usedTypeString) => {
               let targetNodeId = usedTypeString;
 
-              // 1. Check if usedTypeString is already a known FQN
-              // 2. Check if it's a simple name in the same package
-              // Ensure target node exists (defensive)
               if (!nodeIds.has(targetNodeId)) {
                 const newNode = { id: targetNodeId };
                 nodes.push(newNode);
@@ -89,7 +101,6 @@ app.get("/", function (req, res) {
                 itemProcessed = true;
               }
 
-              // Add link if new and not a self-loop
               const linkId = `${sourceNodeId}->${targetNodeId}`;
               if (!linkIds.has(linkId) && sourceNodeId !== targetNodeId) {
                 const newLink = { source: sourceNodeId, target: targetNodeId };
@@ -110,20 +121,12 @@ app.get("/", function (req, res) {
       },
       error: (err) => {
         console.error("Error in dependency stream:", err);
-        res.write(
-          `event: error\ndata: ${JSON.stringify({
-            message: "Error processing dependencies.",
-          })}\n\n`
-        );
+        res.write(`event: error\ndata: ${JSON.stringify({ error: "Error processing dependencies." })}\n\n`);
         res.end();
       },
       complete: () => {
         console.log("Dependency stream completed.");
-        res.write(
-          `event: complete\ndata: ${JSON.stringify({
-            message: "Analysis complete.",
-          })}\n\n`
-        );
+        res.write(`event: complete\ndata: ${JSON.stringify({ message: "Analysis complete." })}\n\n`);
         res.end();
       },
     });
