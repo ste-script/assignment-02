@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const fs = require("fs");
 var app = express();
 var javaDepsLibrary = require("../src/reactive.mjs");
 var path = require("path");
@@ -30,6 +31,10 @@ app.post("/scan", function (req, res) {
 
   if (!projectPath) {
     return res.status(400).json({ error: "Folder path is required." });
+  }
+
+  if (!fs.existsSync(currentProjectPath)) {
+    return res.status(400).json({ error: "This Path does not exists." });
   }
 
   console.log(`Starting scan for folder: ${projectPath}`);
