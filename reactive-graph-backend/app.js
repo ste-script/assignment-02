@@ -28,12 +28,12 @@ let currentProjectPath = null;
 
 app.post("/scan", function (req, res) {
   const projectPath = req.body.folderPath;
-
+  
   if (!projectPath) {
     return res.status(400).json({ error: "Folder path is required." });
   }
 
-  if (!fs.existsSync(currentProjectPath)) {
+  if (!fs.existsSync(projectPath)) {
     return res.status(400).json({ error: "This Path does not exists." });
   }
 
